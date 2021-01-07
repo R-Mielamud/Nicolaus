@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
+    "api",
+    "authorization",
 ]
 
 MIDDLEWARE = [
@@ -48,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "authorization.middleware.ExtractUserFromJWT",
 ]
 
 ROOT_URLCONF = 'Nicolaus.urls'
@@ -119,3 +126,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Rest Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        "api.authentication.CsrfExemptAuthentication",
+        'rest_framework.authentication.BasicAuthentication',
+    ]
+}
+
+# JWT
+
+JWT_SECRET = os.environ.get("JWT_SECRET", "")
+
+JWT_ALGORITHM = os.environ.get("JWT_ALGORITHM", "")
+
+JWT_USER_FIELD = "id"
+
+JWT_PREFIX = "Bearer "
+
+JWT_ROUTES_WHITELIST = [
+    "/api/user/register/",
+    "/api/user/login/",
+]
