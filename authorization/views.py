@@ -68,7 +68,7 @@ class LoginAPIView(APIView):
     def reject(self):
         return JsonResponse({
             "message": "Email or password is invalid"
-        })
+        }, status=401)
 
     def post(self, request):
         email = request.data.get("email")
@@ -89,3 +89,13 @@ class LoginAPIView(APIView):
             "jwt_token": jwt_token,
             "user": serializer.data
         })
+
+class ProfileAPIView(APIView):
+    def get(self, request):
+        if not request.user:
+            return JsonResponse({
+                "message": "Not authorized"
+            }, status=401)
+
+        serializer = UserSerializer(request.user)
+        return JsonResponse(serializer.data)

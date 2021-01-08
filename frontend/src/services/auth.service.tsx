@@ -12,3 +12,12 @@ export async function login(email: string, password: string): Promise<WebApi.Spe
 
     return (await res.json()) as WebApi.Specific.AuthResult;
 }
+
+export async function getProfile(): Promise<WebApi.Entity.User> {
+    const res = await callWebApi({
+        endpoint: "user/profile/",
+        method: "GET",
+    });
+
+    return (await res.json()) as WebApi.Entity.User;
+}

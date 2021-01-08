@@ -7,23 +7,16 @@ export const authReducer = createReducer<AuthState>(initialState, {
         return {
             ...state,
             requestingLogin: true,
-            isAuthorized: false,
         };
     },
-    [actionTypes.LOGIN_SUCCESS](state, action: actionTypes.LoginSuccess) {
+    [actionTypes.LOAD_PROFILE_SUCCESS](state, action: actionTypes.LoadProfileSuccess) {
         return {
             ...state,
-            jwtToken: action.jwtToken,
             user: action.user,
+            profileLoaded: true,
             requestingLogin: false,
-            isAuthorized: true,
-        };
-    },
-    [actionTypes.LOGIN_FAIL](state) {
-        return {
-            ...state,
-            requestingLogin: false,
-            isAuthorized: false,
+            jwtToken: action.jwtToken,
+            isAuthorized: Boolean(action.user),
         };
     },
 });

@@ -39,7 +39,6 @@ export default async function callWebApi(args: RequestArgs): Promise<Response> {
 }
 
 async function throwIfResponseFailed(res: Response) {
-    console.log(res.ok);
     if (!res.ok) {
         const params: WebApiExceptionProps = {
             status: res.status,
@@ -48,7 +47,7 @@ async function throwIfResponseFailed(res: Response) {
         };
 
         try {
-            params.clientException = res.json();
+            params.clientException = await res.json();
         } catch {}
 
         throw new WebApiException(params);
