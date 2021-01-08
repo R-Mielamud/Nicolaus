@@ -9,7 +9,7 @@ class UserSerializer(ModelSerializer):
 class RegisterUserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["email", "password", "telephone", "first_name", "last_name", "is_admin"]
+        fields = ["email", "password", "telephone", "first_name", "last_name"]
 
 class UpdateUserSerializer(ModelSerializer):
     email = EmailField(required=False)

@@ -34,7 +34,6 @@
 		"no-cond-assign": "error",
 		"no-fallthrough": "error",
 		"no-new-wrappers": "error",
-		"no-redeclare": "error",
 		"no-var": "error",
 		"radix": "error",
 		// warnings
@@ -83,7 +82,8 @@
 		"@typescript-eslint/member-delimiter-style": "off",
 		"@typescript-eslint/semi": "off",
 		"prettier/prettier": "off",
-		"no-unused-expressions": "error", //disabled in favour of @typescript-eslint/no-unused-expressions
+		"no-redeclare": "off",
+		"no-unused-expressions": "off", //disabled in favour of @typescript-eslint/no-unused-expressions
 		"comma-dangle": "off" // handled by prettier
 	}
 }
