@@ -13,8 +13,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit, loading }) => {
     const [emailValid, setEmailValid] = useState<boolean>(true);
     const [password, setPassword] = useState<string>("");
     const [passwordHidden, setPasswordHidden] = useState<boolean>(true);
-    const [passwordValid, setPasswordValid] = useState<boolean>(true);
-    const buttonDisabled = loading || !email || !password || !emailValid || !passwordValid;
+    const buttonDisabled = !Boolean(email || password || emailValid);
 
     const setEmail = (value: string) => {
         setEmailValid(true);
@@ -39,11 +38,10 @@ const LoginForm: React.FC<Props> = ({ onSubmit, loading }) => {
                 onBlur={() => setEmailValid(validator.isEmail(email))}
             />
             <PasswordInput
-                valid={passwordValid}
+                valid
                 value={password}
                 hidden={passwordHidden}
                 placeholder="Password"
-                setValid={setPasswordValid}
                 setValue={setPassword}
                 setHidden={setPasswordHidden}
             />

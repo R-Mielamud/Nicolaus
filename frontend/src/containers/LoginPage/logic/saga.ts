@@ -2,7 +2,8 @@ import { all, call, put, takeEvery } from "redux-saga/effects";
 import * as actions from "./actions";
 import * as actionTypes from "./actionTypes";
 import * as service from "../../../services/auth.service";
-import { getToken, setToken } from "../../../helpers/token.helper";
+import { getToken, removeToken, setToken } from "../../../helpers/token.helper";
+import history from "../../../helpers/history.helper";
 
 function* login(action: ReturnType<typeof actions.login>) {
     try {
@@ -25,6 +26,28 @@ function* watchLogin() {
     yield takeEvery(actionTypes.LOGIN, login);
 }
 
+function* register(action: ReturnType<typeof actions.register>) {
+    try {
+        const { type, ...data } = action;
+        const result: WebApi.Specific.AuthResult = yield call(service.register, data);
+        setToken(result.jwt_token);
+
+        yield put(
+            actions.loadProfileSuccess({
+                jwtToken: result.jwt_token,
+                user: result.user,
+            }),
+        );
+    } catch (err) {
+        yield put(actions.loadProfileSuccess({}));
+        alert(err.text); ///
+    }
+}
+
+function* watchRegister() {
+    yield takeEvery(actionTypes.REGISTER, register);
+}
+
 function* loadProfile() {
     try {
         const user: WebApi.Entity.User = yield call(service.getProfile);
@@ -36,6 +59,11 @@ function* loadProfile() {
             }),
         );
     } catch (err) {
+        if (!/login|register|/.test(window.location.href)) {
+            removeToken();
+            history.push("/");
+        }
+
         yield put(actions.loadProfileSuccess({}));
     }
 }
@@ -45,5 +73,5 @@ function* watchLoadProfile() {
 }
 
 export default function* authSaga() {
-    yield all([watchLogin(), watchLoadProfile()]);
+    yield all([watchLogin(), watchRegister(), watchLoadProfile()]);
 }

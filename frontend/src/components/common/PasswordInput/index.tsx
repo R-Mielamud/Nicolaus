@@ -10,7 +10,7 @@ interface Props {
     placeholder?: string;
     setValue: (value: string) => void;
     setHidden: (value: boolean) => void;
-    setValid: (value: boolean) => void;
+    setValid?: (value: boolean) => void;
 }
 
 const PasswordInput: React.FC<Props> = ({
@@ -18,13 +18,19 @@ const PasswordInput: React.FC<Props> = ({
     hidden,
     valid,
     placeholder,
-    setValue: setValueText,
     setHidden,
-    setValid,
+    setValue: setValueText,
+    setValid: setValidBool,
 }) => {
     const type = hidden ? "password" : "text";
     const iconName: SemanticICONS = hidden ? "eye" : "eye slash";
     const icon = <Icon name={iconName} link onClick={() => setHidden(!hidden)} />;
+
+    const setValid = (value: boolean) => {
+        if (setValidBool) {
+            setValidBool(value);
+        }
+    };
 
     const validate = (value: string) => {
         const normalized = value.trim();

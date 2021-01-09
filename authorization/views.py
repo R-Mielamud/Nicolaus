@@ -20,12 +20,12 @@ class RegisterAPIView(APIView):
 
             if check_user:
                 return JsonResponse({
-                    "detail": "This email is already taken"
+                    "message": "This email is already taken"
                 }, status=401)
 
             if passwd and len(passwd) < 6:
                 return JsonResponse({
-                    "detail": "This password is too short"
+                    "message": "This password is too short"
                 }, status=401)
 
             user = create_serializer.save()
@@ -54,7 +54,7 @@ class UpdateAPIView(APIView):
 
                 if check_user:
                     return JsonResponse({
-                        "detail": "This email is already taken"
+                        "message": "This email is already taken"
                     }, status=401)
 
             user = update_serializer.update(update_user, update_serializer.data)

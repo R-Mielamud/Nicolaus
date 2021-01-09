@@ -9,14 +9,33 @@ export const authReducer = createReducer<AuthState>(initialState, {
             requestingLogin: true,
         };
     },
-    [actionTypes.LOAD_PROFILE_SUCCESS](state, action: actionTypes.LoadProfileSuccess) {
+    [actionTypes.REGISTER](state) {
         return {
             ...state,
-            user: action.user,
+            requestingRegister: true,
+        };
+    },
+    [actionTypes.LOAD_PROFILE_SUCCESS](state, action: actionTypes.LoadProfileSuccess) {
+        const userData = action.user
+            ? {
+                  user: action.user,
+                  isAuthorized: Boolean(action.user),
+              }
+            : {};
+
+        const jwtData = action.jwtToken
+            ? {
+                  jwtToken: action.jwtToken,
+              }
+            : {};
+
+        return {
+            ...state,
+            ...userData,
+            ...jwtData,
             profileLoaded: true,
             requestingLogin: false,
-            jwtToken: action.jwtToken,
-            isAuthorized: Boolean(action.user),
+            requestingRegister: false,
         };
     },
 });

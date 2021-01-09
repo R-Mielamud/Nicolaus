@@ -1,3 +1,3 @@
 export enum LocalStorageKeys {
-    USER_TOKEN = "AUTH:USER:JWT_TOKEN",
+    USER_TOKEN = "USER:AUTH:JWT_TOKEN",
 }

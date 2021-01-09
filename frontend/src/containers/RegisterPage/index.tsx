@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Header, Segment } from "semantic-ui-react";
-import LoginForm from "../../components/LoginForm";
 import { useDispatch, useSelector } from "react-redux";
 import RootState from "../../typings/rootState";
-import { login } from "./logic/actions";
+import RegisterForm from "../../components/RegisterForm";
+import { register } from "../LoginPage/logic/actions";
+import { Register } from "../LoginPage/logic/actionTypes";
 import { Redirect } from "react-router";
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const dispatch = useDispatch();
-    const { requestingLogin, isAuthorized } = useSelector((state: RootState) => state.auth);
+    const { requestingRegister, isAuthorized } = useSelector((state: RootState) => state.auth);
 
-    const submit = (email: string, password: string) => {
-        dispatch(login({ email, password }));
+    const submit = (data: Register) => {
+        dispatch(register(data));
     };
 
     useEffect(() => {
-        setLoading(requestingLogin);
-    }, [requestingLogin]);
+        setLoading(requestingRegister);
+    }, [requestingRegister]);
 
     if (isAuthorized) {
         return <Redirect to="/" />;
@@ -26,13 +27,13 @@ const LoginPage: React.FC = () => {
     return (
         <Grid className="fill" columns="1" textAlign="center" verticalAlign="middle">
             <Grid.Column style={{ maxWidth: 400 }}>
-                <Header as="h2">Log in to Nicolaus</Header>
+                <Header as="h2">Sign up to Nicolaus</Header>
                 <Segment>
-                    <LoginForm onSubmit={submit} loading={loading} />
+                    <RegisterForm onSubmit={submit} loading={loading} />
                 </Segment>
             </Grid.Column>
         </Grid>
     );
 };
 
-export default LoginPage;
+export default RegisterPage;
