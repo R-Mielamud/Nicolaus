@@ -20,12 +20,12 @@ class RegisterAPIView(APIView):
 
             if check_user:
                 return JsonResponse({
-                    "detail": "This email is already taken"
+                    "message": "This email is already taken"
                 }, status=401)
 
             if passwd and len(passwd) < 6:
                 return JsonResponse({
-                    "detail": "This password is too short"
+                    "message": "This password is too short"
                 }, status=401)
 
             user = create_serializer.save()
@@ -54,7 +54,7 @@ class UpdateAPIView(APIView):
 
                 if check_user:
                     return JsonResponse({
-                        "detail": "This email is already taken"
+                        "message": "This email is already taken"
                     }, status=401)
 
             user = update_serializer.update(update_user, update_serializer.data)
@@ -68,7 +68,7 @@ class LoginAPIView(APIView):
     def reject(self):
         return JsonResponse({
             "message": "Email or password is invalid"
-        })
+        }, status=401)
 
     def post(self, request):
         email = request.data.get("email")
@@ -89,3 +89,13 @@ class LoginAPIView(APIView):
             "jwt_token": jwt_token,
             "user": serializer.data
         })
+
+class ProfileAPIView(APIView):
+    def get(self, request):
+        if not request.user:
+            return JsonResponse({
+                "message": "Not authorized"
+            }, status=401)
+
+        serializer = UserSerializer(request.user)
+        return JsonResponse(serializer.data)
