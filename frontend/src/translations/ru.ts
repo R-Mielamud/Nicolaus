@@ -15,4 +15,5 @@ export const ru = {
     dont_have_account: "Нет аккаунта?",
     signup_to_nicolaus: "Зарегистрироваться в Nicolaus",
     have_account: "Уже есть аккаунт?",
+    error: "Ошибка",
 };

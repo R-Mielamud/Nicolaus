@@ -4,6 +4,7 @@ import * as actionTypes from "./actionTypes";
 import * as service from "../../../services/auth.service";
 import { getToken, removeToken, setToken } from "../../../helpers/token.helper";
 import history from "../../../helpers/history.helper";
+import { error } from "../../../helpers/notifications.helper";
 
 function* login(action: ReturnType<typeof actions.login>) {
     try {
@@ -18,7 +19,7 @@ function* login(action: ReturnType<typeof actions.login>) {
         );
     } catch (err) {
         yield put(actions.loadProfileSuccess({}));
-        alert(err.text); ///
+        error(err.text);
     }
 }
 
@@ -40,7 +41,7 @@ function* register(action: ReturnType<typeof actions.register>) {
         );
     } catch (err) {
         yield put(actions.loadProfileSuccess({}));
-        alert(err.text); ///
+        error(err.text);
     }
 }
 
