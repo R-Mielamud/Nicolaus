@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Header, Segment } from "semantic-ui-react";
+import { Grid, Header, Message, Segment } from "semantic-ui-react";
 import LoginForm from "../../components/LoginForm";
 import { useDispatch, useSelector } from "react-redux";
 import RootState from "../../typings/rootState";
 import { login } from "./logic/actions";
 import { Redirect } from "react-router";
+import { NavLink } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -30,6 +31,9 @@ const LoginPage: React.FC = () => {
                 <Segment>
                     <LoginForm onSubmit={submit} loading={loading} />
                 </Segment>
+                <Message>
+                    Don&apos;t have an account? <NavLink to="/register">Sign up</NavLink>
+                </Message>
             </Grid.Column>
         </Grid>
     );
