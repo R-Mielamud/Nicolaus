@@ -4,6 +4,7 @@ import reportWebVitals from "./reportWebVitals";
 import configureLanguages from "./config/i18n.config";
 import App from "./containers/App";
 
+import "react-notifications/lib/notifications.css";
 import "semantic-ui-css/semantic.min.css";
 import "./styles/common.scss";
 

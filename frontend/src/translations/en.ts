@@ -15,4 +15,5 @@ export const en = {
     dont_have_account: "Don't have an account?",
     signup_to_nicolaus: "Sign up to Nicolaus",
     have_account: "Already have an acoount?",
+    error: "Error",
 };

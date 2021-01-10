@@ -15,4 +15,5 @@ export const ua = {
     dont_have_account: "Нема облікового запису?",
     signup_to_nicolaus: "Зареєструватися у Nicolaus",
     have_account: "Вже є обліковий запис?",
+    error: "Помилка",
 };
