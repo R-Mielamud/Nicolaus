@@ -3,7 +3,7 @@ import { Form, Button } from "semantic-ui-react";
 import { Register } from "../../containers/LoginPage/logic/actionTypes";
 import PasswordInput from "../common/PasswordInput";
 import validator from "validator";
-import { useTranslation } from "react-i18next/*";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     onSubmit?: (data: Register) => void;

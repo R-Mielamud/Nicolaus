@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslation } from "react-i18next/*";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { Menu, Dropdown, Icon } from "semantic-ui-react";
 import getUsername from "../../../helpers/getUsername.helper";

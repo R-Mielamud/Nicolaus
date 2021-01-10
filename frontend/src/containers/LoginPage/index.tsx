@@ -6,7 +6,7 @@ import RootState from "../../typings/rootState";
 import { login } from "./logic/actions";
 import { Redirect } from "react-router";
 import { NavLink } from "react-router-dom";
-import { useTranslation } from "react-i18next/*";
+import { useTranslation } from "react-i18next";
 
 const LoginPage: React.FC = () => {
     const { t } = useTranslation();

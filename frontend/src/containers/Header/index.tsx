@@ -8,7 +8,7 @@ import RootState from "../../typings/rootState";
 import Authorized from "./Authorized";
 import NotAuthorized from "./NotAuthorized";
 import styles from "./header.module.scss";
-import { useTranslation } from "react-i18next/*";
+import { useTranslation } from "react-i18next";
 
 const Header: React.FC = () => {
     const { t } = useTranslation();

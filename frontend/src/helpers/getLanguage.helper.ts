@@ -3,24 +3,24 @@ import { LocalStorageKeys } from "../constants/LocalStorageKeys";
 export const DEFAULT_LANGUAGE = "en";
 
 function fromLocalStorage() {
-    return localStorage.getItem(LocalStorageKeys.USER_LANGUAGE) || DEFAULT_LANGUAGE;
+    return localStorage.getItem(LocalStorageKeys.USER_LANGUAGE);
 }
 
 function fromNavigator() {
     if (!navigator.language) {
-        return DEFAULT_LANGUAGE;
+        return null;
     }
 
     const languageString = navigator.language;
     const languageParts = languageString.split("-");
     const lastPart = languageParts.pop();
 
-    return lastPart ? lastPart.toLowerCase() : DEFAULT_LANGUAGE;
+    return lastPart?.toLowerCase();
 }
 
 export default function getLanguage() {
     const local = fromLocalStorage();
     const navigator = fromNavigator();
 
-    return local || navigator;
+    return navigator || local || DEFAULT_LANGUAGE;
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next/*";
+import { useTranslation } from "react-i18next";
 import { Button, Form } from "semantic-ui-react";
 import validator from "validator";
 import PasswordInput from "../common/PasswordInput";
