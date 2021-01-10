@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { Menu, Dropdown, Icon } from "semantic-ui-react";
 import getUsername from "../../../helpers/getUsername.helper";
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const Authorized: React.FC<Props> = ({ logOut }) => {
+    const { t } = useTranslation();
     const { user } = useSelector((state: RootState) => state.auth);
 
     return (
@@ -19,13 +21,13 @@ const Authorized: React.FC<Props> = ({ logOut }) => {
                         trigger={
                             <span>
                                 <Icon name="setting" />
-                                Profile
+                                {t("profile")}
                             </span>
                         }
                     >
                         <Dropdown.Menu>
                             <Dropdown.Header>{getUsername(user as WebApi.Entity.User)}</Dropdown.Header>
-                            <Dropdown.Item onClick={logOut}>Log out</Dropdown.Item>
+                            <Dropdown.Item onClick={logOut}>{t("logout")}</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </Menu.Item>

@@ -1,10 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
+import configureLanguages from "./config/i18n.config";
 import App from "./containers/App";
 
 import "semantic-ui-css/semantic.min.css";
 import "./styles/common.scss";
+
+configureLanguages();
 
 const root = document.getElementById("root");
 ReactDOM.render(<App />, root);

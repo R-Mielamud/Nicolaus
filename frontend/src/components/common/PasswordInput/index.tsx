@@ -2,6 +2,7 @@ import React from "react";
 import { Icon, Form, Popup } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 import { Password } from "../../../constants/Password";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     value: string;
@@ -22,6 +23,7 @@ const PasswordInput: React.FC<Props> = ({
     setValue: setValueText,
     setValid: setValidBool,
 }) => {
+    const { t } = useTranslation();
     const type = hidden ? "password" : "text";
     const iconName: SemanticICONS = hidden ? "eye" : "eye slash";
     const icon = <Icon name={iconName} link onClick={() => setHidden(!hidden)} />;
@@ -47,7 +49,7 @@ const PasswordInput: React.FC<Props> = ({
             open={!valid}
             className="error"
             on={[]}
-            content="Password must be at least 6 characters long"
+            content={t("short_password")}
             trigger={
                 <Form.Input
                     value={value}

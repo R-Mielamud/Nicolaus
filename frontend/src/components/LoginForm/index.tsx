@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, Form } from "semantic-ui-react";
 import validator from "validator";
 import PasswordInput from "../common/PasswordInput";
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const LoginForm: React.FC<Props> = ({ onSubmit, loading }) => {
+    const { t } = useTranslation();
     const [email, setEmailText] = useState<string>("");
     const [emailValid, setEmailValid] = useState<boolean>(true);
     const [password, setPassword] = useState<string>("");
@@ -33,7 +35,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit, loading }) => {
                 iconPosition="left"
                 error={!emailValid}
                 value={email}
-                placeholder="Email"
+                placeholder={t("email")}
                 onChange={(event, data) => setEmail(data.value)}
                 onBlur={() => setEmailValid(validator.isEmail(email))}
             />
@@ -41,12 +43,12 @@ const LoginForm: React.FC<Props> = ({ onSubmit, loading }) => {
                 valid
                 value={password}
                 hidden={passwordHidden}
-                placeholder="Password"
+                placeholder={t("password")}
                 setValue={setPassword}
                 setHidden={setPasswordHidden}
             />
             <Button primary fluid type="submit" disabled={buttonDisabled}>
-                Login
+                {t("login")}
             </Button>
         </Form>
     );
