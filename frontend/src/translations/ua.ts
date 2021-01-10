@@ -1,1 +1,18 @@
-export const ua = {};
+export const ua = {
+    short_password: "Пароль має містити не меньше 6 символів",
+    loading: "Завантаження...",
+    email: "Ел. пошта",
+    password: "Пароль",
+    login: "Увійти",
+    phone_number: "Номер телефону",
+    first_name: "Ім'я",
+    last_name: "Прізвище",
+    signup: "Зареєструватися",
+    to_home: "На головну сторінку",
+    profile: "Профіль",
+    logout: "Вийти",
+    login_to_nicolaus: "Увійти до Nicolaus",
+    dont_have_account: "Нема облікового запису?",
+    signup_to_nicolaus: "Зареєструватися у Nicolaus",
+    have_account: "Вже є обліковий запис?",
+};
