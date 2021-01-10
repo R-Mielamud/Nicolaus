@@ -3,6 +3,7 @@ import { Form, Button } from "semantic-ui-react";
 import { Register } from "../../containers/LoginPage/logic/actionTypes";
 import PasswordInput from "../common/PasswordInput";
 import validator from "validator";
+import { useTranslation } from "react-i18next/*";
 
 interface Props {
     onSubmit?: (data: Register) => void;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const RegisterForm: React.FC<Props> = ({ onSubmit, loading }) => {
+    const { t } = useTranslation();
     const [email, setEmailText] = useState<string>("");
     const [emailValid, setEmailValid] = useState<boolean>(true);
     const [password, setPassword] = useState<string>("");
@@ -44,7 +46,7 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, loading }) => {
                 iconPosition="left"
                 error={!emailValid}
                 value={email}
-                placeholder="Email"
+                placeholder={t("email")}
                 onChange={(event, data) => setEmail(data.value)}
                 onBlur={() => setEmailValid(validator.isEmail(email))}
             />
@@ -52,7 +54,7 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, loading }) => {
                 valid={passwordValid}
                 value={password}
                 hidden={passwordHidden}
-                placeholder="Password"
+                placeholder={t("password")}
                 setValue={setPassword}
                 setHidden={setPasswordHidden}
                 setValid={setPasswordValid}
@@ -61,25 +63,25 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, loading }) => {
                 icon="phone"
                 iconPosition="left"
                 value={telephone}
-                placeholder="Phone number"
+                placeholder={t("phone_number")}
                 onChange={(event, data) => setTelephone(data.value)}
             />
             <Form.Input
                 icon="user"
                 iconPosition="left"
                 value={firstName}
-                placeholder="First name"
+                placeholder={t("first_name")}
                 onChange={(event, data) => setFirstName(data.value)}
             />
             <Form.Input
                 icon="user"
                 iconPosition="left"
                 value={lastName}
-                placeholder="Last name"
+                placeholder={t("last_name")}
                 onChange={(event, data) => setLastName(data.value)}
             />
             <Button primary fluid type="submit" disabled={buttonDisabled}>
-                Sign up
+                {t("signup")}
             </Button>
         </Form>
     );
