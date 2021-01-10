@@ -7,8 +7,10 @@ import { register } from "../LoginPage/logic/actions";
 import { Register } from "../LoginPage/logic/actionTypes";
 import { Redirect } from "react-router";
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next/*";
 
 const RegisterPage: React.FC = () => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState<boolean>(false);
     const dispatch = useDispatch();
     const { requestingRegister, isAuthorized } = useSelector((state: RootState) => state.auth);
@@ -28,12 +30,12 @@ const RegisterPage: React.FC = () => {
     return (
         <Grid className="fill" columns="1" textAlign="center" verticalAlign="middle">
             <Grid.Column style={{ maxWidth: 400 }}>
-                <Header as="h2">Sign up to Nicolaus</Header>
+                <Header as="h2">{t("signup_to_nicolaus")}</Header>
                 <Segment>
                     <RegisterForm onSubmit={submit} loading={loading} />
                 </Segment>
                 <Message>
-                    Already have an account? <NavLink to="/login">Log in</NavLink>
+                    {t("have_account")} <NavLink to="/login">{t("login")}</NavLink>
                 </Message>
             </Grid.Column>
         </Grid>

@@ -8,8 +8,10 @@ import RootState from "../../typings/rootState";
 import Authorized from "./Authorized";
 import NotAuthorized from "./NotAuthorized";
 import styles from "./header.module.scss";
+import { useTranslation } from "react-i18next/*";
 
 const Header: React.FC = () => {
+    const { t } = useTranslation();
     const { isAuthorized } = useSelector((state: RootState) => state.auth);
 
     const logOut = () => {
@@ -20,7 +22,7 @@ const Header: React.FC = () => {
     return (
         <div className={styles.headerWrapper}>
             <Menu secondary>
-                <Menu.Menu onClick={() => history.push("/")} title="Back to home" className={styles.cursor}>
+                <Menu.Menu onClick={() => history.push("/")} title={t("to_home")} className={styles.cursor}>
                     <div className={styles.logoWrapper}>
                         <Logo />
                     </div>
