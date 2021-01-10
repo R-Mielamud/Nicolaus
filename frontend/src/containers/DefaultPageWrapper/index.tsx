@@ -1,26 +1,21 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../components/common/Spinner";
-import RootState from "../../typings/rootState";
-import { loadProfile } from "../LoginPage/logic/actions";
+import React from "react";
+import Header from "../Header";
+import styles from "./default.module.scss";
 
 interface Props {
-    children: React.ReactElement<any, any>;
+    overflowHidden?: boolean;
 }
 
-const DefaultPageWrapper: React.FC<Props> = ({ children }) => {
-    const dispatch = useDispatch();
-    const { profileLoaded } = useSelector((state: RootState) => state.auth);
+const DefaultPageWrapper: React.FC<Props> = ({ children, overflowHidden }) => {
+    // const dispatch = useDispatch();
+    // useEffect(() => {}, []);
 
-    useEffect(() => {
-        dispatch(loadProfile());
-    }, []);
-
-    if (!profileLoaded) {
-        return <Spinner />;
-    }
-
-    return children;
+    return (
+        <div className={styles.container}>
+            <Header />
+            <div className={[styles.remaining, overflowHidden ? styles.hidden : ""].join(" ")}>{children}</div>
+        </div>
+    );
 };
 
 export default DefaultPageWrapper;

@@ -17,6 +17,13 @@ body {
     color: red;
 }
 
+.headerText:hover {
+    border-bottom: 2px solid #212121 !important;
+    padding-bottom: 2px;
+    position: relative;
+    top: 2px;
+}
+
 .error {
     border-color: #e0b4b4 !important;
     color: #9f3a38 !important;
