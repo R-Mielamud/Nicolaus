@@ -1,4 +1,4 @@
-export function capitalizeWord(word: string) {
+export function capitalizeWord(word: string): string {
     if (word.length < 1) {
         return "";
     }
@@ -8,7 +8,7 @@ export function capitalizeWord(word: string) {
     return firstLetter.toUpperCase() + remaining.toLocaleLowerCase();
 }
 
-export function snakeCaseToSentense(text: string) {
+export function snakeCaseToSentense(text: string): string {
     const words: string[] = text.split("_");
 
     if (words.length < 1) {

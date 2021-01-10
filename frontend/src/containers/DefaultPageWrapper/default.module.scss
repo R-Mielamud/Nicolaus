@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.remaining {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.hidden {
+    overflow-y: hidden;
+}
