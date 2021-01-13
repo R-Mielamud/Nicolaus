@@ -3,13 +3,15 @@ import { getToken } from "./token.helper";
 import { WebApiException, WebApiExceptionProps, DEFAULT_EXCEPTION_TEXT } from "../typings/webapiException";
 
 const API = "api/";
-const BASE_URL = process.env.REACT_APP_API_BASE_URL + "/";
+const BACKEND_BASE_URL = process.env.REACT_APP_BACKEND_BASE_URL + "/";
+const CHATBOT_BASE_URL = process.env.REACT_APP_CHATBOT_BASE_URL + "/";
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 interface RequestArgs {
     endpoint: string;
     method: Method;
+    chatbotApi?: boolean;
     skipAuthorization?: boolean;
     query?: Record<string, any>;
     body?: any;
@@ -56,7 +58,8 @@ async function throwIfResponseFailed(res: Response) {
 
 function getUrl(args: RequestArgs): RequestInfo {
     const querystring = args.query ? `?${qs.stringify(args.query)}` : "";
-    return BASE_URL + API + args.endpoint + querystring;
+    const baseUrl = args.chatbotApi ? CHATBOT_BASE_URL : BACKEND_BASE_URL;
+    return baseUrl + API + args.endpoint + querystring;
 }
 
 function getArgs(args: RequestArgs): RequestInit {

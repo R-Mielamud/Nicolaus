@@ -11,6 +11,23 @@ namespace WebApi.Entity {
         is_admin: boolean;
     }
 }
+
+namespace WebApi.BotEntity {
+    interface Requisites extends Identified {
+        delivery_phone: string;
+        delivery_name: string;
+        post_service: string;
+        delivery_address: string;
+    }
+
+    interface User extends Identified {
+        messenger: string;
+        messenger_id: string;
+        phone?: string;
+        requisites: Requisites;
+    }
+}
+
 namespace WebApi.Specific {
     interface AuthResult {
         jwt_token: string;
