@@ -24,6 +24,12 @@ body {
     top: 2px;
 }
 
+.leftRight {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
 .error {
     border-color: #e0b4b4 !important;
     color: #9f3a38 !important;

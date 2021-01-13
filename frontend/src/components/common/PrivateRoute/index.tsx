@@ -5,10 +5,9 @@ import RootState from "../../../typings/rootState";
 
 interface Props {
     component: React.ComponentClass | React.FC | React.FunctionComponent;
-    restricted?: boolean;
 }
 
-const PrivateRoute: React.FC<Props & RouteProps> = ({ component, restricted, ...rest }) => {
+const PrivateRoute: React.FC<Props & RouteProps> = ({ component, ...rest }) => {
     const { isAuthorized } = useSelector((state: RootState) => state.auth);
     const Component = isAuthorized ? component : () => <Redirect to="/" />;
 
