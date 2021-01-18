@@ -1,11 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Route, RouteProps } from "react-router";
+import { ReactComponent } from "../../../typings/react";
 import RootState from "../../../typings/rootState";
 
 interface Props {
-    authorized: React.ComponentClass | React.FC | React.FunctionComponent;
-    notAuthorized: React.ComponentClass | React.FC | React.FunctionComponent;
+    authorized: ReactComponent;
+    notAuthorized: ReactComponent;
 }
 
 const HybridRoute: React.FC<Props & RouteProps> = ({ authorized, notAuthorized, ...rest }) => {

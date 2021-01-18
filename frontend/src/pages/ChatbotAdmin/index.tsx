@@ -1,10 +1,10 @@
 import React from "react";
 import ChatbotAdminPage from "../../containers/ChatbotAdminPage";
-import DefaultPageWrapper from "../../containers/DefaultPageWrapper";
+import DefaultPageWrapper, { CHATBOT_ADMIN_INFO_SET } from "../../containers/DefaultPageWrapper";
 
 const ChatbotAdmin: React.FC = () => {
     return (
-        <DefaultPageWrapper>
+        <DefaultPageWrapper infoSet={CHATBOT_ADMIN_INFO_SET}>
             <ChatbotAdminPage />
         </DefaultPageWrapper>
     );

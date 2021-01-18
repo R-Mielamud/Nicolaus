@@ -24,7 +24,7 @@ namespace WebApi.BotEntity {
         messenger: string;
         messenger_id: string;
         phone?: string;
-        requisites: Requisites;
+        requisites?: Requisites;
     }
 }
 
