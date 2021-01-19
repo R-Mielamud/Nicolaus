@@ -28,4 +28,6 @@ export const ua = {
     delivery_address: "Адреса доставки",
     post_service: "Поштовий сервіс",
     delivery_contacts: "Контакти отримувача",
+    search_by_telephone: "Пошук за телефоном...",
+    cant_find: "Вибачте, ми нічого не знайшли",
 };

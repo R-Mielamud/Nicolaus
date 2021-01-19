@@ -28,4 +28,6 @@ export const en = {
     delivery_address: "Delivery address",
     post_service: "Post service",
     delivery_contacts: "Delivery contacts",
+    search_by_telephone: "Search by telephone...",
+    cant_find: "Sorry, we can't find anything",
 };

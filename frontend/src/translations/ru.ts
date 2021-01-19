@@ -28,4 +28,6 @@ export const ru = {
     delivery_address: "Адрес доставки",
     post_service: "Почтовый сервис",
     delivery_contacts: "Контакты получателя",
+    search_by_telephone: "Поиск по телефону...",
+    cant_find: "Извините, мы ничего не нашли",
 };
