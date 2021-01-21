@@ -3,15 +3,16 @@ import { Icon, Form, Popup } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 import { Password } from "../../../constants/Password";
 import { useTranslation } from "react-i18next";
+import { Setter } from "../../../typings/setter";
 
 interface Props {
     value: string;
     hidden: boolean;
     valid: boolean;
     placeholder?: string;
-    setValue: (value: string) => void;
-    setHidden: (value: boolean) => void;
-    setValid?: (value: boolean) => void;
+    setValue: Setter<string>;
+    setHidden: Setter<boolean>;
+    setValid?: Setter<boolean>;
 }
 
 const PasswordInput: React.FC<Props> = ({

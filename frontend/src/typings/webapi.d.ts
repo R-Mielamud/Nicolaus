@@ -20,11 +20,20 @@ namespace WebApi.BotEntity {
         delivery_address: string;
     }
 
-    interface User extends Identified {
+    interface MinimalUser extends Identified {
         messenger: string;
-        messenger_id: string;
         phone?: string;
+    }
+
+    interface User extends MinimalUser {
+        messenger_id: string;
         requisites?: Requisites;
+    }
+
+    interface Bill extends Identified {
+        amount: string;
+        comment: string;
+        user: MinimalUser;
     }
 }
 

@@ -30,4 +30,7 @@ export const en = {
     delivery_contacts: "Delivery contacts",
     search_by_telephone: "Search by telephone...",
     cant_find: "Sorry, we can't find anything",
+    bills: "Bills",
+    amount: "Amount",
+    comment: "Comment",
 };

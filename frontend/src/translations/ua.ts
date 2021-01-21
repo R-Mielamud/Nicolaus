@@ -30,4 +30,7 @@ export const ua = {
     delivery_contacts: "Контакти отримувача",
     search_by_telephone: "Пошук за телефоном...",
     cant_find: "Вибачте, ми нічого не знайшли",
+    bills: "Платежі",
+    amount: "Сума",
+    comment: "Коментар",
 };

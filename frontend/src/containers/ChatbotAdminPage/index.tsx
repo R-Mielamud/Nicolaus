@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Button, Divider, Header, Tab } from "semantic-ui-react";
 import history from "../../helpers/history.helper";
 import RootState from "../../typings/rootState";
+import BillsTable from "./BillsTable";
 import UsersTable from "./UsersTable";
 
 const ChatbotAdminPage: React.FC = () => {
@@ -18,6 +19,10 @@ const ChatbotAdminPage: React.FC = () => {
         {
             menuItem: t("users"),
             render: () => <UsersTable />,
+        },
+        {
+            menuItem: t("bills"),
+            render: () => <BillsTable />,
         },
     ];
 

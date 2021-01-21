@@ -30,4 +30,7 @@ export const ru = {
     delivery_contacts: "Контакты получателя",
     search_by_telephone: "Поиск по телефону...",
     cant_find: "Извините, мы ничего не нашли",
+    bills: "Платежи",
+    amount: "Сумма",
+    comment: "Комментарий",
 };
