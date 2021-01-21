@@ -19,3 +19,13 @@ export async function getMessengerBills(): Promise<WebApi.BotEntity.Bill[]> {
 
     return (await res.json()) as WebApi.BotEntity.Bill[];
 }
+
+export async function getMessengerOrders(): Promise<WebApi.BotEntity.Order[]> {
+    const res: Response = await callWebApi({
+        endpoint: "orders/",
+        method: "GET",
+        chatbotApi: true,
+    });
+
+    return (await res.json()) as WebApi.BotEntity.Order[];
+}

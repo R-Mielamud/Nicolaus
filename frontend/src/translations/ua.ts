@@ -33,4 +33,6 @@ export const ua = {
     bills: "Платежі",
     amount: "Сума",
     comment: "Коментар",
+    orders: "Замовлення",
+    books: "Товари",
 };

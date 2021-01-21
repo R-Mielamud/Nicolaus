@@ -5,6 +5,7 @@ import { Button, Divider, Header, Tab } from "semantic-ui-react";
 import history from "../../helpers/history.helper";
 import RootState from "../../typings/rootState";
 import BillsTable from "./BillsTable";
+import OrdersTable from "./OrdersTable";
 import UsersTable from "./UsersTable";
 
 const ChatbotAdminPage: React.FC = () => {
@@ -23,6 +24,10 @@ const ChatbotAdminPage: React.FC = () => {
         {
             menuItem: t("bills"),
             render: () => <BillsTable />,
+        },
+        {
+            menuItem: t("orders"),
+            render: () => <OrdersTable />,
         },
     ];
 

@@ -33,4 +33,6 @@ export const en = {
     bills: "Bills",
     amount: "Amount",
     comment: "Comment",
+    orders: "Orders",
+    books: "Products",
 };

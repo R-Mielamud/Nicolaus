@@ -33,4 +33,6 @@ export const ru = {
     bills: "Платежи",
     amount: "Сумма",
     comment: "Комментарий",
+    orders: "Заказы",
+    books: "Товары",
 };

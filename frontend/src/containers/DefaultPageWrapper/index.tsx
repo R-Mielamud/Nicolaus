@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { loadMessengerBills, loadMessengerUsers } from "../ChatbotAdminPage/logic/actions";
+import { loadMessengerBills, loadMessengerOrders, loadMessengerUsers } from "../ChatbotAdminPage/logic/actions";
 import Header from "../Header";
 import styles from "./default.module.scss";
 
 export const CATALOG_INFO_SET = []; // Will be filled
 export const SITE_ADMIN_INFO_SET = []; // Will be filled
-export const CHATBOT_ADMIN_INFO_SET = ["messengerUsers", "messengerBills"];
+export const CHATBOT_ADMIN_INFO_SET = ["messengerUsers", "messengerBills", "messengerOrders"];
 
 const infoLoadingMap: Record<string, any> = {
     messengerUsers: loadMessengerUsers,
     messengerBills: loadMessengerBills,
+    messengerOrders: loadMessengerOrders,
 };
 
 interface Props {

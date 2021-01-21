@@ -35,6 +35,11 @@ namespace WebApi.BotEntity {
         comment: string;
         user: MinimalUser;
     }
+
+    interface Order extends Identified {
+        books: string[];
+        user: MinimalUser;
+    }
 }
 
 namespace WebApi.Specific {
