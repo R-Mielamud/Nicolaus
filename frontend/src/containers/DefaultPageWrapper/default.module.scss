@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.remaining {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 30px 40px;
+}
+
+.hidden {
+    overflow-y: hidden;
+}
