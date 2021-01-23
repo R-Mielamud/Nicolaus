@@ -35,4 +35,5 @@ export const ru = {
     comment: "Комментарий",
     orders: "Заказы",
     books: "Товары",
+    download_table: "Скачать отображаемую таблицу в формате CSV",
 };

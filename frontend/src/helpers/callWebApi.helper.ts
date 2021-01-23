@@ -5,6 +5,7 @@ import { WebApiException, WebApiExceptionProps, DEFAULT_EXCEPTION_TEXT } from ".
 const API = "api/";
 const BACKEND_BASE_URL = process.env.REACT_APP_BACKEND_BASE_URL + "/";
 const CHATBOT_BASE_URL = process.env.REACT_APP_CHATBOT_BASE_URL + "/";
+const CHATBOT_API_KEY = process.env.REACT_APP_CHATBOT_API_KEY;
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -67,7 +68,9 @@ function getArgs(args: RequestArgs): RequestInit {
     const token = getToken();
     let body: Body;
 
-    if (token && !args.skipAuthorization) {
+    if (args.chatbotApi) {
+        headers.Authorization = CHATBOT_API_KEY ?? "";
+    } else if (token && !args.skipAuthorization) {
         headers.Authorization = `Bearer ${token}`;
     }
 

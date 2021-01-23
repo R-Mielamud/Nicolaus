@@ -35,4 +35,5 @@ export const ua = {
     comment: "Коментар",
     orders: "Замовлення",
     books: "Товари",
+    download_table: "Завантажити таблицю у форматі CSV",
 };

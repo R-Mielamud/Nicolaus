@@ -35,4 +35,5 @@ export const en = {
     comment: "Comment",
     orders: "Orders",
     books: "Products",
+    download_table: "Download сurrent table as CSV",
 };
