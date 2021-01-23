@@ -24,6 +24,17 @@ body {
     top: 2px;
 }
 
+.leftRight {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leftRight * {
+    margin: 0 !important;
+}
+
 .error {
     border-color: #e0b4b4 !important;
     color: #9f3a38 !important;

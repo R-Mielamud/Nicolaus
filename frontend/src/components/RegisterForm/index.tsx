@@ -4,9 +4,10 @@ import { Register } from "../../containers/LoginPage/logic/actionTypes";
 import PasswordInput from "../common/PasswordInput";
 import validator from "validator";
 import { useTranslation } from "react-i18next";
+import { Setter } from "../../typings/setter";
 
 interface Props {
-    onSubmit?: (data: Register) => void;
+    onSubmit?: Setter<Register>;
     loading: boolean;
 }
 
