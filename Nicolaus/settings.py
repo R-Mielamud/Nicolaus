@@ -85,6 +85,13 @@ WSGI_APPLICATION = 'Nicolaus.wsgi.application'
 
 if DEBUG:
     DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgres_psycopg2",
             "NAME": "nicolaus",
@@ -93,13 +100,6 @@ if DEBUG:
             "HOST": "127.0.0.1",
             "PORT": "5432",
         },
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
     }
 
 
