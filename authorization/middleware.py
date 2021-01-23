@@ -6,13 +6,13 @@ from .models import User
 
 def extract_user_from_jwt(get_response):
     def middleware(request):
-        def reject(self):
+        def reject():
             return JsonResponse({
                 "message": "Not authorized"
             }, status=401)
 
         if (not request.path.startswith("/api")) or (request.path in settings.JWT_ROUTES_WHITELIST):
-            return
+            return get_response(request)
 
         token = jwt.extract_token_from_request(request)
 
