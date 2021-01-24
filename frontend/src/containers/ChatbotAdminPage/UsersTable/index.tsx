@@ -51,8 +51,8 @@ const UsersTable: React.FC = () => {
                     <Table celled>
                         <Table.Header>
                             <Table.Row>
-                                <Table.HeaderCell>{t("phone")}</Table.HeaderCell>
-                                <Table.HeaderCell>{t("messenger")}</Table.HeaderCell>
+                                <Table.HeaderCell width={2}>{t("phone")}</Table.HeaderCell>
+                                <Table.HeaderCell width={1}>{t("messenger")}</Table.HeaderCell>
                                 <Table.HeaderCell>{t("delivery_contacts")}</Table.HeaderCell>
                                 <Table.HeaderCell>{t("post_service")}</Table.HeaderCell>
                                 <Table.HeaderCell>{t("delivery_address")}</Table.HeaderCell>

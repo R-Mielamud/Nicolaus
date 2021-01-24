@@ -9,6 +9,7 @@ import { CSVHeaders } from "../../../constants/CSVHeaders";
 import { FileNames } from "../../../constants/FileNames";
 import RootState from "../../../typings/rootState";
 import StdSearch, { getStdFilter } from "../StdSearch";
+// import moment from "moment";
 
 const BillsTable: React.FC = () => {
     const { t } = useTranslation();
@@ -29,6 +30,7 @@ const BillsTable: React.FC = () => {
     });
 
     const displayBills: WebApi.BotEntity.Bill[] = messengerBills.filter(filterBills);
+    // {moment(bill.created_at).format("MMMM Do YYYY, h:mm a")}
 
     return (
         <Tab.Pane>
@@ -52,7 +54,8 @@ const BillsTable: React.FC = () => {
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell width={2}>{t("phone")}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{t("messenger")}</Table.HeaderCell>
+                                <Table.HeaderCell width={1}>{t("messenger")}</Table.HeaderCell>
+                                <Table.HeaderCell width={2}>{t("creation_date")}</Table.HeaderCell>
                                 <Table.HeaderCell width={6}>{t("amount")}</Table.HeaderCell>
                                 <Table.HeaderCell width={7}>{t("comment")}</Table.HeaderCell>
                             </Table.Row>
@@ -62,6 +65,7 @@ const BillsTable: React.FC = () => {
                                 <Table.Row key={bill.id}>
                                     <Table.Cell>{bill.user.phone}</Table.Cell>
                                     <Table.Cell>{bill.user.messenger}</Table.Cell>
+                                    <Table.Cell>{bill.created_at}</Table.Cell>
                                     <Table.Cell>{bill.amount}</Table.Cell>
                                     <Table.Cell>{bill.comment}</Table.Cell>
                                 </Table.Row>

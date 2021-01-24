@@ -36,4 +36,5 @@ export const ru = {
     orders: "Заказы",
     books: "Товары",
     download_table: "Скачать отображаемую таблицу в формате CSV",
+    creation_date: "Дата создания",
 };

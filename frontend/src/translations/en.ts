@@ -36,4 +36,5 @@ export const en = {
     orders: "Orders",
     books: "Products",
     download_table: "Download сurrent table as CSV",
+    creation_date: "Creation date",
 };

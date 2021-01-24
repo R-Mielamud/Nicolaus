@@ -36,4 +36,5 @@ export const ua = {
     orders: "Замовлення",
     books: "Товари",
     download_table: "Завантажити таблицю у форматі CSV",
+    creation_date: "Дата створення",
 };
