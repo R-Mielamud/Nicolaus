@@ -168,6 +168,8 @@ JWT_ROUTES_WHITELIST = [
 # Cross-Origin Resource Sharing
 
 CORS_ALLOWED_ORIGINS = [
+    "https://nicolaus.com.ua",
+    "http://nicolaus.com.ua",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
