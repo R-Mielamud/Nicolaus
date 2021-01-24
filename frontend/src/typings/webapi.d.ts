@@ -34,11 +34,13 @@ namespace WebApi.BotEntity {
         amount: string;
         comment: string;
         user: MinimalUser;
+        created_at: string;
     }
 
     interface Order extends Identified {
         books: string[];
         user: MinimalUser;
+        created_at: string;
     }
 }
 

@@ -53,8 +53,9 @@ const OrdersTable: React.FC = () => {
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell width={2}>{t("phone")}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{t("messenger")}</Table.HeaderCell>
-                                <Table.HeaderCell width={13}>{t("books")}</Table.HeaderCell>
+                                <Table.HeaderCell width={1}>{t("messenger")}</Table.HeaderCell>
+                                <Table.HeaderCell width={2}>{t("creation_date")}</Table.HeaderCell>
+                                <Table.HeaderCell>{t("books")}</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -62,6 +63,7 @@ const OrdersTable: React.FC = () => {
                                 <Table.Row key={order.id}>
                                     <Table.Cell>{order.user.phone}</Table.Cell>
                                     <Table.Cell>{order.user.messenger}</Table.Cell>
+                                    <Table.Cell>{order.created_at}</Table.Cell>
                                     <Table.Cell>
                                         <div className={styles.booksCell}>
                                             {order.books.map((book, i) => (

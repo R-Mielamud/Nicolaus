@@ -8,6 +8,6 @@ export const CSVHeaders = {
         "requisites.delivery_name",
         "requisites.post_service",
     ],
-    MESSENGER_BILL: ["user.phone", "user.messenger", "amount", "comment"],
-    MESSENGER_ORDER: ["user.phone", "user.messenger", "books"],
+    MESSENGER_BILL: ["user.phone", "user.messenger", "amount", "comment", "created_at"],
+    MESSENGER_ORDER: ["user.phone", "user.messenger", "books", "created_at"],
 };
