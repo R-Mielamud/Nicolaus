@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJ_DEBUG", "1") == "1"
 
-ALLOWED_HOSTS = ["35.178.186.33", "nicolaus.com.ua", "localhost"]
+ALLOWED_HOSTS = ["35.178.186.33", "api.nicolaus.com.ua", "127.0.0.1", "localhost"]
 
 
 # Application definition
