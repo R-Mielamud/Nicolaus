@@ -1,7 +1,9 @@
 import os
 from django.core.files.storage import Storage
+from django.utils.deconstruct import deconstructible
 from helpers.s3 import S3BookImageUploader
 
+@deconstructible
 class S3BookImageStorage(Storage):
     def __init__(self, *args, **kwargs):
         self.uploader = S3BookImageUploader()

@@ -1,3 +1,27 @@
-from django.db import models
+from django.db.models import *
+from book_filters.models import Tag
+from storages import S3BookImageStorage
+from helpers.percentage import get_percent_of_number
 
-# Create your models here.
+class Book(Model):
+    title = CharField(max_length=300)
+    description = TextField(max_length=3000, blank=True, null=True)
+    image = FileField(storage=S3BookImageStorage())
+    # authors = ...
+    # publishing = ...
+    # series = ...
+    isbn = CharField(max_length=100)
+    price = FloatField(default=0)
+    orig_price = FloatField(default=0)
+    discount = IntegerField(default=0)
+    in_stock = IntegerField(default=0)
+    pages_count = IntegerField(default=100)
+    paper_type = CharField(max_length=100)
+    tags = ManyToManyField(to=Tag, related_name="books", blank=True)
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.price = self.orig_price - get_percent_of_number(self.orig_price, self.discount)
+        return super().save(*args, **kwargs)

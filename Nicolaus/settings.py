@@ -196,4 +196,4 @@ AWS_S3_MEDIA_BUCKET = os.environ.get("AWS_S3_MEDIA_BUCKET", "")
 
 AWS_S3_MEDIA_REGION = os.environ.get("AWS_S3_MEDIA_REGION", "")
 
-AWS_S3_BOOK_IMAGE_KEY = "books/images"
+AWS_S3_BOOK_IMAGE_KEY = "book_images"
