@@ -8,7 +8,7 @@ def extract_user_from_jwt(get_response):
     def middleware(request):
         def reject():
             return JsonResponse({
-                "message": "Not authorized"
+                "message": "Not authorized",
             }, status=401)
 
         if (not request.path.startswith("/api")) or (request.path in settings.JWT_ROUTES_WHITELIST):
@@ -30,6 +30,20 @@ def extract_user_from_jwt(get_response):
             return reject()
 
         setattr(request, "user", user)
+        return get_response(request)
+
+    return middleware
+
+def only_for_admin(get_response):
+    def middleware(request):
+        if not request.path.startswith("/api/books") or request.method == "GET":
+            return get_response(request)
+
+        if not request.user.is_admin:
+            return JsonResponse({
+                "message": "Permission denied",
+            }, status=403)
+
         return get_response(request)
 
     return middleware

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "api",
     "authorization",
+    "book_filters",
+    "books",
 ]
 
 MIDDLEWARE = [
@@ -57,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "authorization.middleware.extract_user_from_jwt",
+    "authorization.middleware.only_for_admin",
 ]
 
 ROOT_URLCONF = 'Nicolaus.urls'
