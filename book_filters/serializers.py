@@ -49,6 +49,11 @@ class PublishingSerializer(ModelSerializer):
         model = Publishing
         fields = ["id", "name", "series"]
 
+class MinimalPublishingSerializer(ModelSerializer):
+    class Meta:
+        model = Publishing
+        fields = ["id", "name"]
+
 class ChangePublishingSerializer(ModelSerializer):
     class Meta:
         model = Publishing

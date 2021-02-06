@@ -4,8 +4,15 @@ from rest_framework.serializers import (
     PrimaryKeyRelatedField,
 )
 
-from book_filters.models import Tag
-from book_filters.serializers import TagSerializer
+from book_filters.serializers import (
+    TagSerializer,
+    AuthorSerializer,
+    PublishingSerializer,
+    MinimalPublishingSerializer,
+    SeriesSerializer,
+)
+
+from book_filters.models import Tag, Author, Series, Publishing
 from .models import Book
 
 class CommonBookSerializer(ModelSerializer):
@@ -15,7 +22,7 @@ class CommonBookSerializer(ModelSerializer):
         return obj.in_stock > 0
 
 class ListBookSerializer(CommonBookSerializer):
-    # authors = ...
+    authors = AuthorSerializer(many=True)
 
     class Meta:
         model = Book
@@ -25,15 +32,15 @@ class ListBookSerializer(CommonBookSerializer):
             "title",
             "description",
             "image",
-            # "authors",
+            "authors",
             "price",
             "discount",
         ]
 
 class BookSerializer(CommonBookSerializer):
-    # authors = ...
-    # publishing = ...
-    # series = ...
+    authors = AuthorSerializer(many=True)
+    publishing = MinimalPublishingSerializer()
+    series = SeriesSerializer()
     tags = TagSerializer(many=True)
 
     class Meta:
@@ -44,9 +51,9 @@ class BookSerializer(CommonBookSerializer):
             "title",
             "description",
             "image",
-            # "authors",
-            # "publishing",
-            # "series",
+            "authors",
+            "publishing",
+            "series",
             "isbn",
             "price",
             "discount",
@@ -56,9 +63,9 @@ class BookSerializer(CommonBookSerializer):
         ]
 
 class ChangeBookSerializer(ModelSerializer):
-    # authors = ...
-    # publishing = ...
-    # series = ...
+    authors = PrimaryKeyRelatedField(many=True, queryset=Author.objects.all())
+    publishing = PrimaryKeyRelatedField(queryset=Publishing.objects.all())
+    series = PrimaryKeyRelatedField(queryset=Series.objects.all())
     tags = PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all())
 
     class Meta:
@@ -69,9 +76,9 @@ class ChangeBookSerializer(ModelSerializer):
             "title",
             "description",
             "image",
-            # "authors",
-            # "publishing",
-            # "series",
+            "authors",
+            "publishing",
+            "series",
             "isbn",
             "orig_price",
             "discount",
