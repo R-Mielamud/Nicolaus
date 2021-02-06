@@ -65,6 +65,7 @@ class ChangeBookSerializer(ModelSerializer):
         model = Book
 
         fields = [
+            "id",
             "title",
             "description",
             "image",

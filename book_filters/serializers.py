@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
-from .models import TagGroup, Tag
+from .models import TagGroup, Tag, Author, Publishing, Series
 
 class TagSerializer(ModelSerializer):
     class Meta:
@@ -11,7 +11,7 @@ class ChangeTagSerializer(ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = ["name", "group"]
+        fields = ["id", "name", "group"]
 
 class TagGroupSerializer(ModelSerializer):
     tags = TagSerializer(many=True)
@@ -23,4 +23,33 @@ class TagGroupSerializer(ModelSerializer):
 class ChangeTagGroupSerializer(ModelSerializer):
     class Meta:
         model = TagGroup
+        fields = ["id", "name"]
+
+class AuthorSerializer(ModelSerializer):
+    class Meta:
+        model = Author
+        fields = ["id", "name"]
+
+class SeriesSerializer(ModelSerializer):
+    class Meta:
+        model = Series
+        fields = ["id", "name"]
+
+class ChangeSeriesSerializer(ModelSerializer):
+    publishing = PrimaryKeyRelatedField(queryset=Publishing.objects.all())
+
+    class Meta:
+        model = Series
+        fields = ["id", "name", "publishing"]
+
+class PublishingSerializer(ModelSerializer):
+    series = SeriesSerializer(many=True)
+
+    class Meta:
+        model = Publishing
+        fields = ["id", "name", "series"]
+
+class ChangePublishingSerializer(ModelSerializer):
+    class Meta:
+        model = Publishing
         fields = ["id", "name"]
