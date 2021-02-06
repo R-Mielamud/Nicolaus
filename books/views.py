@@ -27,8 +27,14 @@ class BookAPI(ChangeSerializerViewSet):
         offset = self.request.GET.get("from")
         limit = self.request.GET.get("limit")
         tags = self.request.GET.get("tags")
+        publishings = self.request.GET.get("publishings")
+        series = self.request.GET.get("series")
+        authors = self.request.GET.get("authors")
 
-        text_search_fields = ["title"]
+        text_search_fields = ["title", "authors__name", "series__name", "publishing__name"]
+        publishings_query = Q()
+        series_query = Q()
+        authors_query = Q()
         tags_query = Q()
         text_query = Q()
 
@@ -46,12 +52,20 @@ class BookAPI(ChangeSerializerViewSet):
             words = search.strip().split(" ")
 
             for field in text_search_fields:
-                query_for_field = Q()
-
                 for word in words:
-                    query_for_field |= Q(**{ field + "__icontains": word })
+                    text_query |= Q(**{ field + "__icontains": word })
 
-                text_query &= query_for_field
+        if publishings:
+            pub_ids = publishings.strip().split(",")
+            publishings_query &= Q(publishing__in=pub_ids)
+
+        if series:
+            series_ids = series.strip().split(",")
+            series_query &= Q(series__in=series_ids)
+
+        if authors:
+            author_ids = authors.strip().split(",")
+            authors_query &= Q(authors__in=author_ids)
 
         tags_filtered_queryset = None
 
@@ -72,8 +86,8 @@ class BookAPI(ChangeSerializerViewSet):
         if tags_filtered_queryset is None:
             tags_filtered_queryset = Book.objects.all()
 
-        query = tags_query & text_query
-        queryset = tags_filtered_queryset.filter(query)
+        query = publishings_query & series_query & authors_query & tags_query & text_query
+        queryset = tags_filtered_queryset.filter(query).distinct()
 
         if offset and limit:
             return queryset[offset:offset + limit]
