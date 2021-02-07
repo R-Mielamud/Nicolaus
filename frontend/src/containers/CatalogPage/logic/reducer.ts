@@ -12,6 +12,24 @@ export const catalogReducer = createReducer<CatalogState>(initialState, {
             books: newBooks,
         };
     },
+    [actionTypes.LOAD_TAG_GROUPS_SUCCESS](state, action: actionTypes.LoadTagGroupsSuccess) {
+        return {
+            ...state,
+            tagGroups: action.tagGroups,
+        };
+    },
+    [actionTypes.LOAD_PUBLISHINGS_SUCCESS](state, action: actionTypes.LoadPublishingsSuccess) {
+        return {
+            ...state,
+            publishings: action.publishings,
+        };
+    },
+    [actionTypes.LOAD_AUTHORS_SUCCESS](state, action: actionTypes.LoadAuthorsSuccess) {
+        return {
+            ...state,
+            auhtors: action.authors,
+        };
+    },
     [actionTypes.SET_BOOKS_FILTER](state, action: actionTypes.SetBooksFilter) {
         return {
             ...state,

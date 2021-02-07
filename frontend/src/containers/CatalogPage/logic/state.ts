@@ -4,6 +4,7 @@ export interface CatalogState {
     books?: WebApi.Entity.MinimalBook[];
     tagGroups?: WebApi.Entity.TagGroup[];
     publishings?: WebApi.Entity.Publishing[];
+    auhtors?: WebApi.Entity.Author[];
     hasMoreBooks: boolean;
     booksFilter: WebApi.Specific.BooksFilter;
 }
