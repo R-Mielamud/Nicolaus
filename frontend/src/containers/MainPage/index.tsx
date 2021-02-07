@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import Catalog from "../../pages/Calatog";
+import SiteAdmin from "../../pages/SiteAdmin";
 import RootState from "../../typings/rootState";
-import CatalogPage from "../CatalogPage";
-import SiteAdminPage from "../SiteAdminPage";
 
 const MainPage: React.FC = () => {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -12,10 +12,10 @@ const MainPage: React.FC = () => {
     }
 
     if (user.is_admin) {
-        return <SiteAdminPage />;
+        return <SiteAdmin />;
     }
 
-    return <CatalogPage />;
+    return <Catalog />;
 };
 
 export default MainPage;

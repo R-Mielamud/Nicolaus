@@ -35,6 +35,7 @@ class ListBookSerializer(CommonBookSerializer):
             "authors",
             "price",
             "discount",
+            "is_in_stock",
         ]
 
 class BookSerializer(CommonBookSerializer):
@@ -59,6 +60,7 @@ class BookSerializer(CommonBookSerializer):
             "discount",
             "pages_count",
             "paper_type",
+            "is_in_stock",
             "tags",
         ]
 
@@ -84,5 +86,6 @@ class ChangeBookSerializer(ModelSerializer):
             "discount",
             "pages_count",
             "paper_type",
+            "in_stock",
             "tags",
         ]
