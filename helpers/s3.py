@@ -28,5 +28,5 @@ class S3BookImageUploader(S3Uploader):
     def __init__(self):
         super().__init__(
             settings.AWS_S3_MEDIA_BUCKET,
-            settings.AWS_S3_MEDIA_REGION,
+            settings.AWS_S3_BOOK_IMAGE_KEY,
         )
