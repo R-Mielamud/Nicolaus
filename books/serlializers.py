@@ -8,7 +8,6 @@ from book_filters.serializers import (
     TagSerializer,
     AuthorSerializer,
     PublishingSerializer,
-    MinimalPublishingSerializer,
     SeriesSerializer,
 )
 
@@ -40,7 +39,7 @@ class ListBookSerializer(CommonBookSerializer):
 
 class BookSerializer(CommonBookSerializer):
     authors = AuthorSerializer(many=True)
-    publishing = MinimalPublishingSerializer()
+    publishing = PublishingSerializer()
     series = SeriesSerializer()
     tags = TagSerializer(many=True)
 

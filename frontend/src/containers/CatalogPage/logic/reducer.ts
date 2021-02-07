@@ -27,10 +27,24 @@ export const catalogReducer = createReducer<CatalogState>(initialState, {
     [actionTypes.LOAD_AUTHORS_SUCCESS](state, action: actionTypes.LoadAuthorsSuccess) {
         return {
             ...state,
-            auhtors: action.authors,
+            authors: action.authors,
         };
     },
     [actionTypes.SET_BOOKS_FILTER](state, action: actionTypes.SetBooksFilter) {
+        if (action.clear) {
+            return {
+                ...state,
+                booksFilter: {
+                    ...state.booksFilter,
+                    tags: [],
+                    publishings: [],
+                    series: [],
+                    authors: [],
+                    search: undefined,
+                },
+            };
+        }
+
         return {
             ...state,
             booksFilter: {

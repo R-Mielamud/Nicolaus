@@ -8,10 +8,10 @@ tags_router.register(r"", TagAPI)
 
 publishings_router = DefaultRouter()
 publishings_router.register(r"series", SeriesAPI)
-publishings_router.register(r"", PublishingAPI)
+publishings_router.register(r"", PublishingAPI, basename="publishings")
 
 authors_router = DefaultRouter()
-authors_router.register(r"", AuthorAPI)
+authors_router.register(r"", AuthorAPI, basename="authors")
 
 urlpatterns = [
     path("tags/", include(tags_router.urls)),

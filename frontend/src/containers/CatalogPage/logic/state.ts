@@ -4,7 +4,7 @@ export interface CatalogState {
     books?: WebApi.Entity.MinimalBook[];
     tagGroups?: WebApi.Entity.TagGroup[];
     publishings?: WebApi.Entity.Publishing[];
-    auhtors?: WebApi.Entity.Author[];
+    authors?: WebApi.Entity.Author[];
     hasMoreBooks: boolean;
     booksFilter: WebApi.Specific.BooksFilter;
 }
@@ -14,5 +14,9 @@ export const initialState: CatalogState = {
     booksFilter: {
         from: 0,
         limit: Books.INFINITE_SCROLL_STEP,
+        tags: [],
+        publishings: [],
+        series: [],
+        authors: [],
     },
 };

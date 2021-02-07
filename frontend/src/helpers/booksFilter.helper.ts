@@ -1,5 +1,5 @@
-function optionalArrayField(key: string, value?: Array<any>): Record<string, any> {
-    return value ? { [key]: value.join(",") } : {};
+function optionalArrayField(key: string, value: Array<any>): Record<string, any> {
+    return value.length ? { [key]: value.join(",") } : {};
 }
 
 export default function convertFilterToQuery(filter: WebApi.Specific.BooksFilter) {

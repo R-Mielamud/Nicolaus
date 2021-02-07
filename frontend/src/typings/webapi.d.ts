@@ -30,7 +30,6 @@ namespace WebApi.Entity {
 
     interface Publishing extends Identified {
         name: string;
-        series: Series;
     }
 
     interface MinimalBook extends Identified {
@@ -101,11 +100,11 @@ namespace WebApi.Specific {
     interface BooksFilter {
         from: number;
         limit: number;
+        authors: number[];
+        series: number[];
+        publishings: number[];
+        tags: numbers[];
         search?: string;
-        authors?: number[];
-        series?: number[];
-        publishings?: number[];
-        tags?: numbers[];
     }
 
     interface ListBooksResult {

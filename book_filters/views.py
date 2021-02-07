@@ -11,7 +11,6 @@ from .serializers import (
     SeriesSerializer,
     ChangeSeriesSerializer,
     PublishingSerializer,
-    ChangePublishingSerializer,
 )
 
 class TagAPI(ChangeSerializerViewSet):
@@ -26,14 +25,18 @@ class TagGroupAPI(ChangeSerializerViewSet):
 
 class AuthorAPI(ModelViewSet):
     serializer_class = AuthorSerializer
-    queryset = Author.objects.all()
+
+    def get_queryset(self):
+        if self.request.GET.get("all") == "True":
+            return Author.objects.all()
+        else:
+            return Author.objects.filter(favorite=True)
 
 class SeriesAPI(ChangeSerializerViewSet):
     read_serializer_class = SeriesSerializer
     write_serializer_class = ChangeSeriesSerializer
     queryset = Series.objects.all()
 
-class PublishingAPI(ChangeSerializerViewSet):
-    read_serializer_class = PublishingSerializer
-    write_serializer_class = ChangePublishingSerializer
+class PublishingAPI(ModelViewSet):
+    serializer_class = PublishingSerializer
     queryset = Publishing.objects.all()

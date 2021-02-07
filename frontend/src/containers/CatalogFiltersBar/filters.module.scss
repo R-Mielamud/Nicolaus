@@ -1,0 +1,25 @@
+.accordion {
+    margin-top: 0 !important;
+}
+
+.accordionChild {
+    padding: 0 !important;
+}
+
+.indent {
+    margin-left: 10px !important;
+}
+
+.scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.checks {
+    @extend .indent;
+    margin-bottom: 10px;
+
+    & > * {
+        margin-top: 3px;
+    }
+}

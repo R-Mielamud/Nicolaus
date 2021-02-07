@@ -31,5 +31,6 @@ export interface LoadAuthorsSuccess {
 }
 
 export interface SetBooksFilter {
+    clear?: boolean;
     filter: Partial<WebApi.Specific.BooksFilter>;
 }
