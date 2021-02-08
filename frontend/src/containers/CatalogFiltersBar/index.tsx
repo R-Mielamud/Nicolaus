@@ -5,6 +5,7 @@ import RootState from "../../typings/rootState";
 import { loadBooks, setBooksFilter } from "../CatalogPage/logic/actions";
 import AuthorsFilter from "./AuthorsFilter";
 import PublishingsFilter from "./PublishingsFilter";
+import StatusesFilter from "./StatusesFilter";
 import TagsFilter from "./TagsFilter";
 
 interface OnSelected {
@@ -26,7 +27,7 @@ const CatalogFiltersBar: React.FC = () => {
         }
     };
 
-    const baseOnSelect = (field: "tags" | "publishings" | "authors", id: number, selected: boolean) => {
+    const baseOnSelect = (field: "tags" | "publishings" | "authors" | "statuses", id: number, selected: boolean) => {
         const newField = [...booksFilter[field]];
 
         if (selected) {
@@ -42,6 +43,7 @@ const CatalogFiltersBar: React.FC = () => {
     const onTagSelect: OnSelected = (value, selected) => baseOnSelect("tags", value, selected);
     const onAuthorSelect: OnSelected = (value, selected) => baseOnSelect("authors", value, selected);
     const onPublishingSelect: OnSelected = (value, selected) => baseOnSelect("publishings", value, selected);
+    const onStatusSelect: OnSelected = (value, selected) => baseOnSelect("statuses", value, selected);
     const clear = () => dispatch(dispatch(setBooksFilter({ clear: true, filter: {} })));
 
     return (
@@ -66,6 +68,7 @@ const CatalogFiltersBar: React.FC = () => {
             <Header dividing as="h3">
                 Catalog
             </Header>
+            <StatusesFilter onSelect={onStatusSelect} currentSelected={booksFilter.statuses} />
             <PublishingsFilter onSelect={onPublishingSelect} currentSelected={booksFilter.publishings} />
             <AuthorsFilter onSelect={onAuthorSelect} currentSelected={booksFilter.authors} />
             <Header dividing as="h3">

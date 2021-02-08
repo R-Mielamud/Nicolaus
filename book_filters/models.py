@@ -48,3 +48,13 @@ class Series(Model):
 
     class Meta:
         verbose_name_plural = "series"
+
+
+class Status(Model):
+    name = CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "statuses"

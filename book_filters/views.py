@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from viewsets import ChangeSerializerViewSet
-from .models import Tag, TagGroup, Author, Series, Publishing
+from .models import Tag, TagGroup, Author, Series, Publishing, Status
 
 from .serializers import (
     TagSerializer,
@@ -11,6 +11,7 @@ from .serializers import (
     SeriesSerializer,
     ChangeSeriesSerializer,
     PublishingSerializer,
+    StatusSerializer,
 )
 
 class TagAPI(ChangeSerializerViewSet):
@@ -40,3 +41,7 @@ class SeriesAPI(ChangeSerializerViewSet):
 class PublishingAPI(ModelViewSet):
     serializer_class = PublishingSerializer
     queryset = Publishing.objects.all()
+
+class StatusAPI(ModelViewSet):
+    serializer_class = StatusSerializer
+    queryset = Status.objects.all()

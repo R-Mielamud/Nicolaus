@@ -1,5 +1,5 @@
 from django.db.models import *
-from book_filters.models import Tag, Author, Series, Publishing
+from book_filters.models import Tag, Author, Series, Publishing, Status
 from storages import S3BookImageStorage
 from helpers.percentage import get_percent_of_number
 
@@ -10,6 +10,7 @@ class Book(Model):
     authors = ManyToManyField(to=Author, related_name="books")
     publishing = ForeignKey(to=Publishing, related_name="books", on_delete=SET_NULL, blank=True, null=True)
     series = ForeignKey(to=Series, related_name="books", on_delete=SET_NULL, blank=True, null=True)
+    status = ForeignKey(to=Status, related_name="books", on_delete=SET_NULL, blank=True, null=True)
     isbn = CharField(max_length=100)
     price = FloatField(default=0)
     orig_price = FloatField(default=0)

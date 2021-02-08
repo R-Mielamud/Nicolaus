@@ -5,6 +5,7 @@ export interface CatalogState {
     tagGroups?: WebApi.Entity.TagGroup[];
     publishings?: WebApi.Entity.Publishing[];
     authors?: WebApi.Entity.Author[];
+    statuses?: WebApi.Entity.Series[];
     hasMoreBooks: boolean;
     booksFilter: WebApi.Specific.BooksFilter;
 }
@@ -18,5 +19,6 @@ export const initialState: CatalogState = {
         publishings: [],
         series: [],
         authors: [],
+        statuses: [],
     },
 };

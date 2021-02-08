@@ -5,6 +5,7 @@ import * as booksService from "../../../services/books.service";
 import * as tagsService from "../../../services/tags.service";
 import * as publishingsService from "../../../services/publishings.service";
 import * as authorsService from "../../../services/authors.service";
+import * as statusesService from "../../../services/statuses.service";
 import RootState from "../../../typings/rootState";
 import { Books } from "../../../constants/Books";
 import { error } from "../../../helpers/notifications.helper";
@@ -84,6 +85,25 @@ function* watchLoadAuthors() {
     yield takeEvery(actionTypes.LOAD_AUTHORS, loadAuthors);
 }
 
+function* loadStatuses() {
+    try {
+        const statuses: WebApi.Entity.Status[] = yield call(statusesService.getStatuses);
+        yield put(actions.loadStatusesSuccess({ statuses }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchLoadStatuses() {
+    yield takeEvery(actionTypes.LOAD_STATUSES, loadStatuses);
+}
+
 export default function* catalogSaga() {
-    yield all([watchLoadBooks(), watchLoadTagGroups(), watchLoadPublishings(), watchLoadAuthors()]);
+    yield all([
+        watchLoadBooks(),
+        watchLoadTagGroups(),
+        watchLoadPublishings(),
+        watchLoadAuthors(),
+        watchLoadStatuses(),
+    ]);
 }

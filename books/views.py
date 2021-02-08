@@ -27,7 +27,7 @@ class BookAPI(ChangeSerializerViewSet):
             }
 
         if self.action != "list":
-            return result(Book.objects.all())
+            return Book.objects.all()
 
         search = self.request.GET.get("search")
         offset = self.request.GET.get("from")
@@ -36,12 +36,14 @@ class BookAPI(ChangeSerializerViewSet):
         publishings = self.request.GET.get("publishings")
         series = self.request.GET.get("series")
         authors = self.request.GET.get("authors")
+        statuses = self.request.GET.get("statuses")
 
         text_search_fields = ["title", "authors__name", "series__name", "publishing__name"]
         publishings_query = Q()
         series_query = Q()
         authors_query = Q()
         tags_query = Q()
+        statuses_query = Q()
         text_query = Q()
 
         if offset and offset.isdigit():
@@ -73,6 +75,10 @@ class BookAPI(ChangeSerializerViewSet):
             author_ids = authors.strip().split(",")
             authors_query &= Q(authors__in=author_ids)
 
+        if statuses:
+            status_ids = statuses.strip().split(",")
+            statuses_query &= Q(status__in=status_ids)
+
         tags_filtered_queryset = None
 
         if tags:
@@ -92,7 +98,7 @@ class BookAPI(ChangeSerializerViewSet):
         if tags_filtered_queryset is None:
             tags_filtered_queryset = Book.objects.all()
 
-        query = publishings_query & series_query & authors_query & tags_query & text_query
+        query = publishings_query & series_query & authors_query & tags_query & statuses_query & text_query
         queryset = tags_filtered_queryset.filter(query).distinct()
         has_more = False
 

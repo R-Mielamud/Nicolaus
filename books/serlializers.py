@@ -9,6 +9,7 @@ from book_filters.serializers import (
     AuthorSerializer,
     PublishingSerializer,
     SeriesSerializer,
+    StatusSerializer,
 )
 
 from book_filters.models import Tag, Author, Series, Publishing
@@ -22,6 +23,7 @@ class CommonBookSerializer(ModelSerializer):
 
 class ListBookSerializer(CommonBookSerializer):
     authors = AuthorSerializer(many=True)
+    status = StatusSerializer()
 
     class Meta:
         model = Book
@@ -32,6 +34,7 @@ class ListBookSerializer(CommonBookSerializer):
             "description",
             "image",
             "authors",
+            "status",
             "price",
             "discount",
             "is_in_stock",
@@ -42,6 +45,7 @@ class BookSerializer(CommonBookSerializer):
     publishing = PublishingSerializer()
     series = SeriesSerializer()
     tags = TagSerializer(many=True)
+    status = StatusSerializer()
 
     class Meta:
         model = Book
@@ -54,6 +58,7 @@ class BookSerializer(CommonBookSerializer):
             "authors",
             "publishing",
             "series",
+            "status",
             "isbn",
             "price",
             "discount",

@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
-from .models import TagGroup, Tag, Author, Publishing, Series
+from .models import TagGroup, Tag, Author, Publishing, Series, Status
 
 class TagSerializer(ModelSerializer):
     class Meta:
@@ -45,4 +45,9 @@ class ChangeSeriesSerializer(ModelSerializer):
 class PublishingSerializer(ModelSerializer):
     class Meta:
         model = Publishing
+        fields = ["id", "name"]
+
+class StatusSerializer(ModelSerializer):
+    class Meta:
+        model = Status
         fields = ["id", "name"]

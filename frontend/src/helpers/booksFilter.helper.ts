@@ -9,6 +9,7 @@ export default function convertFilterToQuery(filter: WebApi.Specific.BooksFilter
         ...optionalArrayField("authors", filter.authors),
         ...optionalArrayField("publishings", filter.publishings),
         ...optionalArrayField("series", filter.series),
+        ...optionalArrayField("statuses", filter.statuses),
         ...(filter.search ? { search: filter.search } : {}),
     };
 }

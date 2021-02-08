@@ -32,6 +32,10 @@ namespace WebApi.Entity {
         name: string;
     }
 
+    interface Status extends Identified {
+        name: string;
+    }
+
     interface MinimalBook extends Identified {
         title: string;
         description?: string;
@@ -103,6 +107,7 @@ namespace WebApi.Specific {
         authors: number[];
         series: number[];
         publishings: number[];
+        statuses: number[];
         tags: numbers[];
         search?: string;
     }
