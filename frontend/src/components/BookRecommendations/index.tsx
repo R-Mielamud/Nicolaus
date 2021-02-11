@@ -5,9 +5,11 @@ import { loadRecommendations } from "../../containers/CatalogPage/logic/actions"
 import RootState from "../../typings/rootState";
 import BookCard from "../BookCard";
 import catalogStyles from "../../containers/CatalogPage/catalog.module.scss";
+import { useTranslation } from "react-i18next";
 import styles from "./recommendations.module.scss";
 
 const BookRecommendations: React.FC = () => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const { recommendations } = useSelector((state: RootState) => state.catalog);
 
@@ -22,7 +24,7 @@ const BookRecommendations: React.FC = () => {
     return (
         <div className={styles.container}>
             <Header dividing as="h2">
-                Maybe you&apos;ll like:
+                {t("maybe_you_like")}
             </Header>
             <div className={catalogStyles.books}>
                 {recommendations.map((book) => (

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Header, Icon, Label, Segment } from "semantic-ui-react";
 import styles from "./card.module.scss";
 
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const BookCard: React.FC<Props> = ({ book }) => {
+    const { t } = useTranslation();
     const displayAuthors = book.authors.slice(0, 3);
     const authorsEllipsis = book.authors.length > displayAuthors.length ? "..." : "";
 
@@ -36,11 +38,11 @@ const BookCard: React.FC<Props> = ({ book }) => {
             </div>
             {book.is_in_stock ? (
                 <div className={styles.green}>
-                    <Icon name="check" /> In stock
+                    <Icon name="check" /> {t("in_stock")}
                 </div>
             ) : (
                 <div className={styles.grey}>
-                    <Icon name="cancel" /> Not in stock
+                    <Icon name="cancel" /> {t("not_in_stock")}
                 </div>
             )}
         </Segment>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { Accordion, Checkbox, Icon } from "semantic-ui-react";
 import { FilterProps } from "..";
@@ -7,6 +8,7 @@ import RootState from "../../../typings/rootState";
 import styles from "../filters.module.scss";
 
 const PublishingsFilter: React.FC<FilterProps> = ({ onSelect, currentSelected }) => {
+    const { t } = useTranslation();
     const [active, setActive] = useState<boolean>(false);
     const { publishings } = useSelector((state: RootState) => state.catalog);
 
@@ -18,7 +20,7 @@ const PublishingsFilter: React.FC<FilterProps> = ({ onSelect, currentSelected })
         <Accordion className={styles.accordion}>
             <Accordion.Title active={active} className={styles.accordionChild} onClick={() => setActive(!active)}>
                 <Icon name="dropdown" />
-                Publishings
+                {t("publishings")}
             </Accordion.Title>
             <Accordion.Content
                 active={active}

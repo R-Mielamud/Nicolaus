@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Header, Input, Icon } from "semantic-ui-react";
 import RootState from "../../typings/rootState";
@@ -18,6 +19,7 @@ export interface FilterProps {
 }
 
 const CatalogFiltersBar: React.FC = () => {
+    const { t } = useTranslation();
     const { booksFilter } = useSelector((state: RootState) => state.catalog);
     const dispatch = useDispatch();
 
@@ -56,14 +58,14 @@ const CatalogFiltersBar: React.FC = () => {
             <Button.Group size="mini">
                 <Button primary onClick={() => load()} icon labelPosition="left">
                     <Icon name="check" />
-                    Apply
+                    {t("apply")}
                 </Button>
-                <Button.Or />
-                <Button onClick={() => clear()}>Clear all filters</Button>
+                <Button.Or text={t("or_l") as string} />
+                <Button onClick={() => clear()}>{t("clear_filters")}</Button>
             </Button.Group>
             <Input
                 icon="search"
-                placeholder="Search book..."
+                placeholder={t("search_book")}
                 fluid
                 size="mini"
                 value={booksFilter.search ?? ""}
@@ -71,13 +73,13 @@ const CatalogFiltersBar: React.FC = () => {
                 onChange={(event, data) => updateFilter({ search: data.value })}
             />
             <Header dividing as="h3">
-                Catalog
+                {t("catalog")}
             </Header>
             <StatusesFilter onSelect={onStatusSelect} currentSelected={booksFilter.statuses} />
             <PublishingsFilter onSelect={onPublishingSelect} currentSelected={booksFilter.publishings} />
             <AuthorsFilter onSelect={onAuthorSelect} currentSelected={booksFilter.authors} />
             <Header dividing as="h3">
-                Tags
+                {t("tags")}
             </Header>
             <TagsFilter onSelect={onTagSelect} currentSelected={booksFilter.tags} />
         </div>
