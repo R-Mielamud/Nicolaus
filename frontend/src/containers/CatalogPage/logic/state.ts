@@ -2,6 +2,7 @@ import { Books } from "../../../constants/Books";
 
 export interface CatalogState {
     books?: WebApi.Entity.MinimalBook[];
+    recommendations?: WebApi.Entity.MinimalBook[];
     tagGroups?: WebApi.Entity.TagGroup[];
     publishings?: WebApi.Entity.Publishing[];
     authors?: WebApi.Entity.Author[];

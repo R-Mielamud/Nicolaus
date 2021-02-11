@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Segment } from "semantic-ui-react";
 import BookCard from "../../components/BookCard";
+import BookRecommendations from "../../components/BookRecommendations";
 import Spinner from "../../components/common/Spinner";
 import NoResults from "../../components/NoResults";
 import RootState from "../../typings/rootState";
@@ -20,15 +21,15 @@ const CatalogPage: React.FC = () => {
             <Segment className={styles.sidebar}>
                 <CatalogFiltersBar />
             </Segment>
-            {books.length ? (
-                <div className={styles.books}>
-                    {books.map((book) => (
-                        <BookCard key={book.id} book={book} />
-                    ))}
-                </div>
-            ) : (
-                <NoResults />
-            )}
+            <div className={styles.books}>
+                {books.length ? (
+                    books.map((book) => <BookCard key={book.id} book={book} />)
+                ) : (
+                    <NoResults>
+                        <BookRecommendations />
+                    </NoResults>
+                )}
+            </div>
         </div>
     );
 };

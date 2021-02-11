@@ -114,7 +114,7 @@ class BookAPI(ChangeSerializerViewSet):
         has_more = False
 
         if limit:
-            has_more = queryset.count() > limit
+            has_more = len(queryset) > limit
 
         if offset and limit:
             return result(queryset[offset:offset + limit], has_more)

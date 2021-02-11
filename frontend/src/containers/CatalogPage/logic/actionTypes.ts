@@ -8,6 +8,8 @@ export const LOAD_AUTHORS = "CATALOG:BOOKS:FILTERS:AUTHORS:LOAD";
 export const LOAD_AUTHORS_SUCCESS = "CATALOG:BOOKS:FILTERS:AUTHORS:LOAD:SUCCESS";
 export const LOAD_STATUSES = "CATALOG:BOOKS:FILTERS:STATUSES:LOAD";
 export const LOAD_STATUSES_SUCCESS = "CATALOG:BOOKS:FILTERS:STATUSES:LOAD:SUCCESS";
+export const LOAD_RECOMMENDATIONS = "CATALOG:BOOKS:RECOMMENDED:LOAD";
+export const LOAD_RECOMMENDATIONS_SUCCESS = "CATALOG:BOOKS:RECOMMENDED:LOAD:SUCCESS";
 export const SET_BOOKS_FILTER = "CATALOG:BOOKS:FILTER:SET";
 
 export interface LoadBooks {
@@ -34,6 +36,10 @@ export interface LoadAuthorsSuccess {
 
 export interface LoadStatusesSuccess {
     statuses: WebApi.Entity.Status[];
+}
+
+export interface LoadRecommendationsSuccess {
+    recommendations: WebApi.Entity.MinimalBook[];
 }
 
 export interface SetBooksFilter {

@@ -36,6 +36,12 @@ export const catalogReducer = createReducer<CatalogState>(initialState, {
             statuses: action.statuses,
         };
     },
+    [actionTypes.LOAD_RECOMMENDATIONS_SUCCESS](state, action: actionTypes.LoadRecommendationsSuccess) {
+        return {
+            ...state,
+            recommendations: action.recommendations,
+        };
+    },
     [actionTypes.SET_BOOKS_FILTER](state, action: actionTypes.SetBooksFilter) {
         if (action.clear) {
             return {

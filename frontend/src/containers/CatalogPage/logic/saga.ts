@@ -98,6 +98,19 @@ function* watchLoadStatuses() {
     yield takeEvery(actionTypes.LOAD_STATUSES, loadStatuses);
 }
 
+function* loadRecommendations() {
+    try {
+        const recommendations: WebApi.Entity.MinimalBook[] = yield call(booksService.getRecommendedBooks);
+        yield put(actions.loadRecommendationsSuccess({ recommendations }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchLoadRecommendations() {
+    yield takeEvery(actionTypes.LOAD_RECOMMENDATIONS, loadRecommendations);
+}
+
 export default function* catalogSaga() {
     yield all([
         watchLoadBooks(),
@@ -105,5 +118,6 @@ export default function* catalogSaga() {
         watchLoadPublishings(),
         watchLoadAuthors(),
         watchLoadStatuses(),
+        watchLoadRecommendations(),
     ]);
 }
