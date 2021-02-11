@@ -1,0 +1,76 @@
+.card {
+    width: 300px;
+    height: min-content;
+    margin: 0 0 15px 15px !important;
+    transition-property: box-shadow;
+    transition-duration: 0.1s;
+
+    &:hover {
+        box-shadow: 3px 3px 7px 3px #ccc !important;
+    }
+}
+
+.image {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.imgContainer {
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.status {
+    position: absolute !important;
+    left: -14px !important;
+}
+
+.cutText {
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
+}
+
+.header {
+    @extend .cutText;
+    margin-bottom: 0 !important;
+}
+
+.price {
+    font-weight: 600;
+}
+
+.indent {
+    margin-top: 10px;
+}
+
+.bottomIndent {
+    margin-bottom: 5px;
+}
+
+.discount {
+    border-radius: 12px;
+    border: 1px solid #a2d;
+    color: #a2d;
+    box-sizing: border-box;
+    font-size: 12px;
+    padding: 0 10px;
+    margin-left: 10px;
+}
+
+.isInStock {
+    margin: 5px 0;
+}
+
+.green {
+    @extend .isInStock;
+    color: #090;
+}
+
+.grey {
+    @extend .isInStock;
+    color: #666;
+}

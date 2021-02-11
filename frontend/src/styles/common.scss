@@ -12,7 +12,7 @@ body {
     }
 }
 
-.required:after {
+.required::after {
     content: " *";
     color: red;
 }
@@ -38,6 +38,21 @@ body {
 .error {
     border-color: #e0b4b4 !important;
     color: #9f3a38 !important;
+}
+
+.ui.button.primary {
+    background-color: $primary !important;
+    color: $primary-foreground !important;
+
+    &:hover {
+        background-color: darken($primary, $darken-amount) !important;
+        color: darken($primary-foreground, $darken-amount) !important;
+    }
+}
+
+.primaryBg {
+    background-color: $primary !important;
+    color: $primary-foreground !important;
 }
 
 #root,

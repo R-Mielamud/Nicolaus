@@ -18,6 +18,7 @@ class Book(Model):
     in_stock = IntegerField(default=0)
     pages_count = IntegerField(default=100)
     paper_type = CharField(max_length=100)
+    favorite = BooleanField(default=False)
     tags = ManyToManyField(to=Tag, related_name="books", blank=True)
 
     def __str__(self):

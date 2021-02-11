@@ -44,12 +44,17 @@ const CatalogFiltersBar: React.FC = () => {
     const onAuthorSelect: OnSelected = (value, selected) => baseOnSelect("authors", value, selected);
     const onPublishingSelect: OnSelected = (value, selected) => baseOnSelect("publishings", value, selected);
     const onStatusSelect: OnSelected = (value, selected) => baseOnSelect("statuses", value, selected);
-    const clear = () => dispatch(dispatch(setBooksFilter({ clear: true, filter: {} })));
+    const load = () => dispatch(loadBooks({}));
+
+    const clear = () => {
+        dispatch(setBooksFilter({ clear: true, filter: {} }));
+        load();
+    };
 
     return (
         <div>
             <Button.Group size="mini">
-                <Button primary onClick={() => dispatch(loadBooks({}))} icon labelPosition="left">
+                <Button primary onClick={() => load()} icon labelPosition="left">
                     <Icon name="check" />
                     Apply
                 </Button>

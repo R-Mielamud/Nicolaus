@@ -38,9 +38,9 @@ namespace WebApi.Entity {
 
     interface MinimalBook extends Identified {
         title: string;
-        description?: string;
         image: string;
         authors: Author[];
+        status?: Status;
         price: number;
         discount: number;
         is_in_stock: boolean;
@@ -49,6 +49,7 @@ namespace WebApi.Entity {
     interface Book extends Identified {
         title: string;
         description?: string;
+        status?: Status;
         image: string;
         authors: Author[];
         publishing: Publishing;

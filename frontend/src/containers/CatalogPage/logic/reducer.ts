@@ -46,6 +46,7 @@ export const catalogReducer = createReducer<CatalogState>(initialState, {
                     publishings: [],
                     series: [],
                     authors: [],
+                    statuses: [],
                     search: undefined,
                 },
             };

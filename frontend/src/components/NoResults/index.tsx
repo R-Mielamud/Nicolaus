@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "semantic-ui-react";
-import image from "../../assets/noresults.jpeg";
+import image from "../../assets/noresults.png";
 import styles from "./noresults.module.scss";
 
 const NoResults: React.FC = () => {

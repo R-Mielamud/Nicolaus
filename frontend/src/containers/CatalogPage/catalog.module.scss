@@ -1,13 +1,18 @@
 .container {
     display: flex;
-    overflow-y: auto;
+    min-height: 100%;
 }
 
 .sidebar {
-    width: 300px;
-    max-width: 100%;
+    min-width: 300px;
     overflow-y: auto;
-    position: sticky;
-    top: 0;
-    left: 0;
+}
+
+.books {
+    flex-grow: 1;
+    padding-left: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100%;
+    overflow-y: auto;
 }

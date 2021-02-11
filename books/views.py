@@ -1,5 +1,8 @@
+from random import shuffle
 from django.db.models import Q
 from django.http import JsonResponse
+from rest_framework.mixins import ListModelMixin
+from rest_framework.viewsets import GenericViewSet
 from viewsets import ChangeSerializerViewSet
 from .models import Book
 
@@ -99,7 +102,15 @@ class BookAPI(ChangeSerializerViewSet):
             tags_filtered_queryset = Book.objects.all()
 
         query = publishings_query & series_query & authors_query & tags_query & statuses_query & text_query
-        queryset = tags_filtered_queryset.filter(query).distinct()
+        filtered_queryset = tags_filtered_queryset.filter(query).distinct()
+
+        favorite_queryset = list(filtered_queryset.filter(favorite=True))
+        other_queryset = list(filtered_queryset.exclude(favorite=True))
+
+        shuffle(favorite_queryset)
+        shuffle(other_queryset)
+
+        queryset = favorite_queryset + other_queryset
         has_more = False
 
         if limit:
@@ -122,3 +133,13 @@ class BookAPI(ChangeSerializerViewSet):
             "has_more": queryset["has_more"],
             "books": serializer.data,
         })
+
+class RecommendationsAPI(ListModelMixin, GenericViewSet):
+    serializer_class = ListBookSerializer
+
+    def get_queryset(self):
+        count = 4
+        with_status = list(Book.objects.filter(status__isnull=False))
+        shuffle(with_status)
+
+        return with_status[0:count]
