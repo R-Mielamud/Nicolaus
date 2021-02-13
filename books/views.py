@@ -104,13 +104,13 @@ class BookAPI(ChangeSerializerViewSet):
         query = publishings_query & series_query & authors_query & tags_query & statuses_query & text_query
         filtered_queryset = tags_filtered_queryset.filter(query).distinct()
 
-        favorite_queryset = list(filtered_queryset.filter(favorite=True))
-        other_queryset = list(filtered_queryset.exclude(favorite=True))
+        chosen_queryset = list(filtered_queryset.filter(chosen=True))
+        other_queryset = list(filtered_queryset.exclude(chosen=True))
 
-        shuffle(favorite_queryset)
+        shuffle(chosen_queryset)
         shuffle(other_queryset)
 
-        queryset = favorite_queryset + other_queryset
+        queryset = chosen_queryset + other_queryset
         has_more = False
 
         if limit:

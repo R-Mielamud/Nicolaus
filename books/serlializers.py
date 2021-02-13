@@ -90,6 +90,6 @@ class ChangeBookSerializer(ModelSerializer):
             "pages_count",
             "paper_type",
             "in_stock",
-            "favorite",
+            "chosen",
             "tags",
         ]

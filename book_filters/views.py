@@ -31,7 +31,7 @@ class AuthorAPI(ModelViewSet):
         if self.request.GET.get("all") == "True":
             return Author.objects.all()
         else:
-            return Author.objects.filter(favorite=True)
+            return Author.objects.filter(chosen=True)
 
 class SeriesAPI(ChangeSerializerViewSet):
     read_serializer_class = SeriesSerializer

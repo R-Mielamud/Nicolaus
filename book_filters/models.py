@@ -2,13 +2,13 @@ from django.db.models import *
 
 class TagGroup(Model):
     name = CharField(max_length=200)
-    favorite = BooleanField(default=False)
+    chosen = BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ["-favorite"]
+        ordering = ["-chosen"]
 
 class Tag(Model):
     name = CharField(max_length=200)
@@ -22,7 +22,7 @@ class Tag(Model):
 
 class Author(Model):
     name = CharField(max_length=100)
-    favorite = BooleanField(default=False)
+    chosen = BooleanField(default=False)
 
     def __str__(self):
         return self.name
