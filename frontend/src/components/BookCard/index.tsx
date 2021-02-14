@@ -22,7 +22,7 @@ const BookCard: React.FC<Props> = ({ book }) => {
             <div className={styles.imgContainer}>
                 <img className={styles.image} src={book.image} />
             </div>
-            <Header as="h3" className={styles.header}>
+            <Header as="h3" className={styles.header} title={book.title}>
                 {book.title}
             </Header>
             <div
