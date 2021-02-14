@@ -98,9 +98,13 @@ function* watchLoadStatuses() {
     yield takeEvery(actionTypes.LOAD_STATUSES, loadStatuses);
 }
 
-function* loadRecommendations() {
+function* loadRecommendations(action: ReturnType<typeof actions.loadRecommendations>) {
     try {
-        const recommendations: WebApi.Entity.MinimalBook[] = yield call(booksService.getRecommendedBooks);
+        const recommendations: WebApi.Entity.MinimalBook[] = yield call(
+            booksService.getRecommendedBooks,
+            action.exclude,
+        );
+
         yield put(actions.loadRecommendationsSuccess({ recommendations }));
     } catch (err) {
         error(err.text);

@@ -138,8 +138,14 @@ class RecommendationsAPI(ListModelMixin, GenericViewSet):
     serializer_class = ListBookSerializer
 
     def get_queryset(self):
+        exclude = self.request.GET.get("exclude")
         count = 4
-        with_status = list(Book.objects.filter(status__isnull=False))
+        book_filter = Q(status__isnull=False)
+
+        if exclude:
+            book_filter &= ~Q(pk=exclude)
+
+        with_status = list(Book.objects.filter(book_filter))
         shuffle(with_status)
 
         return with_status[0:count]

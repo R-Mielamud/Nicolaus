@@ -12,6 +12,7 @@ import ChatbotAdmin from "../../pages/ChatbotAdmin";
 import Header from "../Header";
 import { loadProfile } from "../LoginPage/logic/actions";
 import Main from "../../pages/Main";
+import ExpandedBook from "../../pages/ExpandedBook";
 
 const Routing: React.FC = () => {
     const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const Routing: React.FC = () => {
             <PublicRoute restricted path="/login" exact component={Login} />
             <PublicRoute restricted path="/register" exact component={Register} />
             <PrivateRoute path="/chatbot" exact component={ChatbotAdmin} />
+            <PrivateRoute path="/book/:id" exact component={ExpandedBook} />
             <HybridRoute path="/" exact authorized={Main} notAuthorized={Header} />
         </Switch>
     );

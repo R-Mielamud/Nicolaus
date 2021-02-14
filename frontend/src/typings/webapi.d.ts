@@ -52,8 +52,8 @@ namespace WebApi.Entity {
         status?: Status;
         image: string;
         authors: Author[];
-        publishing: Publishing;
-        series: Series;
+        publishing?: Publishing;
+        series?: Series;
         isbn: string;
         price: number;
         discount: number;

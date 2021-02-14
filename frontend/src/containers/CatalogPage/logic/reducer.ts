@@ -1,6 +1,7 @@
 import createReducer from "../../../helpers/createReducer.helper";
 import { CatalogState, initialState } from "./state";
 import * as actionTypes from "./actionTypes";
+import { getTime } from "../../../helpers/time.helper";
 
 export const catalogReducer = createReducer<CatalogState>(initialState, {
     [actionTypes.LOAD_BOOKS_SUCCESS](state, action: actionTypes.LoadBooksSuccess) {
@@ -40,6 +41,7 @@ export const catalogReducer = createReducer<CatalogState>(initialState, {
         return {
             ...state,
             recommendations: action.recommendations,
+            lastRecommendationTime: getTime(),
         };
     },
     [actionTypes.SET_BOOKS_FILTER](state, action: actionTypes.SetBooksFilter) {

@@ -1,3 +1,4 @@
 export enum Books {
     INFINITE_SCROLL_STEP = 20,
+    RECOMMENDATION_LOAD_SECS = 5,
 }

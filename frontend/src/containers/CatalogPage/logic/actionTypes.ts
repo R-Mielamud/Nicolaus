@@ -38,6 +38,10 @@ export interface LoadStatusesSuccess {
     statuses: WebApi.Entity.Status[];
 }
 
+export interface LoadRecommendations {
+    exclude?: number;
+}
+
 export interface LoadRecommendationsSuccess {
     recommendations: WebApi.Entity.MinimalBook[];
 }

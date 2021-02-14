@@ -7,15 +7,23 @@ import BookCard from "../BookCard";
 import catalogStyles from "../../containers/CatalogPage/catalog.module.scss";
 import { useTranslation } from "react-i18next";
 import styles from "./recommendations.module.scss";
+import { isGoodTimeFromStart } from "../../helpers/time.helper";
+import { Books } from "../../constants/Books";
 
-const BookRecommendations: React.FC = () => {
+interface Props {
+    exclude?: number;
+}
+
+const BookRecommendations: React.FC<Props> = ({ exclude }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { recommendations } = useSelector((state: RootState) => state.catalog);
+    const { recommendations, lastRecommendationTime } = useSelector((state: RootState) => state.catalog);
 
     useEffect(() => {
-        dispatch(loadRecommendations());
-    }, []);
+        if (isGoodTimeFromStart(lastRecommendationTime, Books.RECOMMENDATION_LOAD_SECS)) {
+            dispatch(loadRecommendations({ exclude }));
+        }
+    }, [lastRecommendationTime]);
 
     if (!recommendations) {
         return null;

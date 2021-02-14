@@ -1,9 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
 import { Icon, Menu } from "semantic-ui-react";
-import history from "../../../helpers/history.helper";
 
 const NotAuthorized: React.FC = () => {
+    const history = useHistory();
     const { t } = useTranslation();
 
     return (

@@ -1,9 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
 import { Header, Button, Divider } from "semantic-ui-react";
-import history from "../../helpers/history.helper";
 
 const SiteAdminPage: React.FC = () => {
+    const history = useHistory();
     const { t } = useTranslation();
 
     return (

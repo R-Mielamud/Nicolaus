@@ -3,6 +3,7 @@ import { Books } from "../../../constants/Books";
 export interface CatalogState {
     books?: WebApi.Entity.MinimalBook[];
     recommendations?: WebApi.Entity.MinimalBook[];
+    lastRecommendationTime: number;
     tagGroups?: WebApi.Entity.TagGroup[];
     publishings?: WebApi.Entity.Publishing[];
     authors?: WebApi.Entity.Author[];
@@ -13,6 +14,7 @@ export interface CatalogState {
 
 export const initialState: CatalogState = {
     hasMoreBooks: false,
+    lastRecommendationTime: -5000,
     booksFilter: {
         from: 0,
         limit: Books.INFINITE_SCROLL_STEP,
