@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
 import { Header, Icon, Label, Segment } from "semantic-ui-react";
 import styles from "./card.module.scss";
 
@@ -8,12 +9,13 @@ interface Props {
 }
 
 const BookCard: React.FC<Props> = ({ book }) => {
+    const history = useHistory();
     const { t } = useTranslation();
     const displayAuthors = book.authors.slice(0, 3);
     const authorsEllipsis = book.authors.length > displayAuthors.length ? "..." : "";
 
     return (
-        <Segment className={styles.card}>
+        <Segment className={styles.card} onClick={() => history.push(`/book/${book.id}`)}>
             {book.status ? (
                 <Label ribbon className={["primaryBg", styles.status].join(" ")}>
                     {book.status.name.toUpperCase()}

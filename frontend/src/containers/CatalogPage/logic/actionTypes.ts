@@ -48,5 +48,6 @@ export interface LoadRecommendationsSuccess {
 
 export interface SetBooksFilter {
     clear?: boolean;
+    rewrite?: boolean;
     filter: Partial<WebApi.Specific.BooksFilter>;
 }

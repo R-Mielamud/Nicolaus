@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import { Header, Icon, Label, Segment } from "semantic-ui-react";
 import BookRecommendations from "../../components/BookRecommendations";
 import Spinner from "../../components/common/Spinner";
 import { getBookById } from "../../services/books.service";
+import { setBooksFilter } from "../CatalogPage/logic/actions";
 import styles from "./book.module.scss";
 
 interface Props {
@@ -11,7 +14,9 @@ interface Props {
 }
 
 const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
+    const history = useHistory();
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     const [book, setBook] = useState<WebApi.Entity.Book | null>(null);
     const [bookLoaded, setBookLoaded] = useState<boolean>(false);
     const [bookLoading, setBookLoading] = useState<boolean>(false);
@@ -36,6 +41,11 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
     if (!book) {
         return null;
     }
+
+    const updateFilterAndRedirect = (filter: Partial<WebApi.Specific.BooksFilter>) => {
+        dispatch(setBooksFilter({ filter, rewrite: true }));
+        history.push("/");
+    };
 
     return (
         <div>
@@ -70,12 +80,31 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                         </div>
                         <div className={styles.textParameter}>
                             <span className={styles.key}>{t("authors")}: </span>
-                            {book.authors.map((author) => author.name).join(", ")}
+                            {book.authors.map((author, i) => (
+                                <span key={author.id}>
+                                    <span
+                                        className={styles.link}
+                                        onClick={() => updateFilterAndRedirect({ authors: [author.id] })}
+                                    >
+                                        {author.name}
+                                    </span>
+                                    {book.authors.length === i + 1 ? "" : ", "}
+                                </span>
+                            ))}
                         </div>
                         {book.publishing ? (
                             <div className={styles.textParameter}>
                                 <span className={styles.key}>Publishing: </span>
-                                {book.publishing.name}
+                                <span
+                                    className={styles.link}
+                                    onClick={() =>
+                                        book.publishing
+                                            ? updateFilterAndRedirect({ publishings: [book.publishing.id] })
+                                            : () => {}
+                                    }
+                                >
+                                    {book.publishing.name}
+                                </span>
                             </div>
                         ) : null}
                         {book.series ? (
@@ -103,7 +132,11 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                                 </Header>
                                 <div className={styles.tags}>
                                     {book.tags.map((tag) => (
-                                        <div key={tag.id} className={styles.tag}>
+                                        <div
+                                            key={tag.id}
+                                            className={styles.tag}
+                                            onClick={() => updateFilterAndRedirect({ tags: [tag.id] })}
+                                        >
                                             {tag.name}
                                         </div>
                                     ))}

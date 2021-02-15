@@ -45,6 +45,23 @@ export const catalogReducer = createReducer<CatalogState>(initialState, {
         };
     },
     [actionTypes.SET_BOOKS_FILTER](state, action: actionTypes.SetBooksFilter) {
+        if (action.rewrite) {
+            return {
+                ...state,
+                booksFilter: {
+                    from: state.booksFilter.from,
+                    limit: state.booksFilter.limit,
+                    tags: [],
+                    publishings: [],
+                    series: [],
+                    authors: [],
+                    statuses: [],
+                    search: undefined,
+                    ...action.filter,
+                },
+            };
+        }
+
         if (action.clear) {
             return {
                 ...state,
