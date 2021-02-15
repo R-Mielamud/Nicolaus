@@ -8,12 +8,14 @@ export interface CatalogState {
     publishings?: WebApi.Entity.Publishing[];
     authors?: WebApi.Entity.Author[];
     statuses?: WebApi.Entity.Series[];
+    loadingBooks: boolean;
     hasMoreBooks: boolean;
     booksFilter: WebApi.Specific.BooksFilter;
 }
 
 export const initialState: CatalogState = {
     hasMoreBooks: false,
+    loadingBooks: false,
     lastRecommendationTime: -5000,
     booksFilter: {
         from: 0,

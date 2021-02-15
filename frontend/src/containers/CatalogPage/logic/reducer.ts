@@ -4,13 +4,26 @@ import * as actionTypes from "./actionTypes";
 import { getTime } from "../../../helpers/time.helper";
 
 export const catalogReducer = createReducer<CatalogState>(initialState, {
+    [actionTypes.LOAD_BOOKS](state) {
+        return {
+            ...state,
+            loadingBooks: true,
+        };
+    },
     [actionTypes.LOAD_BOOKS_SUCCESS](state, action: actionTypes.LoadBooksSuccess) {
         const newBooks = action.more ? [...(state.books ?? []), ...action.books] : action.books;
 
         return {
             ...state,
             hasMoreBooks: action.hasMore,
+            loadingBooks: false,
             books: newBooks,
+        };
+    },
+    [actionTypes.LOAD_BOOKS_FAIL](state) {
+        return {
+            ...state,
+            loadingBooks: false,
         };
     },
     [actionTypes.LOAD_TAG_GROUPS_SUCCESS](state, action: actionTypes.LoadTagGroupsSuccess) {

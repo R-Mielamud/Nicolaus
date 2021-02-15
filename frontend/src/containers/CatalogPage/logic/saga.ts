@@ -17,11 +17,9 @@ function* loadBooks({ more }: ReturnType<typeof actions.loadBooks>) {
         }: RootState = yield select();
 
         const increasedFrom = filter.from + Books.INFINITE_SCROLL_STEP;
-        const increasedLimit = filter.limit + Books.INFINITE_SCROLL_STEP;
 
         if (more) {
             filter.from = increasedFrom;
-            filter.limit = increasedLimit;
         }
 
         const { books, has_more }: WebApi.Specific.ListBooksResult = yield call(booksService.getBooks, filter);
@@ -32,12 +30,12 @@ function* loadBooks({ more }: ReturnType<typeof actions.loadBooks>) {
                 actions.setBooksFilter({
                     filter: {
                         from: increasedFrom,
-                        limit: increasedLimit,
                     },
                 }),
             );
         }
     } catch (err) {
+        yield put(actions.loadBooksFail());
         error(err.text);
     }
 }

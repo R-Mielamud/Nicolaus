@@ -6,16 +6,19 @@ import styles from "./card.module.scss";
 
 interface Props {
     book: WebApi.Entity.MinimalBook;
+    replace?: boolean;
 }
 
-const BookCard: React.FC<Props> = ({ book }) => {
+const BookCard: React.FC<Props> = ({ book, replace }) => {
     const history = useHistory();
     const { t } = useTranslation();
     const displayAuthors = book.authors.slice(0, 3);
     const authorsEllipsis = book.authors.length > displayAuthors.length ? "..." : "";
+    const url = `/book/${book.id}`;
+    const redirect = replace ? () => window.location.replace(url) : () => history.push(url);
 
     return (
-        <Segment className={styles.card} onClick={() => history.push(`/book/${book.id}`)}>
+        <Segment className={styles.card} onClick={redirect}>
             {book.status ? (
                 <Label ribbon className={["primaryBg", styles.status].join(" ")}>
                     {book.status.name.toUpperCase()}

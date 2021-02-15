@@ -27,3 +27,6 @@ class Book(Model):
     def save(self, *args, **kwargs):
         self.price = self.orig_price - get_percent_of_number(self.orig_price, self.discount)
         return super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ["-chosen"]

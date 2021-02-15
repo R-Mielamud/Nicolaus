@@ -51,6 +51,7 @@ class BookAPI(ChangeSerializerViewSet):
 
         if offset and offset.isdigit():
             offset = int(offset)
+            print(offset)
         else:
             offset = None
 
@@ -102,19 +103,12 @@ class BookAPI(ChangeSerializerViewSet):
             tags_filtered_queryset = Book.objects.all()
 
         query = publishings_query & series_query & authors_query & tags_query & statuses_query & text_query
-        filtered_queryset = tags_filtered_queryset.filter(query).distinct()
+        queryset = tags_filtered_queryset.filter(query).distinct()
 
-        chosen_queryset = list(filtered_queryset.filter(chosen=True))
-        other_queryset = list(filtered_queryset.exclude(chosen=True))
-
-        shuffle(chosen_queryset)
-        shuffle(other_queryset)
-
-        queryset = chosen_queryset + other_queryset
         has_more = False
 
         if limit:
-            has_more = len(queryset) > limit
+            has_more = queryset.count() > offset + limit
 
         if offset and limit:
             return result(queryset[offset:offset + limit], has_more)

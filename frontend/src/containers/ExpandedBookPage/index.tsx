@@ -34,6 +34,10 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
         }
     }, []);
 
+    useEffect(() => {
+        dispatch(setBooksFilter({ filter: { from: 0 }, clear: true }));
+    }, []);
+
     if (!bookLoaded) {
         return <Spinner />;
     }

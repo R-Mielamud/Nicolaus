@@ -36,7 +36,7 @@ const BookRecommendations: React.FC<Props> = ({ exclude }) => {
             </Header>
             <div className={catalogStyles.books}>
                 {recommendations.map((book) => (
-                    <BookCard key={book.id} book={book} />
+                    <BookCard key={book.id} book={book} replace />
                 ))}
             </div>
         </div>
