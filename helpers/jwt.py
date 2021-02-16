@@ -20,8 +20,8 @@ def get_user_id(token):
 def extract_token_from_request(request):
     header = request.headers.get("Authorization")
 
-    if (not header) or (not header.startswith(settings.JWT_PREFIX)):
-        return
+    if not header or not header.startswith(settings.JWT_PREFIX):
+        return None
 
     token = header[len(settings.JWT_PREFIX):]
     return token

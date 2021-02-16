@@ -13,7 +13,11 @@ import { loadBooks } from "./logic/actions";
 
 const CatalogPage: React.FC = () => {
     const dispatch = useDispatch();
-    const { books, loadingBooks, hasMoreBooks } = useSelector((state: RootState) => state.catalog);
+
+    const {
+        catalog: { books, loadingBooks, hasMoreBooks },
+        // auth: { isAuthorized }, // It'll be useful
+    } = useSelector((state: RootState) => state);
 
     if (!books) {
         return <Spinner />;

@@ -7,11 +7,7 @@ import RootState from "../../typings/rootState";
 const MainPage: React.FC = () => {
     const { user } = useSelector((state: RootState) => state.auth);
 
-    if (!user) {
-        return null;
-    }
-
-    if (user.is_admin) {
+    if (user?.is_admin) {
         return <SiteAdmin />;
     }
 

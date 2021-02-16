@@ -58,8 +58,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "authorization.middleware.extract_user_from_jwt",
-    "authorization.middleware.only_for_admin",
+    "authorization.middleware.extract_auth_token",
+    "authorization.middleware.extract_user",
+    "authorization.middleware.process_permissions",
 ]
 
 ROOT_URLCONF = 'Nicolaus.urls'
@@ -163,10 +164,25 @@ JWT_USER_FIELD = "id"
 
 JWT_PREFIX = "Bearer "
 
-JWT_ROUTES_WHITELIST = [
-    "/api/user/register/",
-    "/api/user/login/",
-]
+ALLOW_ROUTES = {
+    "PUBLISH": [
+        r"^/api/user/register/$",
+        r"^/api/user/login/$",
+    ],
+    "PUBLISH_GET": [
+        r"^/api/books/$",
+        r"^/api/books/[0-9]+/$",
+        r"^/api/books/recommendations/$",
+        r"^/api/books/filters/[a-z]+/$",
+        r"^/api/books/filters/tags/groups/$",
+    ],
+    "FOR_ADMIN_MOD": [
+        r"^/api/books/$",
+        r"^/api/books/[0-9]+/$",
+        r"^/api/books/filters/[a-z]*/$",
+        r"^/api/books/filters/tags/groups/$",
+    ],
+}
 
 # Cross-Origin Resource Sharing
 

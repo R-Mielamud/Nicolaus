@@ -1,48 +1,72 @@
+import re
 from django.http import JsonResponse
 from jwt import DecodeError
 from Nicolaus import settings
 from helpers import jwt
 from .models import User
 
-def extract_user_from_jwt(get_response):
+def extract_auth_token(get_response):
     def middleware(request):
-        def reject():
-            return JsonResponse({
-                "message": "Not authorized",
-            }, status=401)
-
-        if (not request.path.startswith("/api")) or (request.path in settings.JWT_ROUTES_WHITELIST):
+        if not request.path.startswith("/api"):
             return get_response(request)
 
         token = jwt.extract_token_from_request(request)
+        setattr(request, "auth_token", token)
 
-        if not token:
-            return reject()
-
-        try:
-            user_id = jwt.get_user_id(token)
-        except DecodeError:
-            return reject()
-
-        user = User.objects.filter(pk=user_id).first()
-
-        if not user:
-            return reject()
-
-        setattr(request, "user", user)
         return get_response(request)
 
     return middleware
 
-def only_for_admin(get_response):
+def extract_user(get_response):
     def middleware(request):
-        if not request.path.startswith("/api/books") or request.method == "GET":
+        token = request.auth_token
+
+        if not request.path.startswith("/api") or not token:
+            request.user = None
             return get_response(request)
 
-        if not request.user.is_admin:
+        try:
+            user_id = jwt.get_user_id(token)
+        except DecodeError:
             return JsonResponse({
-                "message": "Permission denied",
-            }, status=403)
+                "message": "Invalid JWT token",
+            }, status=401)
+
+        user = User.objects.filter(pk=user_id).first()
+        request.user = user
+
+        return get_response(request)
+
+    return middleware
+
+def process_permissions(get_response):
+    def middleware(request):
+        path = request.path
+        print(path)
+        is_get = request.method == "GET"
+
+        if not path.startswith("/api"):
+            return get_response(request)
+
+        for regex in settings.ALLOW_ROUTES["PUBLISH"]:
+            if re.match(regex, path):
+                return get_response(request)
+
+        if is_get:
+            for regex in settings.ALLOW_ROUTES["PUBLISH_GET"]:
+                if re.match(regex, path) and is_get:
+                    return get_response(request)
+
+        if not request.user:
+            return JsonResponse({
+                "message": "Not authorized",
+            }, status=401)
+        elif not request.user.is_admin:
+            for regex in settings.ALLOW_ROUTES["FOR_ADMIN_MOD"]:
+                if re.match(regex, path):
+                    return JsonResponse({
+                        "message": "Permission denied",
+                    }, status=403)
 
         return get_response(request)
 
