@@ -49,4 +49,8 @@ export const ua = {
     in_stock: "В наявності",
     not_in_stock: "Не в наявності",
     or_l: "або",
+    series: "Серія",
+    paper: "Папір",
+    product_id: "Код товара",
+    pages_l: "сторінок",
 };

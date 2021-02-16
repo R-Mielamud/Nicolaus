@@ -49,4 +49,8 @@ export const en = {
     in_stock: "In stock",
     not_in_stock: "Not in stock",
     or_l: "or",
+    series: "Series",
+    paper: "Paper",
+    product_id: "Product code",
+    pages_l: "pages",
 };

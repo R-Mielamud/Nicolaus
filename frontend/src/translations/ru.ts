@@ -49,4 +49,8 @@ export const ru = {
     in_stock: "В наличии",
     not_in_stock: "Не в наличии",
     or_l: "или",
+    series: "Серия",
+    paper: "Бумага",
+    product_id: "Код товара",
+    pages_l: "страниц",
 };

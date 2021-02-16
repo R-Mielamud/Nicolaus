@@ -110,7 +110,7 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                                     onClick={() =>
                                         book.publishing
                                             ? updateFilterAndRedirect({ publishings: [book.publishing.id] })
-                                            : () => {}
+                                            : null
                                     }
                                 >
                                     {book.publishing.name}
@@ -119,8 +119,15 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                         ) : null}
                         {book.series ? (
                             <div className={styles.textParameter}>
-                                <span className={styles.key}>Series: </span>
-                                {book.series.name}
+                                <span className={styles.key}>{t("series")}: </span>
+                                <span
+                                    className={styles.link}
+                                    onClick={() =>
+                                        book.series ? updateFilterAndRedirect({ series: [book.series.id] }) : null
+                                    }
+                                >
+                                    {book.series.name}
+                                </span>
                             </div>
                         ) : null}
                         <div className={styles.textParameter}>
@@ -128,11 +135,11 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                             {book.isbn}
                         </div>
                         <div className={styles.textParameter}>
-                            <span className={styles.key}>Paper: </span>
-                            {book.paper_type} ({book.pages_count})
+                            <span className={styles.key}>{t("paper")}: </span>
+                            {book.paper_type} ({book.pages_count} {t("pages_l")})
                         </div>
                         <div className={styles.textParameter}>
-                            <span className={styles.key}>Product ID: </span>
+                            <span className={styles.key}>{t("product_id")}: </span>
                             {book.id}
                         </div>
                         {book.tags.length ? (
