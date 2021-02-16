@@ -51,7 +51,6 @@ class BookAPI(ChangeSerializerViewSet):
 
         if offset and offset.isdigit():
             offset = int(offset)
-            print(offset)
         else:
             offset = None
 

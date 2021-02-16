@@ -42,7 +42,6 @@ def extract_user(get_response):
 def process_permissions(get_response):
     def middleware(request):
         path = request.path
-        print(path)
         is_get = request.method == "GET"
 
         if not path.startswith("/api"):
