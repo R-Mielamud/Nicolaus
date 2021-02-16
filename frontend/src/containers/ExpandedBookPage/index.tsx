@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { Header, Icon, Label, Segment } from "semantic-ui-react";
 import BookRecommendations from "../../components/BookRecommendations";
+import OnlyDesktop from "../../components/common/OnlyDesktop";
 import Spinner from "../../components/common/Spinner";
 import { getBookById } from "../../services/books.service";
 import { setBooksFilter } from "../CatalogPage/logic/actions";
@@ -35,7 +36,7 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
     }, []);
 
     useEffect(() => {
-        dispatch(setBooksFilter({ filter: { from: 0 }, clear: true }));
+        dispatch(setBooksFilter({ filter: { from: 0 }, rewrite: true }));
     }, []);
 
     if (!bookLoaded) {
@@ -69,7 +70,12 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                         </Header>
                         <div className={styles.price}>
                             {book.price} &#8372;
-                            {book.discount > 0 ? <span className={styles.discount}>-{book.discount}%</span> : null}
+                            {book.discount > 0 ? (
+                                <span>
+                                    <span className={styles.origPrice}>{book.orig_price} &#8372;</span>
+                                    <span className={styles.discount}>-{book.discount}%</span>
+                                </span>
+                            ) : null}
                         </div>
                         <div className={styles.textParameter}>
                             {book.is_in_stock ? (
@@ -150,15 +156,21 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                     </div>
                 </Segment>
                 <div className={styles.right}>
-                    <Header as="h2" dividing>
-                        Description
-                    </Header>
-                    <div className={styles.description}>{book.description}</div>
+                    {book.description ? (
+                        <>
+                            <Header as="h2" dividing>
+                                Description
+                            </Header>
+                            <div className={styles.description}>{book.description}</div>
+                        </>
+                    ) : null}
                 </div>
             </div>
-            <div>
-                <BookRecommendations exclude={book.id} />
-            </div>
+            <OnlyDesktop>
+                <div>
+                    <BookRecommendations exclude={book.id} />
+                </div>
+            </OnlyDesktop>
         </div>
     );
 };

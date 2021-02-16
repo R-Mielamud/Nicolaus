@@ -35,6 +35,7 @@ class ListBookSerializer(CommonBookSerializer):
             "authors",
             "status",
             "price",
+            "orig_price",
             "discount",
             "is_in_stock",
         ]
@@ -60,6 +61,7 @@ class BookSerializer(CommonBookSerializer):
             "status",
             "isbn",
             "price",
+            "orig_price",
             "discount",
             "pages_count",
             "paper_type",

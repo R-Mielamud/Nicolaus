@@ -42,6 +42,7 @@ namespace WebApi.Entity {
         authors: Author[];
         status?: Status;
         price: number;
+        orig_price: number;
         discount: number;
         is_in_stock: boolean;
     }
@@ -56,6 +57,7 @@ namespace WebApi.Entity {
         series?: Series;
         isbn: string;
         price: number;
+        orig_price: number;
         discount: number;
         is_in_stock: boolean;
         pages_count: number;

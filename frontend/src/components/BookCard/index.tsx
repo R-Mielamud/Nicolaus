@@ -39,7 +39,12 @@ const BookCard: React.FC<Props> = ({ book, replace }) => {
             </div>
             <div className={styles.price}>
                 {book.price} &#8372;
-                {book.discount > 0 ? <span className={styles.discount}>-{book.discount}%</span> : null}
+                {book.discount > 0 ? (
+                    <span>
+                        <span className={styles.origPrice}>{book.orig_price} &#8372;</span>
+                        <span className={styles.discount}>-{book.discount}%</span>
+                    </span>
+                ) : null}
             </div>
             {book.is_in_stock ? (
                 <div className={styles.green}>

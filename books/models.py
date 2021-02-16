@@ -25,7 +25,9 @@ class Book(Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.price = self.orig_price - get_percent_of_number(self.orig_price, self.discount)
+        new_price = self.orig_price - get_percent_of_number(self.orig_price, self.discount)
+        self.price = round(new_price)
+
         return super().save(*args, **kwargs)
 
     class Meta:
