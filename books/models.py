@@ -6,7 +6,7 @@ from helpers.percentage import get_percent_of_number
 class Book(Model):
     title = CharField(max_length=300)
     description = TextField(max_length=3000, blank=True, null=True)
-    image = FileField(storage=S3BookImageStorage())
+    image = ImageField(storage=S3BookImageStorage())
     authors = ManyToManyField(to=Author, related_name="books")
     publishing = ForeignKey(to=Publishing, related_name="books", on_delete=SET_NULL, blank=True, null=True)
     series = ForeignKey(to=Series, related_name="books", on_delete=SET_NULL, blank=True, null=True)

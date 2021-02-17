@@ -19,9 +19,12 @@ def extract_auth_token(get_response):
 
 def extract_user(get_response):
     def middleware(request):
+        if not request.path.startswith("/api"):
+            return get_response(request)
+
         token = request.auth_token
 
-        if not request.path.startswith("/api") or not token:
+        if not token:
             request.user = None
             return get_response(request)
 
