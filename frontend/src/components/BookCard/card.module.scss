@@ -4,6 +4,7 @@
     margin: 0 0 15px 15px !important;
     transition-property: box-shadow;
     transition-duration: 0.1s;
+    cursor: pointer;
 
     &:hover {
         box-shadow: 3px 3px 7px 3px #ccc !important;

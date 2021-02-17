@@ -2,6 +2,7 @@ import { all, call, put, takeEvery } from "redux-saga/effects";
 import * as actions from "./actions";
 import * as actionTypes from "./actionTypes";
 import * as service from "../../../services/auth.service";
+import { setBooksFilter } from "../../CatalogPage/logic/actions";
 import { getToken, removeToken, setToken } from "../../../helpers/token.helper";
 import history from "../../../helpers/history.helper";
 import { error } from "../../../helpers/notifications.helper";
@@ -17,6 +18,8 @@ function* login(action: ReturnType<typeof actions.login>) {
                 user: result.user,
             }),
         );
+
+        yield put(setBooksFilter({ filter: {}, clear: true }));
     } catch (err) {
         yield put(actions.loadProfileSuccess({}));
         error(err.text);
@@ -39,6 +42,8 @@ function* register(action: ReturnType<typeof actions.register>) {
                 user: result.user,
             }),
         );
+
+        yield put(setBooksFilter({ filter: {}, clear: true }));
     } catch (err) {
         yield put(actions.loadProfileSuccess({}));
         error(err.text);

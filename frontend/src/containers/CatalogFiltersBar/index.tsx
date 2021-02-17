@@ -8,6 +8,7 @@ import AuthorsFilter from "./AuthorsFilter";
 import PublishingsFilter from "./PublishingsFilter";
 import StatusesFilter from "./StatusesFilter";
 import TagsFilter from "./TagsFilter";
+import styles from "./filters.module.scss";
 
 interface OnSelected {
     (value: number, selected: boolean): void;
@@ -24,9 +25,7 @@ const CatalogFiltersBar: React.FC = () => {
     const dispatch = useDispatch();
 
     const updateFilter = (filter: Partial<WebApi.Specific.BooksFilter>) => {
-        if (Object.keys(filter).length) {
-            dispatch(setBooksFilter({ filter }));
-        }
+        dispatch(setBooksFilter({ filter }));
     };
 
     const baseOnSelect = (field: "tags" | "publishings" | "authors" | "statuses", id: number, selected: boolean) => {
@@ -54,24 +53,26 @@ const CatalogFiltersBar: React.FC = () => {
     };
 
     return (
-        <div>
-            <Button.Group size="mini">
-                <Button primary onClick={() => load()} icon labelPosition="left">
-                    <Icon name="check" />
-                    {t("apply")}
-                </Button>
-                <Button.Or text={t("or_l") as string} />
-                <Button onClick={() => clear()}>{t("clear_filters")}</Button>
-            </Button.Group>
-            <Input
-                icon="search"
-                placeholder={t("search_book")}
-                fluid
-                size="mini"
-                value={booksFilter.search ?? ""}
-                style={{ marginTop: 10 }}
-                onChange={(event, data) => updateFilter({ search: data.value })}
-            />
+        <>
+            <div className={styles.sticky}>
+                <Button.Group size="mini">
+                    <Button primary onClick={load} icon labelPosition="left">
+                        <Icon name="check" />
+                        {t("apply")}
+                    </Button>
+                    <Button.Or text={t("or_l") as string} />
+                    <Button onClick={() => clear()}>{t("clear_filters")}</Button>
+                </Button.Group>
+                <Input
+                    icon="search"
+                    placeholder={t("search_book")}
+                    fluid
+                    size="mini"
+                    value={booksFilter.search ?? ""}
+                    style={{ marginTop: 10 }}
+                    onChange={(event, data) => updateFilter({ search: data.value })}
+                />
+            </div>
             <Header dividing as="h3">
                 {t("catalog")}
             </Header>
@@ -82,7 +83,7 @@ const CatalogFiltersBar: React.FC = () => {
                 {t("tags")}
             </Header>
             <TagsFilter onSelect={onTagSelect} currentSelected={booksFilter.tags} />
-        </div>
+        </>
     );
 };
 
