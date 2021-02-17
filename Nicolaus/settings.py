@@ -170,17 +170,10 @@ ALLOW_ROUTES = {
         r"^/api/user/login/$",
     ],
     "PUBLISH_GET": [
-        r"^/api/books/$",
-        r"^/api/books/[0-9]+/$",
-        r"^/api/books/recommendations/$",
-        r"^/api/books/filters/[a-z]+/$",
-        r"^/api/books/filters/tags/groups/$",
+        r"^/api/books/",
     ],
     "FOR_ADMIN_MOD": [
-        r"^/api/books/$",
-        r"^/api/books/[0-9]+/$",
-        r"^/api/books/filters/[a-z]*/$",
-        r"^/api/books/filters/tags/groups/$",
+        r"^/api/books/",
     ],
 }
 
