@@ -53,7 +53,7 @@ def process_permissions(get_response):
 
         if is_get:
             for regex in settings.ALLOW_ROUTES["PUBLISH_GET"]:
-                if re.match(regex, path) and is_get:
+                if re.match(regex, path):
                     return get_response(request)
 
         if not request.user:
