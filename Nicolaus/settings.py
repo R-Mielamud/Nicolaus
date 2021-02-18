@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "api",
     "authorization",
+    "book_filters",
+    "books",
 ]
 
 MIDDLEWARE = [
@@ -56,7 +58,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "authorization.middleware.extract_user_from_jwt",
+    "authorization.middleware.extract_auth_token",
+    "authorization.middleware.extract_user",
+    "authorization.middleware.process_permissions",
 ]
 
 ROOT_URLCONF = 'Nicolaus.urls'
@@ -160,10 +164,18 @@ JWT_USER_FIELD = "id"
 
 JWT_PREFIX = "Bearer "
 
-JWT_ROUTES_WHITELIST = [
-    "/api/user/register/",
-    "/api/user/login/",
-]
+ALLOW_ROUTES = {
+    "PUBLISH": [
+        r"^/api/user/register/$",
+        r"^/api/user/login/$",
+    ],
+    "PUBLISH_GET": [
+        r"^/api/books/",
+    ],
+    "FOR_ADMIN_MOD": [
+        r"^/api/books/",
+    ],
+}
 
 # Cross-Origin Resource Sharing
 
@@ -182,3 +194,15 @@ CORS_ALLOW_METHODS = [
     "DELETE",
     "OPTIONS",
 ]
+
+# S3 File Uploading
+
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
+
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+
+AWS_S3_MEDIA_BUCKET = os.environ.get("AWS_S3_MEDIA_BUCKET", "")
+
+AWS_S3_MEDIA_REGION = os.environ.get("AWS_S3_MEDIA_REGION", "")
+
+AWS_S3_BOOK_IMAGE_KEY = "book_images"

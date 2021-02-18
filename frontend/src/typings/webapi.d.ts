@@ -10,6 +10,60 @@ namespace WebApi.Entity {
         last_name?: string;
         is_admin: boolean;
     }
+
+    interface Tag extends Identified {
+        name: string;
+    }
+
+    interface TagGroup extends Identified {
+        name: string;
+        tags: Tag[];
+    }
+
+    interface Author extends Identified {
+        name: string;
+    }
+
+    interface Series extends Identified {
+        name: string;
+    }
+
+    interface Publishing extends Identified {
+        name: string;
+    }
+
+    interface Status extends Identified {
+        name: string;
+    }
+
+    interface MinimalBook extends Identified {
+        title: string;
+        image: string;
+        authors: Author[];
+        status?: Status;
+        price: number;
+        orig_price: number;
+        discount: number;
+        is_in_stock: boolean;
+    }
+
+    interface Book extends Identified {
+        title: string;
+        description?: string;
+        status?: Status;
+        image: string;
+        authors: Author[];
+        publishing?: Publishing;
+        series?: Series;
+        isbn: string;
+        price: number;
+        orig_price: number;
+        discount: number;
+        is_in_stock: boolean;
+        pages_count: number;
+        paper_type: string;
+        tags: Tag[];
+    }
 }
 
 namespace WebApi.BotEntity {
@@ -48,5 +102,21 @@ namespace WebApi.Specific {
     interface AuthResult {
         jwt_token: string;
         user: WebApi.Entity.User;
+    }
+
+    interface BooksFilter {
+        from: number;
+        limit: number;
+        authors: number[];
+        series: number[];
+        publishings: number[];
+        statuses: number[];
+        tags: numbers[];
+        search?: string;
+    }
+
+    interface ListBooksResult {
+        has_more: boolean;
+        books: WebApi.Entity.MinimalBook[];
     }
 }

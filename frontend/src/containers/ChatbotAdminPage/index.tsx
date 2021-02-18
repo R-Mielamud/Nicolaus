@@ -1,14 +1,15 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { Button, Divider, Header, Tab } from "semantic-ui-react";
-import history from "../../helpers/history.helper";
 import RootState from "../../typings/rootState";
 import BillsTable from "./BillsTable";
 import OrdersTable from "./OrdersTable";
 import UsersTable from "./UsersTable";
 
 const ChatbotAdminPage: React.FC = () => {
+    const history = useHistory();
     const { t } = useTranslation();
     const { user } = useSelector((state: RootState) => state.auth);
 

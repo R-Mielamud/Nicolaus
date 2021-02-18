@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button, Label } from "semantic-ui-react";
 import { Register } from "../../containers/LoginPage/logic/actionTypes";
 import PasswordInput from "../common/PasswordInput";
 import validator from "validator";
 import { useTranslation } from "react-i18next";
 import { Setter } from "../../typings/setter";
+import { fullTelephoneValid, partialTelephoneValid } from "../../helpers/telephone.helper";
 
 interface Props {
     onSubmit?: Setter<Register>;
@@ -18,9 +19,11 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, loading }) => {
     const [password, setPassword] = useState<string>("");
     const [passwordHidden, setPasswordHidden] = useState<boolean>(true);
     const [passwordValid, setPasswordValid] = useState<boolean>(true);
-    const [telephone, setTelephone] = useState<string>("");
+    const [telephone, setTelephoneText] = useState<string>("");
+    const [telephoneValid, setTelephoneValid] = useState<boolean>(true);
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
+    const phonePrefix = "+380";
     const buttonDisabled = !Boolean(email || password || emailValid || passwordValid);
 
     const setEmail = (value: string) => {
@@ -28,14 +31,22 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, loading }) => {
         setEmailText(value);
     };
 
+    const setTelephone = (value: string) => {
+        if (partialTelephoneValid(value)) {
+            setTelephoneText(value);
+        }
+
+        setTelephoneValid(true);
+    };
+
     const submit = () => {
         if (onSubmit && !buttonDisabled) {
             onSubmit({
                 email,
                 password,
-                telephone: telephone || undefined,
+                telephone: telephone ? phonePrefix + telephone : undefined,
                 firstName: firstName || undefined,
-                lastName: firstName || undefined,
+                lastName: lastName || undefined,
             });
         }
     };
@@ -61,12 +72,16 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, loading }) => {
                 setValid={setPasswordValid}
             />
             <Form.Input
-                icon="phone"
-                iconPosition="left"
                 value={telephone}
+                labelPosition="left"
                 placeholder={t("phone_number")}
+                error={!telephoneValid}
                 onChange={(event, data) => setTelephone(data.value)}
-            />
+                onBlur={() => setTelephoneValid(fullTelephoneValid(telephone))}
+            >
+                <Label basic>{phonePrefix}</Label>
+                <input />
+            </Form.Input>
             <Form.Input
                 icon="user"
                 iconPosition="left"
