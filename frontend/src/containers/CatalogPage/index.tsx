@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Icon, Loader, Segment } from "semantic-ui-react";
+import { Button, Icon, Loader, Segment } from "semantic-ui-react";
 import BookCard from "../../components/BookCard";
 import BookRecommendations from "../../components/BookRecommendations";
 import Spinner from "../../components/common/Spinner";
@@ -10,10 +10,14 @@ import RootState from "../../typings/rootState";
 import CatalogFiltersBar from "../CatalogFiltersBar";
 import { loadBooks } from "./logic/actions";
 import styles from "./catalog.module.scss";
+import OnlyDesktop from "../../components/common/OnlyDesktop";
+import OnlyMobile from "../../components/common/OnlyMobile";
 
 const CatalogPage: React.FC = () => {
     const dispatch = useDispatch();
     const booksRef = useRef<HTMLDivElement | null>(null);
+    const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(false);
+    const expanded = sidebarExpanded ? styles.expanded : "";
 
     const {
         catalog: { books, loadingBooks, hasMoreBooks },
@@ -42,9 +46,25 @@ const CatalogPage: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <Segment className={styles.sidebar}>
-                <CatalogFiltersBar />
-            </Segment>
+            <OnlyDesktop>
+                <Segment className={styles.sidebar}>
+                    <CatalogFiltersBar />
+                </Segment>
+            </OnlyDesktop>
+            <OnlyMobile>
+                <Segment className={[styles.sidebar, styles.mobile, expanded].join(" ")}>
+                    <Button
+                        primary
+                        fluid
+                        circular
+                        className={[styles.expand, expanded].join(" ")}
+                        onClick={() => setSidebarExpanded(!sidebarExpanded)}
+                    >
+                        <Icon name="chevron right" />
+                    </Button>
+                    <CatalogFiltersBar />
+                </Segment>
+            </OnlyMobile>
             <div>
                 {books.length ? (
                     <InfiniteScroller
