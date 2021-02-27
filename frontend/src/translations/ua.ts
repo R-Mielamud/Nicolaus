@@ -53,4 +53,10 @@ export const ua = {
     paper: "Папір",
     product_id: "Код товара",
     pages_l: "сторінок",
+    search_by_name: "Знайти за іменем",
+    import_table: "Імпортувати таблицю у форматі CSV",
+    save_table: "Зберегти таблицю",
+    name: "І'мя",
+    chosen: "Обрано",
+    actions: "Дії",
 };

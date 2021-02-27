@@ -9,6 +9,7 @@ import { CSVHeaders } from "../../../constants/CSVHeaders";
 import { FileNames } from "../../../constants/FileNames";
 import RootState from "../../../typings/rootState";
 import StdSearch, { getStdFilter } from "../StdSearch";
+import styles from "../chatbot.module.scss";
 
 const UsersTable: React.FC = () => {
     const { t } = useTranslation();
@@ -45,14 +46,14 @@ const UsersTable: React.FC = () => {
                     <DownloadCSV
                         data={displayUsers}
                         headers={CSVHeaders.MESSENGER_USER}
-                        fileName={FileNames.USERS_CSV}
+                        fileName={FileNames.MESSENGER_USERS_CSV}
                         text={t("download_table")}
                     />
-                    <Table celled>
+                    <Table celled className={styles.table}>
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell width={2}>{t("phone")}</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>{t("messenger")}</Table.HeaderCell>
+                                <Table.HeaderCell width={2}>{t("messenger")}</Table.HeaderCell>
                                 <Table.HeaderCell>{t("delivery_contacts")}</Table.HeaderCell>
                                 <Table.HeaderCell>{t("post_service")}</Table.HeaderCell>
                                 <Table.HeaderCell>{t("delivery_address")}</Table.HeaderCell>
@@ -61,8 +62,8 @@ const UsersTable: React.FC = () => {
                         <Table.Body>
                             {displayUsers.map((user) => (
                                 <Table.Row key={user.messenger_id}>
-                                    <Table.Cell>{user.phone}</Table.Cell>
-                                    <Table.Cell>{user.messenger}</Table.Cell>
+                                    <Table.Cell width={2}>{user.phone}</Table.Cell>
+                                    <Table.Cell width={2}>{user.messenger}</Table.Cell>
                                     <Table.Cell>
                                         {user.requisites?.delivery_phone} {user.requisites?.delivery_name}
                                     </Table.Cell>

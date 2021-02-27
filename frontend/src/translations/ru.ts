@@ -53,4 +53,10 @@ export const ru = {
     paper: "Бумага",
     product_id: "Код товара",
     pages_l: "страниц",
+    search_by_name: "Найти по имени",
+    import_table: "Импортировать таблицу в формате CSV",
+    save_table: "Сохранить таблицу",
+    name: "Имя",
+    chosen: "Выбрано",
+    actions: "Действия",
 };

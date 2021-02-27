@@ -10,6 +10,7 @@ import { FileNames } from "../../../constants/FileNames";
 import RootState from "../../../typings/rootState";
 import StdSearch, { getStdFilter } from "../StdSearch";
 import styles from "./orders.module.scss";
+import globalStyles from "../chatbot.module.scss";
 
 const OrdersTable: React.FC = () => {
     const { t } = useTranslation();
@@ -46,14 +47,14 @@ const OrdersTable: React.FC = () => {
                     <DownloadCSV
                         data={displayOrders}
                         headers={CSVHeaders.MESSENGER_ORDER}
-                        fileName={FileNames.ORDERS_CSV}
+                        fileName={FileNames.MESSENGER_ORDERS_CSV}
                         text={t("download_table")}
                     />
-                    <Table celled>
+                    <Table celled className={globalStyles.table}>
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell width={2}>{t("phone")}</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>{t("messenger")}</Table.HeaderCell>
+                                <Table.HeaderCell width={2}>{t("messenger")}</Table.HeaderCell>
                                 <Table.HeaderCell width={2}>{t("creation_date")}</Table.HeaderCell>
                                 <Table.HeaderCell>{t("books")}</Table.HeaderCell>
                             </Table.Row>
@@ -61,9 +62,9 @@ const OrdersTable: React.FC = () => {
                         <Table.Body>
                             {displayOrders.map((order) => (
                                 <Table.Row key={order.id}>
-                                    <Table.Cell>{order.user.phone}</Table.Cell>
-                                    <Table.Cell>{order.user.messenger}</Table.Cell>
-                                    <Table.Cell>{order.created_at}</Table.Cell>
+                                    <Table.Cell width={2}>{order.user.phone}</Table.Cell>
+                                    <Table.Cell width={2}>{order.user.messenger}</Table.Cell>
+                                    <Table.Cell width={2}>{order.created_at}</Table.Cell>
                                     <Table.Cell>
                                         <div className={styles.booksCell}>
                                             {order.books.map((book, i) => (

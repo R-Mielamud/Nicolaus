@@ -1,11 +1,19 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
-import { Header, Button, Divider } from "semantic-ui-react";
+import { Header, Button, Divider, Tab } from "semantic-ui-react";
+import AuthorsTable from "./AuthorsTable";
 
 const SiteAdminPage: React.FC = () => {
     const history = useHistory();
     const { t } = useTranslation();
+
+    const tabOptions = [
+        {
+            menuItem: t("authors"),
+            render: () => <AuthorsTable />,
+        },
+    ];
 
     return (
         <div>
@@ -16,7 +24,7 @@ const SiteAdminPage: React.FC = () => {
                 </Button>
             </div>
             <Divider />
-            {/* Content will be added soon */}
+            <Tab panes={tabOptions} />
         </div>
     );
 };

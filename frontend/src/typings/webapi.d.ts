@@ -1,5 +1,6 @@
 interface Identified {
     id: number;
+    [key: string]: any;
 }
 
 namespace WebApi.Entity {
@@ -15,17 +16,42 @@ namespace WebApi.Entity {
         name: string;
     }
 
+    interface ChangeTag extends Identified {
+        name: string;
+        group: number;
+    }
+
     interface TagGroup extends Identified {
         name: string;
         tags: Tag[];
+    }
+
+    interface ChangeTagGroup extends Identified {
+        name: string;
     }
 
     interface Author extends Identified {
         name: string;
     }
 
+    interface ChangeAuthor extends Identified {
+        name: string;
+        chosen: boolean;
+    }
+
+    interface CSVChangeAuthor extends Identified {
+        name: string;
+        chosen: boolean;
+        change: boolean;
+    }
+
     interface Series extends Identified {
         name: string;
+    }
+
+    interface ChangeSeries extends Identified {
+        name: string;
+        publishing: number;
     }
 
     interface Publishing extends Identified {
@@ -62,6 +88,24 @@ namespace WebApi.Entity {
         is_in_stock: boolean;
         pages_count: number;
         paper_type: string;
+        tags: Tag[];
+    }
+
+    interface ChangeBook extends Identified {
+        title: string;
+        description?: string;
+        status?: Status;
+        image: string;
+        authors: Author[];
+        publishing?: Publishing;
+        series?: Series;
+        isbn: string;
+        orig_price: number;
+        discount: number;
+        in_stock: number;
+        pages_count: number;
+        paper_type: string;
+        chosen: boolean;
         tags: Tag[];
     }
 }
@@ -118,5 +162,10 @@ namespace WebApi.Specific {
     interface ListBooksResult {
         has_more: boolean;
         books: WebApi.Entity.MinimalBook[];
+    }
+
+    interface ListAdminBooksResult {
+        has_more: boolean;
+        books: WebApi.Entity.ChangeBook[];
     }
 }

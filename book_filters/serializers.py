@@ -30,6 +30,11 @@ class AuthorSerializer(ModelSerializer):
         model = Author
         fields = ["id", "name"]
 
+class ChangeAuthorSerializer(ModelSerializer):
+    class Meta:
+        model = Author
+        fields = ["id", "name", "chosen"]
+
 class SeriesSerializer(ModelSerializer):
     class Meta:
         model = Series

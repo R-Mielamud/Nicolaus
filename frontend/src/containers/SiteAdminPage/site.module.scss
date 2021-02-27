@@ -1,0 +1,39 @@
+.table {
+    display: block;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.table {
+    tbody,
+    thead,
+    tfoot {
+        width: 100%;
+        display: table;
+        table-layout: fixed;
+    }
+
+    thead,
+    tfoot {
+        z-index: 10;
+    }
+
+    thead {
+        position: sticky;
+        top: 0;
+    }
+
+    tfoot {
+        position: sticky;
+        bottom: 0;
+    }
+}
+
+.danger {
+    transition-duration: 0.1s !important;
+    transition-property: color, opacity !important;
+
+    &:hover {
+        color: red;
+    }
+}

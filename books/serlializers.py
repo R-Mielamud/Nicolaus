@@ -12,7 +12,7 @@ from book_filters.serializers import (
     StatusSerializer,
 )
 
-from book_filters.models import Tag, Author, Series, Publishing
+from book_filters.models import Tag, Author, Series, Publishing, Status
 from .models import Book
 
 class CommonBookSerializer(ModelSerializer):
@@ -74,6 +74,7 @@ class ChangeBookSerializer(ModelSerializer):
     publishing = PrimaryKeyRelatedField(queryset=Publishing.objects.all())
     series = PrimaryKeyRelatedField(queryset=Series.objects.all())
     tags = PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all())
+    status = PrimaryKeyRelatedField(queryset=Status.objects.all())
 
     class Meta:
         model = Book
@@ -82,6 +83,7 @@ class ChangeBookSerializer(ModelSerializer):
             "id",
             "title",
             "description",
+            "status",
             "image",
             "authors",
             "publishing",

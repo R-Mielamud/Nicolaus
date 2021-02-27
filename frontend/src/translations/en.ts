@@ -53,4 +53,10 @@ export const en = {
     paper: "Paper",
     product_id: "Product code",
     pages_l: "pages",
+    search_by_name: "Search by name",
+    import_table: "Import table as CSV",
+    save_table: "Save table",
+    name: "Name",
+    chosen: "Chosen",
+    actions: "Actions",
 };

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Button } from "semantic-ui-react";
-import CSVExporter from "../../helpers/csv.helper";
+import { CSVExporter } from "../../helpers/csv.helper";
 
 interface Props {
     data: Record<string, any>[];
