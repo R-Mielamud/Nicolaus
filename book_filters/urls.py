@@ -1,6 +1,17 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import TagAPI, TagGroupAPI, AuthorAPI, SeriesAPI, PublishingAPI, StatusAPI, BulkUpdateAuthorAPI, BulkUpdateTagGroupAPI
+
+from .views import (
+    TagAPI,
+    TagGroupAPI,
+    AuthorAPI,
+    SeriesAPI,
+    PublishingAPI,
+    StatusAPI,
+    BulkUpdateAuthorAPI,
+    BulkUpdateTagGroupAPI,
+    BulkUpdatePublishingAPI,
+)
 
 tags_router = DefaultRouter()
 tags_router.register(r"groups/bulk", BulkUpdateTagGroupAPI, basename="tag_groups")
@@ -9,7 +20,8 @@ tags_router.register(r"", TagAPI)
 
 publishings_router = DefaultRouter()
 publishings_router.register(r"series", SeriesAPI)
-publishings_router.register(r"", PublishingAPI, basename="publishings")
+publishings_router.register(r"bulk", BulkUpdatePublishingAPI, basename="publishings")
+publishings_router.register(r"", PublishingAPI)
 
 authors_router = DefaultRouter()
 authors_router.register(r"bulk", BulkUpdateAuthorAPI, basename="authors")

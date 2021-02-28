@@ -30,6 +30,25 @@ export const deleteTagGroupSuccess = createAction<actionTypes.DeleteTagGroupSucc
     actionTypes.DELETE_TAG_GROUP_SUCCESS,
 );
 
+// Publishings
+
+export const createPublishing = createAction<actionTypes.CreatePublishing>(actionTypes.CREATE_PUBLISHING);
+export const updatePublishing = createAction<actionTypes.UpdatePublishing>(actionTypes.UPDATE_PUBLISHING);
+export const deletePublishing = createAction<actionTypes.DeletePublishing>(actionTypes.DELETE_PUBLISHING);
+export const bulkPublishings = createAction<actionTypes.BulkPublishings>(actionTypes.BULK_PUBLISHINGS);
+
+export const createPublishingSuccess = createAction<actionTypes.CreatePublishingSuccess>(
+    actionTypes.CREATE_PUBLISHING_SUCCESS,
+);
+
+export const updatePublishingSuccess = createAction<actionTypes.UpdatePublishingSuccess>(
+    actionTypes.UPDATE_PUBLISHING_SUCCESS,
+);
+
+export const deletePublishingSuccess = createAction<actionTypes.DeletePublishingSuccess>(
+    actionTypes.DELETE_PUBLISHING_SUCCESS,
+);
+
 // Read
 
 export const loadAdminBooks = createAction<actionTypes.LoadBooks>(actionTypes.LOAD_ADMIN_BOOKS);

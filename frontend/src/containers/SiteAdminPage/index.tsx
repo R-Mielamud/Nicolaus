@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { Header, Button, Divider, Tab } from "semantic-ui-react";
 import AuthorsTable from "./AuthorsTable";
+import PublishingsTable from "./PublishingsTable";
 import TagGroupsTable from "./TagGroupsTable";
 
 interface Props {
@@ -26,6 +27,10 @@ const SiteAdminPage: React.FC<Props> = ({ activeIndex }) => {
             menuItem: t("tag_groups"),
             render: () => <TagGroupsTable index={1} />,
         },
+        {
+            menuItem: t("publishings"),
+            render: () => <PublishingsTable index={2} />,
+        },
     ];
 
     return (
@@ -37,7 +42,11 @@ const SiteAdminPage: React.FC<Props> = ({ activeIndex }) => {
                 </Button>
             </div>
             <Divider />
-            <Tab panes={tabOptions} activeIndex={activeIndex} />
+            <Tab
+                panes={tabOptions}
+                activeIndex={activeIndex}
+                onTabChange={(event, data) => console.log(data.activeIndex)}
+            />
         </div>
     );
 };

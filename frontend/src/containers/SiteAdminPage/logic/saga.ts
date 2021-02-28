@@ -3,6 +3,7 @@ import * as actions from "./actions";
 import * as actionTypes from "./actionTypes";
 import * as authorsService from "../../../services/authors.service";
 import * as tagsService from "../../../services/tags.service";
+import * as publishingsService from "../../../services/publishings.service";
 import { error } from "../../../helpers/notifications.helper";
 
 // Authors
@@ -145,6 +146,80 @@ function* watchBulkTagGroups() {
     yield takeEvery(actionTypes.BULK_TAG_GROUPS, bulkTagGroups);
 }
 
+// Publishings
+
+function* loadAdminPublishings() {
+    try {
+        const publishings: WebApi.Entity.ChangePublishing[] = yield call(publishingsService.getAdminPublishings);
+        yield put(actions.loadAdminPublishingsSuccess({ publishings }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchLoadAdminPublishings() {
+    yield takeEvery(actionTypes.LOAD_ADMIN_PUBLISHINGS, loadAdminPublishings);
+}
+
+function* createPublishing(action: ReturnType<typeof actions.createPublishing>) {
+    try {
+        const publishing: WebApi.Entity.ChangePublishing = yield call(publishingsService.createPublishing, action.data);
+        yield put(actions.createPublishingSuccess({ publishing }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchCreatePublishing() {
+    yield takeEvery(actionTypes.CREATE_PUBLISHING, createPublishing);
+}
+
+function* updatePublishing(action: ReturnType<typeof actions.updatePublishing>) {
+    try {
+        const publishing: WebApi.Entity.ChangePublishing = yield call(
+            publishingsService.updatePublishing,
+            action.id,
+            action.data,
+        );
+        yield put(actions.updatePublishingSuccess({ id: action.id, publishing }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchUpdatePublishing() {
+    yield takeEvery(actionTypes.UPDATE_PUBLISHING, updatePublishing);
+}
+
+function* deletePublishing(action: ReturnType<typeof actions.deletePublishing>) {
+    try {
+        yield call(publishingsService.deletePublishing, action.id);
+        yield put(actions.deletePublishingSuccess({ id: action.id }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchDeletePublishing() {
+    yield takeEvery(actionTypes.DELETE_PUBLISHING, deletePublishing);
+}
+
+function* bulkPublishings(action: ReturnType<typeof actions.bulkPublishings>) {
+    try {
+        yield call(publishingsService.bulkPublishings, action.publishings);
+
+        const parts = window.location.href.split("?");
+        const url = parts[0];
+        window.location.replace(url + "?activeIndex=" + action.index);
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchBulkPublishings() {
+    yield takeEvery(actionTypes.BULK_PUBLISHINGS, bulkPublishings);
+}
+
 function* authorSaga() {
     yield all([
         watchLoadAdminAuthors(),
@@ -165,6 +240,16 @@ function* tagGroupSaga() {
     ]);
 }
 
+function* publishingSaga() {
+    yield all([
+        watchLoadAdminPublishings(),
+        watchCreatePublishing(),
+        watchUpdatePublishing(),
+        watchDeletePublishing(),
+        watchBulkPublishings(),
+    ]);
+}
+
 export default function* siteAdminSaga() {
-    yield all([authorSaga(), tagGroupSaga()]);
+    yield all([publishingSaga(), authorSaga(), tagGroupSaga()]);
 }

@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import CreateModelMixin
 from viewsets import ChangeSerializerViewSet
 from .models import Tag, TagGroup, Author, Series, Publishing, Status
-from .celery import bulk_update_authors, bulk_update_tag_groups
+from .celery import bulk_update_authors, bulk_update_tag_groups, bulk_update_publishings
 
 from .serializers import (
     TagSerializer,
@@ -77,3 +77,9 @@ class BulkUpdateTagGroupAPI(BaseBulkUpdateAPI):
 
     def create(self, request, *args, **kwargs):
         return self.get_create(bulk_update_tag_groups, request, *args, **kwargs)
+
+class BulkUpdatePublishingAPI(BaseBulkUpdateAPI):
+    serializer_class = PublishingSerializer
+
+    def create(self, request, *args, **kwargs):
+        return self.get_create(bulk_update_publishings, request, *args, **kwargs)

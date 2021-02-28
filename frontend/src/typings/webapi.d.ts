@@ -65,6 +65,15 @@ namespace WebApi.Entity {
         name: string;
     }
 
+    interface ChangePublishing extends Identified {
+        name: string;
+    }
+
+    interface CSVChangePublishing extends Identified {
+        name: string;
+        change: boolean;
+    }
+
     interface Status extends Identified {
         name: string;
     }

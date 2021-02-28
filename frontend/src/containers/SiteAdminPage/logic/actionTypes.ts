@@ -35,6 +35,16 @@ export const DELETE_TAG_GROUP = "CATALOG:ADMIN:TAG:GROUPS:DELETE";
 export const DELETE_TAG_GROUP_SUCCESS = "CATALOG:TAG:GROUPS:DELETE:SUCCESS";
 export const BULK_TAG_GROUPS = "CATALOG:TAG:GROUPS:UPDATE:BULK";
 
+// Publishings
+
+export const CREATE_PUBLISHING = "CATALOG:ADMIN:PUBLISHINGS:CREATE";
+export const CREATE_PUBLISHING_SUCCESS = "CATALOG:PUBLISHINGS:CREATE:SUCCESS";
+export const UPDATE_PUBLISHING = "CATALOG:ADMIN:PUBLISHINGS:UPDATE";
+export const UPDATE_PUBLISHING_SUCCESS = "CATALOG:PUBLISHINGS:UPDATE:SUCCESS";
+export const DELETE_PUBLISHING = "CATALOG:ADMIN:PUBLISHINGS:DELETE";
+export const DELETE_PUBLISHING_SUCCESS = "CATALOG:PUBLISHINGS:DELETE:SUCCESS";
+export const BULK_PUBLISHINGS = "CATALOG:PUBLISHINGS:UPDATE:BULK";
+
 // Read
 
 export interface LoadBooks {
@@ -134,5 +144,38 @@ export interface DeleteTagGroupSuccess {
 
 export interface BulkTagGroups {
     tagGroups: WebApi.Entity.CSVChangeTagGroup[];
+    index: number;
+}
+
+// Publishings
+
+export interface CreatePublishing {
+    data: WebApi.Entity.ChangePublishing;
+}
+
+export interface CreatePublishingSuccess {
+    publishing: WebApi.Entity.ChangePublishing;
+}
+
+export interface UpdatePublishing {
+    id: number;
+    data: Partial<WebApi.Entity.ChangePublishing>;
+}
+
+export interface UpdatePublishingSuccess {
+    id: number;
+    publishing: WebApi.Entity.ChangePublishing;
+}
+
+export interface DeletePublishing {
+    id: number;
+}
+
+export interface DeletePublishingSuccess {
+    id: number;
+}
+
+export interface BulkPublishings {
+    publishings: WebApi.Entity.CSVChangePublishing[];
     index: number;
 }

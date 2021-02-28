@@ -12,4 +12,5 @@ export const CSVHeaders = {
     MESSENGER_ORDER: ["user.phone", "user.messenger", "books", "created_at"],
     AUTHOR: ["id", "name", "chosen::0", "change::0"],
     TAG_GROUP: ["id", "name", "chosen::0", "change::0"],
+    PUBLISHING: ["id", "name", "change::0"],
 };
