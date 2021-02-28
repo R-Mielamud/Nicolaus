@@ -33,3 +33,8 @@ def bulk_update_filter(Model, dataset):
 def bulk_update_authors(dataset):
     from .models import Author
     bulk_update_filter(Author, dataset)
+
+@app.task()
+def bulk_update_tag_groups(dataset):
+    from .models import TagGroup
+    bulk_update_filter(TagGroup, dataset)

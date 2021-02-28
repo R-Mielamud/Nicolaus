@@ -59,4 +59,5 @@ export const ru = {
     name: "Имя",
     chosen: "Выбрано",
     actions: "Действия",
+    tag_groups: "Группы тегов",
 };

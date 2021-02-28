@@ -1,8 +1,10 @@
 import createReducer from "../../../helpers/createReducer.helper";
-import { initialState } from "./state";
+import { initialState, SiteAdminState } from "./state";
 import * as actionTypes from "./actionTypes";
 
-export const siteAdminReducer = createReducer(initialState, {
+export const siteAdminReducer = createReducer<SiteAdminState>(initialState, {
+    // Read
+
     [actionTypes.LOAD_ADMIN_BOOKS_SUCCESS](state, action: actionTypes.LoadBooksSuccess) {
         const newBooks = action.more ? [...(state.books || []), ...action.books] : action.books;
 
@@ -42,6 +44,9 @@ export const siteAdminReducer = createReducer(initialState, {
             publishings: action.publishings,
         };
     },
+
+    // Authors
+
     [actionTypes.CREATE_AUTHOR_SUCCESS](state, action: actionTypes.CreateAuthorSuccess) {
         return {
             ...state,
@@ -91,6 +96,60 @@ export const siteAdminReducer = createReducer(initialState, {
         return {
             ...state,
             authors: [...newAuthors],
+        };
+    },
+
+    // Tag groups
+
+    [actionTypes.CREATE_TAG_GROUP_SUCCESS](state, action: actionTypes.CreateTagGroupSuccess) {
+        return {
+            ...state,
+            tagGroups: [...(state.tagGroups || []), action.tagGroup],
+        };
+    },
+    [actionTypes.UPDATE_TAG_GROUP_SUCCESS](state, action: actionTypes.UpdateTagGroupSuccess) {
+        if (!state.tagGroups) {
+            return state;
+        }
+
+        const newGroups = [...state.tagGroups];
+        const index = newGroups.findIndex((group) => group.id === action.id);
+
+        if (index < 0) {
+            return state;
+        }
+
+        const group = newGroups[index];
+
+        const newGroup = {
+            ...group,
+            ...action.tagGroup,
+        };
+
+        newGroups[index] = newGroup;
+
+        return {
+            ...state,
+            tagGroups: [...newGroups],
+        };
+    },
+    [actionTypes.DELETE_TAG_GROUP_SUCCESS](state, action: actionTypes.DeleteTagGroupSuccess) {
+        if (!state.tagGroups) {
+            return state;
+        }
+
+        const newGroups = [...state.tagGroups];
+        const index = newGroups.findIndex((group) => group.id === action.id);
+
+        if (index < 0) {
+            return state;
+        }
+
+        newGroups.splice(index, 1);
+
+        return {
+            ...state,
+            tagGroups: [...newGroups],
         };
     },
 });

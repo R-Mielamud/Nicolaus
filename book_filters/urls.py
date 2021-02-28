@@ -1,8 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import TagAPI, TagGroupAPI, AuthorAPI, SeriesAPI, PublishingAPI, StatusAPI, BulkUpdateAuthorAPI
+from .views import TagAPI, TagGroupAPI, AuthorAPI, SeriesAPI, PublishingAPI, StatusAPI, BulkUpdateAuthorAPI, BulkUpdateTagGroupAPI
 
 tags_router = DefaultRouter()
+tags_router.register(r"groups/bulk", BulkUpdateTagGroupAPI, basename="tag_groups")
 tags_router.register(r"groups", TagGroupAPI)
 tags_router.register(r"", TagAPI)
 

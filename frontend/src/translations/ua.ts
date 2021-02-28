@@ -59,4 +59,5 @@ export const ua = {
     name: "І'мя",
     chosen: "Обрано",
     actions: "Дії",
+    tag_groups: "Групи тегів",
 };

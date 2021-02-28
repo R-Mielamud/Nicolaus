@@ -59,4 +59,5 @@ export const en = {
     name: "Name",
     chosen: "Chosen",
     actions: "Actions",
+    tag_groups: "Tag groups",
 };

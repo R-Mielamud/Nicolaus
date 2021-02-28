@@ -28,6 +28,13 @@ namespace WebApi.Entity {
 
     interface ChangeTagGroup extends Identified {
         name: string;
+        chosen: boolean;
+    }
+
+    interface CSVChangeTagGroup extends Identified {
+        name: string;
+        chosen: boolean;
+        change: boolean;
     }
 
     interface Author extends Identified {

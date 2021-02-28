@@ -1,7 +1,7 @@
 import createAction from "../../../helpers/createAction.helper";
 import * as actionTypes from "./actionTypes";
 
-// Create, Update, Delete
+// Authors
 
 export const createAuthor = createAction<actionTypes.CreateAuthor>(actionTypes.CREATE_AUTHOR);
 export const createAuthorSuccess = createAction<actionTypes.CreateAuthorSuccess>(actionTypes.CREATE_AUTHOR_SUCCESS);
@@ -10,6 +10,25 @@ export const updateAuthorSuccess = createAction<actionTypes.UpdateAuthorSuccess>
 export const deleteAuthor = createAction<actionTypes.DeleteAuthor>(actionTypes.DELETE_AUTHOR);
 export const deleteAuthorSuccess = createAction<actionTypes.DeleteAuthorSuccess>(actionTypes.DELETE_AUTHOR_SUCCESS);
 export const bulkAuthors = createAction<actionTypes.BulkAuthors>(actionTypes.BULK_AUTHORS);
+
+// Tag groups
+
+export const createTagGroup = createAction<actionTypes.CreateTagGroup>(actionTypes.CREATE_TAG_GROUP);
+export const updateTagGroup = createAction<actionTypes.UpdateTagGroup>(actionTypes.UPDATE_TAG_GROUP);
+export const deleteTagGroup = createAction<actionTypes.DeleteTagGroup>(actionTypes.DELETE_TAG_GROUP);
+export const bulkTagGroups = createAction<actionTypes.BulkTagGroups>(actionTypes.BULK_TAG_GROUPS);
+
+export const createTagGroupSuccess = createAction<actionTypes.CreateTagGroupSuccess>(
+    actionTypes.CREATE_TAG_GROUP_SUCCESS,
+);
+
+export const updateTagGroupSuccess = createAction<actionTypes.UpdateTagGroupSuccess>(
+    actionTypes.UPDATE_TAG_GROUP_SUCCESS,
+);
+
+export const deleteTagGroupSuccess = createAction<actionTypes.DeleteTagGroupSuccess>(
+    actionTypes.DELETE_TAG_GROUP_SUCCESS,
+);
 
 // Read
 
