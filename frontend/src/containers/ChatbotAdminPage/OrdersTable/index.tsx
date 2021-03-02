@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { Tab, Table } from "semantic-ui-react";
@@ -19,10 +19,6 @@ const OrdersTable: React.FC = () => {
     const [showTelegram, setShowTelegram] = useState<boolean>(true);
     const { messengerOrders } = useSelector((state: RootState) => state.chatbot);
 
-    if (!messengerOrders) {
-        return <Spinner />;
-    }
-
     const filterOrders = getStdFilter<WebApi.BotEntity.Order>({
         getUser: (item) => item.user,
         phoneSearch,
@@ -30,7 +26,14 @@ const OrdersTable: React.FC = () => {
         showTelegram,
     });
 
-    const displayOrders: WebApi.BotEntity.Order[] = messengerOrders.filter(filterOrders);
+    const displayOrders = useMemo(() => messengerOrders && messengerOrders.filter(filterOrders), [
+        messengerOrders,
+        filterOrders,
+    ]);
+
+    if (!displayOrders) {
+        return <Spinner />;
+    }
 
     return (
         <Tab.Pane>

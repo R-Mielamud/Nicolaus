@@ -220,6 +220,76 @@ function* watchBulkPublishings() {
     yield takeEvery(actionTypes.BULK_PUBLISHINGS, bulkPublishings);
 }
 
+// Tags
+
+function* loadAdminTags() {
+    try {
+        const tags: WebApi.Entity.ChangeTag[] = yield call(tagsService.getAdminTags);
+        yield put(actions.loadAdminTagsSuccess({ tags }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchLoadAdminTags() {
+    yield takeEvery(actionTypes.LOAD_ADMIN_TAGS, loadAdminTags);
+}
+
+function* createTag(action: ReturnType<typeof actions.createTag>) {
+    try {
+        const tag: WebApi.Entity.ChangeTag = yield call(tagsService.createTag, action.data);
+        yield put(actions.createTagSuccess({ tag }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchCreateTag() {
+    yield takeEvery(actionTypes.CREATE_TAG, createTag);
+}
+
+function* updateTag(action: ReturnType<typeof actions.updateTag>) {
+    try {
+        const tag: WebApi.Entity.ChangeTag = yield call(tagsService.updateTag, action.id, action.data);
+        yield put(actions.updateTagSuccess({ id: action.id, tag }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchUpdateTag() {
+    yield takeEvery(actionTypes.UPDATE_TAG, updateTag);
+}
+
+function* deleteTag(action: ReturnType<typeof actions.deleteTag>) {
+    try {
+        yield call(tagsService.deleteTag, action.id);
+        yield put(actions.deleteTagSuccess({ id: action.id }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchDeleteTag() {
+    yield takeEvery(actionTypes.DELETE_TAG, deleteTag);
+}
+
+function* bulkTags(action: ReturnType<typeof actions.bulkTags>) {
+    try {
+        yield call(tagsService.bulkTags, action.tags);
+
+        const parts = window.location.href.split("?");
+        const url = parts[0];
+        window.location.replace(url + "?activeIndex=" + action.index);
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchBulkTags() {
+    yield takeEvery(actionTypes.BULK_TAGS, bulkTags);
+}
+
 function* authorSaga() {
     yield all([
         watchLoadAdminAuthors(),
@@ -250,6 +320,10 @@ function* publishingSaga() {
     ]);
 }
 
+function* tagSaga() {
+    yield all([watchLoadAdminTags(), watchCreateTag(), watchUpdateTag(), watchDeleteTag(), watchBulkTags()]);
+}
+
 export default function* siteAdminSaga() {
-    yield all([publishingSaga(), authorSaga(), tagGroupSaga()]);
+    yield all([publishingSaga(), authorSaga(), tagGroupSaga(), tagSaga()]);
 }

@@ -5,4 +5,5 @@ export enum FileNames {
     AUTHORS_CSV = "authors.csv",
     TAG_GROUPS_CSV = "tagGroups.csv",
     PUBLISHINGS_CSV = "publishings.csv",
+    TAGS_CSV = "tags.csv",
 }

@@ -98,7 +98,7 @@ export class CSVImporter<T extends BasicObject> {
     protected fileText: string;
     protected headers: string[];
     protected horizontalDelimiter = ";";
-    protected verticalDelimeter = "\n";
+    protected verticalDelimeter = /\n|\r|\n\r|\r\n/;
     protected quote = '"';
 
     public constructor(fileText: string, headers: string[]) {

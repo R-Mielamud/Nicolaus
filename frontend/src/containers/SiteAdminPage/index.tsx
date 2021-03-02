@@ -1,10 +1,11 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
-import { Header, Button, Divider, Tab } from "semantic-ui-react";
+import { Header, Button, Divider, Tab, TabProps } from "semantic-ui-react";
 import AuthorsTable from "./AuthorsTable";
 import PublishingsTable from "./PublishingsTable";
 import TagGroupsTable from "./TagGroupsTable";
+import TagsTable from "./TagsTable";
 
 interface Props {
     activeIndex?: number;
@@ -31,7 +32,16 @@ const SiteAdminPage: React.FC<Props> = ({ activeIndex }) => {
             menuItem: t("publishings"),
             render: () => <PublishingsTable index={2} />,
         },
+        {
+            menuItem: t("tags"),
+            render: () => <TagsTable index={3} />,
+        },
     ];
+
+    const onSwitch = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, data: TabProps) => {
+        const parts = window.location.pathname.split("?");
+        history.replace(parts[0] + "?activeIndex=" + data.activeIndex);
+    };
 
     return (
         <div>
@@ -42,11 +52,7 @@ const SiteAdminPage: React.FC<Props> = ({ activeIndex }) => {
                 </Button>
             </div>
             <Divider />
-            <Tab
-                panes={tabOptions}
-                activeIndex={activeIndex}
-                onTabChange={(event, data) => console.log(data.activeIndex)}
-            />
+            <Tab panes={tabOptions} activeIndex={activeIndex} onTabChange={onSwitch} />
         </div>
     );
 };

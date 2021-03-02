@@ -11,11 +11,13 @@ from .views import (
     BulkUpdateAuthorAPI,
     BulkUpdateTagGroupAPI,
     BulkUpdatePublishingAPI,
+    BulkUpdateTagAPI,
 )
 
 tags_router = DefaultRouter()
 tags_router.register(r"groups/bulk", BulkUpdateTagGroupAPI, basename="tag_groups")
 tags_router.register(r"groups", TagGroupAPI)
+tags_router.register(r"bulk", BulkUpdateTagAPI, basename="tags")
 tags_router.register(r"", TagAPI)
 
 publishings_router = DefaultRouter()

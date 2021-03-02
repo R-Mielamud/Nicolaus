@@ -21,6 +21,12 @@ namespace WebApi.Entity {
         group: number;
     }
 
+    interface CSVChangeTag extends Identified {
+        name: string;
+        group: number;
+        change: boolean;
+    }
+
     interface TagGroup extends Identified {
         name: string;
         tags: Tag[];

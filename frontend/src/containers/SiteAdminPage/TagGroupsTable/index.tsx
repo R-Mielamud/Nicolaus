@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Checkbox, Form, Icon, Input, Tab, Table } from "semantic-ui-react";
@@ -30,7 +30,12 @@ const TagGroupsTable: React.FC<TableProps> = ({ index }) => {
     const [changedTagGroups, setChangedTagGroups] = useState<ChangeTagGroupDataSet>({});
     const [newGroup, setNewGroup] = useState<Partial<WebApi.Entity.ChangeTagGroup>>(defaultNewTagGroup);
 
-    if (!tagGroups) {
+    const displayGroups = useMemo(
+        () => tagGroups && tagGroups.filter((group) => group.name.toLowerCase().includes(name.toLowerCase())),
+        [tagGroups, name],
+    );
+
+    if (!displayGroups || !tagGroups) {
         return <Spinner />;
     }
 
@@ -111,7 +116,15 @@ const TagGroupsTable: React.FC<TableProps> = ({ index }) => {
         dispatch(bulkTagGroups({ tagGroups: data, index }));
     };
 
-    const displayGroups = tagGroups.filter((group) => group.name.toLowerCase().includes(name.toLowerCase()));
+    const getField = (object: WebApi.Entity.ChangeTagGroup, name: keyof WebApi.Entity.ChangeTagGroup) => {
+        const changed: IndexedChange | undefined = changedTagGroups[object.id];
+
+        if (changed && changed[name]) {
+            return changed[name];
+        }
+
+        return object[name];
+    };
 
     return (
         <Tab.Pane>
@@ -151,14 +164,14 @@ const TagGroupsTable: React.FC<TableProps> = ({ index }) => {
                                         <Input
                                             fluid
                                             transparent
-                                            defaultValue={group.name}
+                                            defaultValue={getField(group, "name")}
                                             onChange={(event, data) => setUpdateData(group.id, { name: data.value })}
                                         />
                                     </Table.Cell>
                                     <Table.Cell width={2}>
                                         <Checkbox
                                             toggle
-                                            defaultChecked={group.chosen}
+                                            defaultChecked={getField(group, "chosen")}
                                             onChange={(event, data) =>
                                                 setUpdateData(group.id, { chosen: data.checked })
                                             }

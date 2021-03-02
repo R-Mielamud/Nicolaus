@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Form, Icon, Input, Tab, Table } from "semantic-ui-react";
@@ -23,14 +23,21 @@ interface ChangePublishingDataSet {
 
 const PublishingsTable: React.FC<TableProps> = ({ index }) => {
     const { t } = useTranslation();
-    const defaultNewPublishing: Partial<WebApi.Entity.ChangePublishing> = { chosen: false, name: "" };
+    const defaultNewPublishing: Partial<WebApi.Entity.ChangePublishing> = { name: "" };
     const dispatch = useDispatch();
     const { publishings } = useSelector((state: RootState) => state.siteAdmin);
     const [name, setName] = useState<string>("");
     const [changedPublishings, setChangedPublishings] = useState<ChangePublishingDataSet>({});
     const [newPublishing, setNewPublishing] = useState<Partial<WebApi.Entity.ChangePublishing>>(defaultNewPublishing);
 
-    if (!publishings) {
+    const displayPublishings = useMemo(
+        () =>
+            publishings &&
+            publishings.filter((publishing) => publishing.name.toLowerCase().includes(name.toLowerCase())),
+        [name, publishings],
+    );
+
+    if (!displayPublishings || !publishings) {
         return <Spinner />;
     }
 
@@ -111,9 +118,15 @@ const PublishingsTable: React.FC<TableProps> = ({ index }) => {
         dispatch(bulkPublishings({ publishings: data, index }));
     };
 
-    const displayPublishings = publishings.filter((publishing) =>
-        publishing.name.toLowerCase().includes(name.toLowerCase()),
-    );
+    const getField = (object: WebApi.Entity.ChangePublishing, name: keyof WebApi.Entity.ChangePublishing) => {
+        const changed: IndexedChange | undefined = changedPublishings[object.id];
+
+        if (changed && changed[name]) {
+            return changed[name];
+        }
+
+        return object[name];
+    };
 
     return (
         <Tab.Pane>
@@ -152,7 +165,7 @@ const PublishingsTable: React.FC<TableProps> = ({ index }) => {
                                         <Input
                                             fluid
                                             transparent
-                                            defaultValue={publishing.name}
+                                            defaultValue={getField(publishing, "name")}
                                             onChange={(event, data) =>
                                                 setUpdateData(publishing.id, { name: data.value })
                                             }

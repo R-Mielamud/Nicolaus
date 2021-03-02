@@ -206,4 +206,58 @@ export const siteAdminReducer = createReducer<SiteAdminState>(initialState, {
             publishings: [...newPublishings],
         };
     },
+
+    // Tags
+
+    [actionTypes.CREATE_TAG_SUCCESS](state, action: actionTypes.CreateTagSuccess) {
+        return {
+            ...state,
+            tags: [...(state.tags || []), action.tag],
+        };
+    },
+    [actionTypes.UPDATE_TAG_SUCCESS](state, action: actionTypes.UpdateTagSuccess) {
+        if (!state.tags) {
+            return state;
+        }
+
+        const newTags = [...state.tags];
+        const index = newTags.findIndex((tag) => tag.id === action.id);
+
+        if (index < 0) {
+            return state;
+        }
+
+        const tag = newTags[index];
+
+        const newTag = {
+            ...tag,
+            ...action.tag,
+        };
+
+        newTags[index] = newTag;
+
+        return {
+            ...state,
+            tags: [...newTags],
+        };
+    },
+    [actionTypes.DELETE_TAG_SUCCESS](state, action: actionTypes.DeleteTagSuccess) {
+        if (!state.tags) {
+            return state;
+        }
+
+        const newTags = [...state.tags];
+        const index = newTags.findIndex((tag) => tag.id === action.id);
+
+        if (index < 0) {
+            return state;
+        }
+
+        newTags.splice(index, 1);
+
+        return {
+            ...state,
+            tags: [...newTags],
+        };
+    },
 });

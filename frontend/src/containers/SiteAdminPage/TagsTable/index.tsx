@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Checkbox, Form, Icon, Input, Tab, Table } from "semantic-ui-react";
+import { Button, Dropdown, Form, Icon, Input, Tab, Table } from "semantic-ui-react";
 import Spinner from "../../../components/common/Spinner";
 import NoResults from "../../../components/NoResults";
-import { bulkAuthors, createAuthor, deleteAuthor, updateAuthor } from "../logic/actions";
+import { bulkTags, createTag, deleteTag, updateTag } from "../logic/actions";
 import RootState from "../../../typings/rootState";
 import DownloadCSV from "../../../components/DownloadCSV";
 import { CSVHeaders } from "../../../constants/CSVHeaders";
@@ -12,46 +12,58 @@ import { FileNames } from "../../../constants/FileNames";
 import ImportCSV from "../../../components/ImportCSV";
 import { TableProps } from "..";
 import styles from "../site.module.scss";
+import { useMemo } from "react";
 
-interface IndexedChange extends Partial<WebApi.Entity.ChangeAuthor> {
+interface IndexedChange extends Partial<WebApi.Entity.ChangeTag> {
     [key: string]: any;
 }
 
-interface ChangeAuthorDataSet {
+interface ChangeTagDataSet {
     [key: number]: IndexedChange;
 }
 
-const AuthorsTable: React.FC<TableProps> = ({ index }) => {
-    const { t } = useTranslation();
-    const defaultNewAuthor: Partial<WebApi.Entity.ChangeAuthor> = { chosen: false, name: "" };
-    const dispatch = useDispatch();
-    const { authors } = useSelector((state: RootState) => state.siteAdmin);
-    const [name, setName] = useState<string>("");
-    const [changedAuthors, setChangedAuthors] = useState<ChangeAuthorDataSet>({});
-    const [newAuthor, setNewAuthor] = useState<Partial<WebApi.Entity.ChangeAuthor>>(defaultNewAuthor);
+interface SelectOption {
+    key: number;
+    value: number;
+    text: string;
+}
 
-    const displayAuthors = useMemo(
-        () => authors && authors.filter((author) => author.name.toLowerCase().includes(name.toLowerCase())),
-        [authors, name],
+const TagsTable: React.FC<TableProps> = ({ index }) => {
+    const { t } = useTranslation();
+    const defaultNewTag: Partial<WebApi.Entity.ChangeTag> = { name: "", group: undefined };
+    const dispatch = useDispatch();
+    const { tags, tagGroups } = useSelector((state: RootState) => state.siteAdmin);
+    const [name, setName] = useState<string>("");
+    const [changedTags, setChangedTags] = useState<ChangeTagDataSet>({});
+    const [newTag, setNewTag] = useState<Partial<WebApi.Entity.ChangeTag>>(defaultNewTag);
+
+    const displayTags = useMemo(
+        () => tags && tags.filter((tag) => tag.name.toLowerCase().includes(name.toLowerCase())),
+        [name, tags],
     );
 
-    if (!displayAuthors || !authors) {
+    const groupOptions: SelectOption[] | undefined = useMemo(
+        () => tagGroups && tagGroups.map((group) => ({ value: group.id, key: group.id, text: group.name })),
+        [tagGroups],
+    );
+
+    if (!displayTags || !groupOptions || !tags) {
         return <Spinner />;
     }
 
     const setUpdateData = (id: number, data: IndexedChange) => {
-        const newChanged = { ...changedAuthors };
+        const newChanged = { ...changedTags };
 
         if (!newChanged[id]) {
             newChanged[id] = data;
-            return setChangedAuthors(newChanged);
+            return setChangedTags(newChanged);
         }
 
-        const author = authors.find((a) => a.id === id);
+        const tag = tags.find((a) => a.id === id);
 
         Object.keys(data).forEach((key) => {
             const changedValue = data[key];
-            const initialValue = author && author[key];
+            const initialValue = tag && tag[key];
 
             if (initialValue === undefined) {
                 return;
@@ -68,20 +80,20 @@ const AuthorsTable: React.FC<TableProps> = ({ index }) => {
             }
         });
 
-        setChangedAuthors(newChanged);
+        setChangedTags(newChanged);
     };
 
-    const updateAuthors = () => {
-        Object.keys(changedAuthors).forEach((strId) => {
+    const updateTags = () => {
+        Object.keys(changedTags).forEach((strId) => {
             const id = Number(strId);
-            dispatch(updateAuthor({ id, data: changedAuthors[id] }));
+            dispatch(updateTag({ id, data: changedTags[id] }));
         });
 
-        setChangedAuthors({});
+        setChangedTags({});
     };
 
-    const newAuthorValid = () => {
-        for (const value of Object.values(newAuthor)) {
+    const newTagValid = () => {
+        for (const value of Object.values(newTag)) {
             if (!value && value !== false) {
                 return false;
             }
@@ -90,34 +102,34 @@ const AuthorsTable: React.FC<TableProps> = ({ index }) => {
         return true;
     };
 
-    const addToNewAuthor = (data: Partial<WebApi.Entity.ChangeAuthor>) => {
-        setNewAuthor({
-            ...newAuthor,
+    const addToNewTag = (data: Partial<WebApi.Entity.ChangeTag>) => {
+        setNewTag({
+            ...newTag,
             ...data,
         });
     };
 
-    const saveAuthor = () => {
-        if (!newAuthorValid()) {
+    const saveTag = () => {
+        if (!newTagValid()) {
             return;
         }
 
-        const newAuthorFull = newAuthor as WebApi.Entity.ChangeAuthor;
+        const newTagFull = newTag as WebApi.Entity.ChangeTag;
 
-        dispatch(createAuthor({ data: newAuthorFull }));
-        setNewAuthor(defaultNewAuthor);
+        dispatch(createTag({ data: newTagFull }));
+        setNewTag(defaultNewTag);
     };
 
-    const removeAuthor = (id: number) => {
-        dispatch(deleteAuthor({ id }));
+    const removeTag = (id: number) => {
+        dispatch(deleteTag({ id }));
     };
 
-    const _bulkAuthors = (data: WebApi.Entity.CSVChangeAuthor[]) => {
-        dispatch(bulkAuthors({ authors: data, index }));
+    const _bulkTags = (data: WebApi.Entity.CSVChangeTag[]) => {
+        dispatch(bulkTags({ tags: data, index }));
     };
 
-    const getField = (object: WebApi.Entity.ChangeAuthor, name: keyof WebApi.Entity.ChangeAuthor) => {
-        const changed: IndexedChange | undefined = changedAuthors[object.id];
+    const getField = (object: WebApi.Entity.ChangeTag, name: keyof WebApi.Entity.ChangeTag) => {
+        const changed: IndexedChange | undefined = changedTags[object.id];
 
         if (changed && changed[name]) {
             return changed[name];
@@ -137,43 +149,44 @@ const AuthorsTable: React.FC<TableProps> = ({ index }) => {
                     onChange={(event, data) => setName(data.value)}
                 />
             </Form>
-            {displayAuthors.length ? (
+            {displayTags.length ? (
                 <>
                     <DownloadCSV
-                        data={displayAuthors}
-                        headers={CSVHeaders.AUTHOR}
-                        fileName={FileNames.AUTHORS_CSV}
+                        data={displayTags}
+                        headers={CSVHeaders.TAG}
+                        fileName={FileNames.TAGS_CSV}
                         text={t("download_table")}
                     />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.AUTHOR} onGetData={_bulkAuthors} />
-                    <Button primary disabled={Object.keys(changedAuthors).length === 0} onClick={updateAuthors}>
+                    <ImportCSV text={t("import_table")} headers={CSVHeaders.TAG} onGetData={_bulkTags} />
+                    <Button primary disabled={Object.keys(changedTags).length === 0} onClick={updateTags}>
                         {t("save_table")}
                     </Button>
                     <Table celled className={styles.table}>
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{t("chosen")}</Table.HeaderCell>
+                                <Table.HeaderCell width={2}>{t("tag_group")}</Table.HeaderCell>
                                 <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {displayAuthors.map((author) => (
-                                <Table.Row key={author.id}>
+                            {displayTags.map((tag) => (
+                                <Table.Row key={tag.id}>
                                     <Table.Cell width={3}>
                                         <Input
                                             fluid
                                             transparent
-                                            defaultValue={getField(author, "name")}
-                                            onChange={(event, data) => setUpdateData(author.id, { name: data.value })}
+                                            defaultValue={getField(tag, "name")}
+                                            onChange={(event, data) => setUpdateData(tag.id, { name: data.value })}
                                         />
                                     </Table.Cell>
                                     <Table.Cell width={2}>
-                                        <Checkbox
-                                            toggle
-                                            defaultChecked={getField(author, "chosen")}
+                                        <Dropdown
+                                            fluid
+                                            options={groupOptions}
+                                            defaultValue={getField(tag, "group")}
                                             onChange={(event, data) =>
-                                                setUpdateData(author.id, { chosen: data.checked })
+                                                setUpdateData(tag.id, { group: data.value as number | undefined })
                                             }
                                         />
                                     </Table.Cell>
@@ -182,7 +195,7 @@ const AuthorsTable: React.FC<TableProps> = ({ index }) => {
                                             link
                                             name="trash"
                                             className={styles.danger}
-                                            onClick={() => removeAuthor(author.id)}
+                                            onClick={() => removeTag(tag.id)}
                                         />
                                     </Table.Cell>
                                 </Table.Row>
@@ -194,19 +207,22 @@ const AuthorsTable: React.FC<TableProps> = ({ index }) => {
                                     <Input
                                         fluid
                                         transparent
-                                        value={newAuthor.name ?? ""}
-                                        onChange={(event, data) => addToNewAuthor({ name: data.value })}
+                                        value={newTag.name ?? ""}
+                                        onChange={(event, data) => addToNewTag({ name: data.value })}
                                     />
                                 </Table.HeaderCell>
                                 <Table.HeaderCell width={2}>
-                                    <Checkbox
-                                        toggle
-                                        checked={newAuthor.chosen ?? false}
-                                        onChange={(event, data) => addToNewAuthor({ chosen: data.checked })}
+                                    <Dropdown
+                                        fluid
+                                        options={groupOptions}
+                                        value={newTag.group ?? ""}
+                                        onChange={(event, data) =>
+                                            addToNewTag({ group: data.value as number | undefined })
+                                        }
                                     />
                                 </Table.HeaderCell>
                                 <Table.HeaderCell width={1}>
-                                    <Icon link name="plus" onClick={saveAuthor} />
+                                    <Icon link name="plus" onClick={saveTag} />
                                 </Table.HeaderCell>
                             </Table.Row>
                         </Table.Footer>
@@ -219,4 +235,4 @@ const AuthorsTable: React.FC<TableProps> = ({ index }) => {
     );
 };
 
-export default AuthorsTable;
+export default TagsTable;
