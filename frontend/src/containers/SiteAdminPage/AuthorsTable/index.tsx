@@ -47,7 +47,7 @@ const AuthorsTable: React.FC<TableProps> = ({ index }) => {
             return setChangedAuthors(newChanged);
         }
 
-        const author = authors.find((a) => a.id === id);
+        const author = authors.find((author) => author.id === id);
 
         Object.keys(data).forEach((key) => {
             const changedValue = data[key];

@@ -60,4 +60,7 @@ export const ua = {
     chosen: "Обрано",
     actions: "Дії",
     tag_groups: "Групи тегів",
+    tag_group: "Група тегів",
+    series_p: "Серії",
+    publishing: "Видавництво",
 };

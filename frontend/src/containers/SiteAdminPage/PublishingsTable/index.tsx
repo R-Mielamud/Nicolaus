@@ -49,7 +49,7 @@ const PublishingsTable: React.FC<TableProps> = ({ index }) => {
             return setChangedPublishings(newChanged);
         }
 
-        const publishing = publishings.find((a) => a.id === id);
+        const publishing = publishings.find((publishing) => publishing.id === id);
 
         Object.keys(data).forEach((key) => {
             const changedValue = data[key];

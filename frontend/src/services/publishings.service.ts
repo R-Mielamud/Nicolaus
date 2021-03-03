@@ -58,11 +58,49 @@ export async function bulkPublishings(body: WebApi.Entity.CSVChangePublishing[])
 }
 
 export async function getAdminSeries(): Promise<WebApi.Entity.ChangeSeries[]> {
-    const res = await callWebApi({
+    const res: Response = await callWebApi({
         endpoint: "books/filters/publishings/series/",
         method: "GET",
         query: { admin: 1 },
     });
 
     return (await res.json()) as WebApi.Entity.ChangeSeries[];
+}
+
+export async function createSeries(body: WebApi.Entity.ChangeSeries): Promise<WebApi.Entity.ChangeSeries> {
+    const res: Response = await callWebApi({
+        endpoint: "books/filters/publishings/series/",
+        method: "POST",
+        body,
+    });
+
+    return (await res.json()) as WebApi.Entity.ChangeSeries;
+}
+
+export async function updateSeries(
+    id: number,
+    body: Partial<WebApi.Entity.ChangeSeries>,
+): Promise<WebApi.Entity.ChangeSeries> {
+    const res: Response = await callWebApi({
+        endpoint: `books/filters/publishings/series/${id}/`,
+        method: "PATCH",
+        body,
+    });
+
+    return (await res.json()) as WebApi.Entity.ChangeSeries;
+}
+
+export async function deleteSeries(id: number): Promise<void> {
+    await callWebApi({
+        endpoint: `books/filters/publishings/series/${id}/`,
+        method: "DELETE",
+    });
+}
+
+export async function bulkSeries(body: WebApi.Entity.CSVChangeSeries[]): Promise<void> {
+    await callWebApi({
+        endpoint: "books/filters/publishings/series/bulk/",
+        method: "POST",
+        body,
+    });
 }

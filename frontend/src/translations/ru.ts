@@ -60,4 +60,7 @@ export const ru = {
     chosen: "Выбрано",
     actions: "Действия",
     tag_groups: "Группы тегов",
+    tag_group: "Группа тегов",
+    series_p: "Серии",
+    publishing: "Издательство",
 };

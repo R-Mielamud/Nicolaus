@@ -21,6 +21,7 @@ def bulk_update_filter(Model, dataset):
                 del copy[key]
 
         datai = copy.copy()
+        print(datai, f_id)
 
         if not f_id:
             Model.objects.create(**datai)
@@ -56,3 +57,8 @@ def bulk_update_publishings(dataset):
 def bulk_update_tags(dataset):
     from .models import Tag
     bulk_update_filter(Tag, dataset)
+
+@app.task()
+def bulk_update_series(dataset):
+    from .models import Series
+    bulk_update_filter(Series, dataset)

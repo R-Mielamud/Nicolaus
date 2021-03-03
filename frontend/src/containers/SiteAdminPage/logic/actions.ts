@@ -59,6 +59,16 @@ export const deleteTag = createAction<actionTypes.DeleteTag>(actionTypes.DELETE_
 export const deleteTagSuccess = createAction<actionTypes.DeleteTagSuccess>(actionTypes.DELETE_TAG_SUCCESS);
 export const bulkTags = createAction<actionTypes.BulkTags>(actionTypes.BULK_TAGS);
 
+// Series
+
+export const createSeries = createAction<actionTypes.CreateSeries>(actionTypes.CREATE_SERIES);
+export const createSeriesSuccess = createAction<actionTypes.CreateSeriesSuccess>(actionTypes.CREATE_SERIES_SUCCESS);
+export const updateSeries = createAction<actionTypes.UpdateSeries>(actionTypes.UPDATE_SERIES);
+export const updateSeriesSuccess = createAction<actionTypes.UpdateSeriesSuccess>(actionTypes.UPDATE_SERIES_SUCCESS);
+export const deleteSeries = createAction<actionTypes.DeleteSeries>(actionTypes.DELETE_SERIES);
+export const deleteSeriesSuccess = createAction<actionTypes.DeleteSeriesSuccess>(actionTypes.DELETE_SERIES_SUCCESS);
+export const bulkSeries = createAction<actionTypes.BulkSeries>(actionTypes.BULK_SERIES);
+
 // Read
 
 export const loadAdminBooks = createAction<actionTypes.LoadBooks>(actionTypes.LOAD_ADMIN_BOOKS);

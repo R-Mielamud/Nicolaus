@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import { Header, Button, Divider, Tab, TabProps } from "semantic-ui-react";
 import AuthorsTable from "./AuthorsTable";
 import PublishingsTable from "./PublishingsTable";
+import SeriesTable from "./SeriesTable";
 import TagGroupsTable from "./TagGroupsTable";
 import TagsTable from "./TagsTable";
 
@@ -35,6 +36,10 @@ const SiteAdminPage: React.FC<Props> = ({ activeIndex }) => {
         {
             menuItem: t("tags"),
             render: () => <TagsTable index={3} />,
+        },
+        {
+            menuItem: t("series_p"),
+            render: () => <SeriesTable index={4} />,
         },
     ];
 

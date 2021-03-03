@@ -14,4 +14,5 @@ export const CSVHeaders = {
     TAG_GROUP: ["id", "name", "chosen::0", "change::0"],
     PUBLISHING: ["id", "name", "change::0"],
     TAG: ["id", "name", "group", "change::0"],
+    SERIES: ["id", "name", "publishing", "change::0"],
 };

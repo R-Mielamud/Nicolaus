@@ -60,4 +60,7 @@ export const en = {
     chosen: "Chosen",
     actions: "Actions",
     tag_groups: "Tag groups",
+    tag_group: "Tag group",
+    series_p: "Series",
+    publishing: "Publishing",
 };

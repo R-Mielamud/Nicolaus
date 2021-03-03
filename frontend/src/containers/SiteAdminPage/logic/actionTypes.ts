@@ -55,6 +55,16 @@ export const DELETE_TAG = "CATALOG:ADMIN:TAGS:DELETE";
 export const DELETE_TAG_SUCCESS = "CATALOG:ADMIN:TAGS:DELETE:SUCCESS";
 export const BULK_TAGS = "CATALOG:ADMIN:TAGS:UPDATE:BULK";
 
+// Series
+
+export const CREATE_SERIES = "CATALOG:ADMIN:PUBLISHINGS:SERIES:CREATE";
+export const CREATE_SERIES_SUCCESS = "CATALOG:ADMIN:PUBLISHINGS:SERIES:CREATE:SUCCESS";
+export const UPDATE_SERIES = "CATALOG:ADMIN:PUBLISHINGS:SERIES:UPDATE";
+export const UPDATE_SERIES_SUCCESS = "CATALOG:ADMIN:PUBLISHINGS:SERIES:UPDATE:SUCCESS";
+export const DELETE_SERIES = "CATALOG:ADMIN:PUBLISHINGS:SERIES:DELETE";
+export const DELETE_SERIES_SUCCESS = "CATALOG:ADMIN:PUBLISHINGS:SERIES:DELETE:SUCCESS";
+export const BULK_SERIES = "CATALOG:ADMIN:PUBLISHINGS:SERIES:UPDATE:BULK";
+
 // Read
 
 export interface LoadBooks {
@@ -220,5 +230,38 @@ export interface DeleteTagSuccess {
 
 export interface BulkTags {
     tags: WebApi.Entity.CSVChangeTag[];
+    index: number;
+}
+
+// Series
+
+export interface CreateSeries {
+    data: WebApi.Entity.ChangeSeries;
+}
+
+export interface CreateSeriesSuccess {
+    series: WebApi.Entity.ChangeSeries;
+}
+
+export interface UpdateSeries {
+    id: number;
+    data: Partial<WebApi.Entity.ChangeSeries>;
+}
+
+export interface UpdateSeriesSuccess {
+    id: number;
+    series: WebApi.Entity.ChangeSeries;
+}
+
+export interface DeleteSeries {
+    id: number;
+}
+
+export interface DeleteSeriesSuccess {
+    id: number;
+}
+
+export interface BulkSeries {
+    series: WebApi.Entity.CSVChangeSeries[];
     index: number;
 }

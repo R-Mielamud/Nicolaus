@@ -64,9 +64,9 @@ function* bulkAuthors(action: ReturnType<typeof actions.bulkAuthors>) {
     try {
         yield call(authorsService.bulkAuthors, action.authors);
 
-        if (!window.location.href.includes("?")) {
-            window.location.replace(window.location.href + "?activeIndex=" + action.index);
-        }
+        const parts = window.location.href.split("?");
+        const url = parts[0];
+        window.location.replace(url + "?activeIndex=" + action.index);
     } catch (err) {
         error(err.text);
     }
@@ -134,9 +134,9 @@ function* bulkTagGroups(action: ReturnType<typeof actions.bulkTagGroups>) {
     try {
         yield call(tagsService.bulkTagGroups, action.tagGroups);
 
-        if (!window.location.href.includes("?")) {
-            window.location.replace(window.location.href + "?activeIndex=" + action.index);
-        }
+        const parts = window.location.href.split("?");
+        const url = parts[0];
+        window.location.replace(url + "?activeIndex=" + action.index);
     } catch (err) {
         error(err.text);
     }
@@ -290,6 +290,76 @@ function* watchBulkTags() {
     yield takeEvery(actionTypes.BULK_TAGS, bulkTags);
 }
 
+// Series
+
+function* loadAdminSeries() {
+    try {
+        const series: WebApi.Entity.ChangeSeries[] = yield call(publishingsService.getAdminSeries);
+        yield put(actions.loadAdminSeriesSuccess({ series }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchLoadAdminSeries() {
+    yield takeEvery(actionTypes.LOAD_ADMIN_SERIES, loadAdminSeries);
+}
+
+function* createSeries(action: ReturnType<typeof actions.createSeries>) {
+    try {
+        const series: WebApi.Entity.ChangeSeries = yield call(publishingsService.createSeries, action.data);
+        yield put(actions.createSeriesSuccess({ series }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchCreateSeries() {
+    yield takeEvery(actionTypes.CREATE_SERIES, createSeries);
+}
+
+function* updateSeries(action: ReturnType<typeof actions.updateSeries>) {
+    try {
+        const series: WebApi.Entity.ChangeSeries = yield call(publishingsService.updateSeries, action.id, action.data);
+        yield put(actions.updateSeriesSuccess({ id: action.id, series }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchUpdateSeries() {
+    yield takeEvery(actionTypes.UPDATE_SERIES, updateSeries);
+}
+
+function* deleteSeries(action: ReturnType<typeof actions.deleteSeries>) {
+    try {
+        yield call(publishingsService.deleteSeries, action.id);
+        yield put(actions.deleteSeriesSuccess({ id: action.id }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchDeleteSeries() {
+    yield takeEvery(actionTypes.DELETE_SERIES, deleteSeries);
+}
+
+function* bulkSeries(action: ReturnType<typeof actions.bulkSeries>) {
+    try {
+        yield call(publishingsService.bulkSeries, action.series);
+
+        const parts = window.location.href.split("?");
+        const url = parts[0];
+        window.location.replace(url + "?activeIndex=" + action.index);
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchBulkSeries() {
+    yield takeEvery(actionTypes.BULK_SERIES, bulkSeries);
+}
+
 function* authorSaga() {
     yield all([
         watchLoadAdminAuthors(),
@@ -320,10 +390,20 @@ function* publishingSaga() {
     ]);
 }
 
+function* seriesSaga() {
+    yield all([
+        watchLoadAdminSeries(),
+        watchCreateSeries(),
+        watchUpdateSeries(),
+        watchDeleteSeries(),
+        watchBulkSeries(),
+    ]);
+}
+
 function* tagSaga() {
     yield all([watchLoadAdminTags(), watchCreateTag(), watchUpdateTag(), watchDeleteTag(), watchBulkTags()]);
 }
 
 export default function* siteAdminSaga() {
-    yield all([publishingSaga(), authorSaga(), tagGroupSaga(), tagSaga()]);
+    yield all([publishingSaga(), authorSaga(), tagGroupSaga(), tagSaga(), seriesSaga()]);
 }

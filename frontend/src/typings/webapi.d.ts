@@ -67,6 +67,12 @@ namespace WebApi.Entity {
         publishing: number;
     }
 
+    interface CSVChangeSeries extends Identified {
+        name: string;
+        publishing: number;
+        change: boolean;
+    }
+
     interface Publishing extends Identified {
         name: string;
     }

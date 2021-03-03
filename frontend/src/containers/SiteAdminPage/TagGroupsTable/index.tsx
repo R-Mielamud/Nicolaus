@@ -47,7 +47,7 @@ const TagGroupsTable: React.FC<TableProps> = ({ index }) => {
             return setChangedTagGroups(newChanged);
         }
 
-        const group = tagGroups.find((g) => g.id === id);
+        const group = tagGroups.find((group) => group.id === id);
 
         Object.keys(data).forEach((key) => {
             const changedValue = data[key];

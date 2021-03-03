@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Dropdown, Form, Icon, Input, Tab, Table } from "semantic-ui-react";
+import { Button, Form, Icon, Input, Tab, Table, Dropdown } from "semantic-ui-react";
 import Spinner from "../../../components/common/Spinner";
 import NoResults from "../../../components/NoResults";
-import { bulkTags, createTag, deleteTag, updateTag } from "../logic/actions";
+import { bulkSeries, createSeries, deleteSeries, updateSeries } from "../logic/actions";
 import RootState from "../../../typings/rootState";
 import DownloadCSV from "../../../components/DownloadCSV";
 import { CSVHeaders } from "../../../constants/CSVHeaders";
@@ -12,13 +12,12 @@ import { FileNames } from "../../../constants/FileNames";
 import ImportCSV from "../../../components/ImportCSV";
 import { TableProps } from "..";
 import styles from "../site.module.scss";
-import { useMemo } from "react";
 
-interface IndexedChange extends Partial<WebApi.Entity.ChangeTag> {
+interface IndexedChange extends Partial<WebApi.Entity.ChangeSeries> {
     [key: string]: any;
 }
 
-interface ChangeTagDataSet {
+interface ChangeSeriesDataSet {
     [key: number]: IndexedChange;
 }
 
@@ -28,42 +27,44 @@ interface SelectOption {
     text: string;
 }
 
-const TagsTable: React.FC<TableProps> = ({ index }) => {
+const SeriesTable: React.FC<TableProps> = ({ index }) => {
     const { t } = useTranslation();
-    const defaultNewTag: Partial<WebApi.Entity.ChangeTag> = { name: "", group: undefined };
+    const defaultNewSeries: Partial<WebApi.Entity.ChangeSeries> = { chosen: false, name: "" };
     const dispatch = useDispatch();
-    const { tags, tagGroups } = useSelector((state: RootState) => state.siteAdmin);
+    const { series: seriesArr, publishings } = useSelector((state: RootState) => state.siteAdmin);
     const [name, setName] = useState<string>("");
-    const [changedTags, setChangedTags] = useState<ChangeTagDataSet>({});
-    const [newTag, setNewTag] = useState<Partial<WebApi.Entity.ChangeTag>>(defaultNewTag);
+    const [changedSeries, setChangedSeries] = useState<ChangeSeriesDataSet>({});
+    const [newSeries, setNewSeries] = useState<Partial<WebApi.Entity.ChangeSeries>>(defaultNewSeries);
 
-    const displayTags = useMemo(
-        () => tags && tags.filter((tag) => tag.name.toLowerCase().includes(name.toLowerCase())),
-        [name, tags],
+    const displaySeries = useMemo(
+        () => seriesArr && seriesArr.filter((series) => series.name.toLowerCase().includes(name.toLowerCase())),
+        [seriesArr, name],
     );
 
-    const groupOptions: SelectOption[] | undefined = useMemo(
-        () => tagGroups && tagGroups.map((group) => ({ value: group.id, key: group.id, text: group.name })),
-        [tagGroups],
+    const publishingOptions: SelectOption[] | undefined = useMemo(
+        () =>
+            publishings &&
+            publishings.map((publishing) => ({ value: publishing.id, key: publishing.id, text: publishing.name })),
+        [publishings],
     );
 
-    if (!displayTags || !groupOptions || !tags) {
+    if (!displaySeries || !seriesArr || !publishingOptions) {
         return <Spinner />;
     }
 
     const setUpdateData = (id: number, data: IndexedChange) => {
-        const newChanged = { ...changedTags };
+        const newChanged = { ...changedSeries };
 
         if (!newChanged[id]) {
             newChanged[id] = data;
-            return setChangedTags(newChanged);
+            return setChangedSeries(newChanged);
         }
 
-        const tag = tags.find((tag) => tag.id === id);
+        const series = seriesArr.find((series) => series.id === id);
 
         Object.keys(data).forEach((key) => {
             const changedValue = data[key];
-            const initialValue = tag && tag[key];
+            const initialValue = series && series[key];
 
             if (initialValue === undefined) {
                 return;
@@ -80,20 +81,20 @@ const TagsTable: React.FC<TableProps> = ({ index }) => {
             }
         });
 
-        setChangedTags(newChanged);
+        setChangedSeries(newChanged);
     };
 
-    const updateTags = () => {
-        Object.keys(changedTags).forEach((strId) => {
+    const _updateSeries = () => {
+        Object.keys(changedSeries).forEach((strId) => {
             const id = Number(strId);
-            dispatch(updateTag({ id, data: changedTags[id] }));
+            dispatch(updateSeries({ id, data: changedSeries[id] }));
         });
 
-        setChangedTags({});
+        setChangedSeries({});
     };
 
-    const newTagValid = () => {
-        for (const value of Object.values(newTag)) {
+    const newSeriesValid = () => {
+        for (const value of Object.values(newSeries)) {
             if (!value && value !== false) {
                 return false;
             }
@@ -102,34 +103,34 @@ const TagsTable: React.FC<TableProps> = ({ index }) => {
         return true;
     };
 
-    const addToNewTag = (data: Partial<WebApi.Entity.ChangeTag>) => {
-        setNewTag({
-            ...newTag,
+    const addToNewSeries = (data: Partial<WebApi.Entity.ChangeSeries>) => {
+        setNewSeries({
+            ...newSeries,
             ...data,
         });
     };
 
-    const saveTag = () => {
-        if (!newTagValid()) {
+    const saveSeries = () => {
+        if (!newSeriesValid()) {
             return;
         }
 
-        const newTagFull = newTag as WebApi.Entity.ChangeTag;
+        const newSeriesFull = newSeries as WebApi.Entity.ChangeSeries;
 
-        dispatch(createTag({ data: newTagFull }));
-        setNewTag(defaultNewTag);
+        dispatch(createSeries({ data: newSeriesFull }));
+        setNewSeries(defaultNewSeries);
     };
 
-    const removeTag = (id: number) => {
-        dispatch(deleteTag({ id }));
+    const removeSeries = (id: number) => {
+        dispatch(deleteSeries({ id }));
     };
 
-    const _bulkTags = (data: WebApi.Entity.CSVChangeTag[]) => {
-        dispatch(bulkTags({ tags: data, index }));
+    const _bulkSeries = (data: WebApi.Entity.CSVChangeSeries[]) => {
+        dispatch(bulkSeries({ series: data, index }));
     };
 
-    const getField = (object: WebApi.Entity.ChangeTag, name: keyof WebApi.Entity.ChangeTag) => {
-        const changed: IndexedChange | undefined = changedTags[object.id];
+    const getField = (object: WebApi.Entity.ChangeSeries, name: keyof WebApi.Entity.ChangeSeries) => {
+        const changed: IndexedChange | undefined = changedSeries[object.id];
 
         if (changed && changed[name]) {
             return changed[name];
@@ -149,45 +150,47 @@ const TagsTable: React.FC<TableProps> = ({ index }) => {
                     onChange={(event, data) => setName(data.value)}
                 />
             </Form>
-            {displayTags.length ? (
+            {displaySeries.length ? (
                 <>
                     <DownloadCSV
-                        data={displayTags}
-                        headers={CSVHeaders.TAG}
-                        fileName={FileNames.TAGS_CSV}
+                        data={displaySeries}
+                        headers={CSVHeaders.SERIES}
+                        fileName={FileNames.SERIES_CSV}
                         text={t("download_table")}
                     />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.TAG} onGetData={_bulkTags} />
-                    <Button primary disabled={Object.keys(changedTags).length === 0} onClick={updateTags}>
+                    <ImportCSV text={t("import_table")} headers={CSVHeaders.SERIES} onGetData={_bulkSeries} />
+                    <Button primary disabled={Object.keys(changedSeries).length === 0} onClick={_updateSeries}>
                         {t("save_table")}
                     </Button>
                     <Table celled className={styles.table}>
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{t("tag_group")}</Table.HeaderCell>
+                                <Table.HeaderCell width={2}>{t("publishing")}</Table.HeaderCell>
                                 <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                            {displayTags.map((tag) => (
-                                <Table.Row key={tag.id}>
+                            {displaySeries.map((series) => (
+                                <Table.Row key={series.id}>
                                     <Table.Cell width={3}>
                                         <Input
                                             fluid
                                             transparent
-                                            defaultValue={getField(tag, "name")}
-                                            onChange={(event, data) => setUpdateData(tag.id, { name: data.value })}
+                                            defaultValue={getField(series, "name")}
+                                            onChange={(event, data) => setUpdateData(series.id, { name: data.value })}
                                         />
                                     </Table.Cell>
                                     <Table.Cell width={2}>
                                         <Dropdown
                                             fluid
-                                            options={groupOptions}
-                                            defaultValue={getField(tag, "group")}
+                                            options={publishingOptions}
+                                            defaultValue={getField(series, "publishing")}
                                             scrolling
                                             onChange={(event, data) =>
-                                                setUpdateData(tag.id, { group: data.value as number | undefined })
+                                                setUpdateData(series.id, {
+                                                    publishing: data.value as number | undefined,
+                                                })
                                             }
                                         />
                                     </Table.Cell>
@@ -196,7 +199,7 @@ const TagsTable: React.FC<TableProps> = ({ index }) => {
                                             link
                                             name="trash"
                                             className={styles.danger}
-                                            onClick={() => removeTag(tag.id)}
+                                            onClick={() => removeSeries(series.id)}
                                         />
                                     </Table.Cell>
                                 </Table.Row>
@@ -208,26 +211,26 @@ const TagsTable: React.FC<TableProps> = ({ index }) => {
                                     <Input
                                         fluid
                                         transparent
-                                        value={newTag.name ?? ""}
-                                        onChange={(event, data) => addToNewTag({ name: data.value })}
+                                        value={newSeries.name ?? ""}
+                                        onChange={(event, data) => addToNewSeries({ name: data.value })}
                                     />
                                 </Table.HeaderCell>
                                 <Table.HeaderCell width={2}>
                                     <Dropdown
                                         fluid
-                                        options={groupOptions}
-                                        value={newTag.group ?? ""}
+                                        options={publishingOptions}
+                                        value={newSeries.publishing ?? ""}
                                         floating
                                         upward
                                         scrolling
                                         clearable
                                         onChange={(event, data) =>
-                                            addToNewTag({ group: data.value as number | undefined })
+                                            addToNewSeries({ publishing: data.value as number | undefined })
                                         }
                                     />
                                 </Table.HeaderCell>
                                 <Table.HeaderCell width={1}>
-                                    <Icon link name="plus" onClick={saveTag} />
+                                    <Icon link name="plus" onClick={saveSeries} />
                                 </Table.HeaderCell>
                             </Table.Row>
                         </Table.Footer>
@@ -240,4 +243,4 @@ const TagsTable: React.FC<TableProps> = ({ index }) => {
     );
 };
 
-export default TagsTable;
+export default SeriesTable;
