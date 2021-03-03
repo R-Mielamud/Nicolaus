@@ -69,6 +69,16 @@ export const deleteSeries = createAction<actionTypes.DeleteSeries>(actionTypes.D
 export const deleteSeriesSuccess = createAction<actionTypes.DeleteSeriesSuccess>(actionTypes.DELETE_SERIES_SUCCESS);
 export const bulkSeries = createAction<actionTypes.BulkSeries>(actionTypes.BULK_SERIES);
 
+// Statuses
+
+export const createStatus = createAction<actionTypes.CreateStatus>(actionTypes.CREATE_STATUS);
+export const updateStatus = createAction<actionTypes.UpdateStatus>(actionTypes.UPDATE_STATUS);
+export const deleteStatus = createAction<actionTypes.DeleteStatus>(actionTypes.DELETE_STATUS);
+export const bulkStatuses = createAction<actionTypes.BulkStatuses>(actionTypes.BULK_STATUSES);
+export const createStatusSuccess = createAction<actionTypes.CreateStatusSuccess>(actionTypes.CREATE_STATUS_SUCCESS);
+export const updateStatusSuccess = createAction<actionTypes.UpdateStatusSuccess>(actionTypes.UPDATE_STATUS_SUCCESS);
+export const deleteStatusSuccess = createAction<actionTypes.DeleteStatusSuccess>(actionTypes.DELETE_STATUS_SUCCESS);
+
 // Read
 
 export const loadAdminBooks = createAction<actionTypes.LoadBooks>(actionTypes.LOAD_ADMIN_BOOKS);

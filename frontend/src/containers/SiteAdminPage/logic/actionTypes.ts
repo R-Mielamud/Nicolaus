@@ -65,6 +65,16 @@ export const DELETE_SERIES = "CATALOG:ADMIN:PUBLISHINGS:SERIES:DELETE";
 export const DELETE_SERIES_SUCCESS = "CATALOG:ADMIN:PUBLISHINGS:SERIES:DELETE:SUCCESS";
 export const BULK_SERIES = "CATALOG:ADMIN:PUBLISHINGS:SERIES:UPDATE:BULK";
 
+// Statuses
+
+export const CREATE_STATUS = "CATALOG:ADMIN:STATUSES:CREATE";
+export const CREATE_STATUS_SUCCESS = "CATALOG:ADMIN:STATUSES:CREATE:SUCCESS";
+export const UPDATE_STATUS = "CATALOG:ADMIN:STATUSES:UPDATE";
+export const UPDATE_STATUS_SUCCESS = "CATALOG:ADMIN:STATUSES:UPDATE:SUCCESS";
+export const DELETE_STATUS = "CATALOG:ADMIN:STATUSES:DELETE";
+export const DELETE_STATUS_SUCCESS = "CATALOG:ADMIN:STATUSES:DELETE:SUCCESS";
+export const BULK_STATUSES = "CATALOG:ADMIN:STATUSES:UPDATE:BULK";
+
 // Read
 
 export interface LoadBooks {
@@ -263,5 +273,38 @@ export interface DeleteSeriesSuccess {
 
 export interface BulkSeries {
     series: WebApi.Entity.CSVChangeSeries[];
+    index: number;
+}
+
+// Statuses
+
+export interface CreateStatus {
+    data: WebApi.Entity.ChangeStatus;
+}
+
+export interface CreateStatusSuccess {
+    status: WebApi.Entity.ChangeStatus;
+}
+
+export interface UpdateStatus {
+    id: number;
+    data: Partial<WebApi.Entity.ChangeStatus>;
+}
+
+export interface UpdateStatusSuccess {
+    id: number;
+    status: WebApi.Entity.ChangeStatus;
+}
+
+export interface DeleteStatus {
+    id: number;
+}
+
+export interface DeleteStatusSuccess {
+    id: number;
+}
+
+export interface BulkStatuses {
+    statuses: WebApi.Entity.CSVChangeStatus[];
     index: number;
 }

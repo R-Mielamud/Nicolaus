@@ -2,7 +2,10 @@ from Nicolaus.celery import app
 
 def bulk_update_filter(Model, dataset):
     fields = [f.name for f in Model._meta.get_fields()]
-    fetch_relations = getattr(Model, "id_to_relation")
+    fetch_relations = None
+
+    if hasattr(Model, "id_to_relation"):
+        fetch_relations = getattr(Model, "id_to_relation")
 
     for datai in dataset:
         f_id = datai.get("id")
@@ -21,7 +24,6 @@ def bulk_update_filter(Model, dataset):
                 del copy[key]
 
         datai = copy.copy()
-        print(datai, f_id)
 
         if not f_id:
             Model.objects.create(**datai)
@@ -62,3 +64,8 @@ def bulk_update_tags(dataset):
 def bulk_update_series(dataset):
     from .models import Series
     bulk_update_filter(Series, dataset)
+
+@app.task()
+def bulk_update_statuses(dataset):
+    from .models import Status
+    bulk_update_filter(Status, dataset)

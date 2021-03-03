@@ -5,6 +5,7 @@ import { Header, Button, Divider, Tab, TabProps } from "semantic-ui-react";
 import AuthorsTable from "./AuthorsTable";
 import PublishingsTable from "./PublishingsTable";
 import SeriesTable from "./SeriesTable";
+import StatusesTable from "./StatusesTable";
 import TagGroupsTable from "./TagGroupsTable";
 import TagsTable from "./TagsTable";
 
@@ -40,6 +41,10 @@ const SiteAdminPage: React.FC<Props> = ({ activeIndex }) => {
         {
             menuItem: t("series_p"),
             render: () => <SeriesTable index={4} />,
+        },
+        {
+            menuItem: t("statuses"),
+            render: () => <StatusesTable index={5} />,
         },
     ];
 

@@ -90,6 +90,15 @@ namespace WebApi.Entity {
         name: string;
     }
 
+    interface ChangeStatus extends Identified {
+        name: string;
+    }
+
+    interface CSVChangeStatus extends Identified {
+        name: string;
+        change: boolean;
+    }
+
     interface MinimalBook extends Identified {
         title: string;
         image: string;

@@ -44,6 +44,12 @@ export const siteAdminReducer = createReducer<SiteAdminState>(initialState, {
             publishings: action.publishings,
         };
     },
+    [actionTypes.LOAD_ADMIN_STATUSES_SUCCESS](state, action: actionTypes.LoadStatusesSuccess) {
+        return {
+            ...state,
+            statuses: action.statuses,
+        };
+    },
 
     // Authors
 
@@ -312,6 +318,60 @@ export const siteAdminReducer = createReducer<SiteAdminState>(initialState, {
         return {
             ...state,
             series: [...newSeries],
+        };
+    },
+
+    // Statuses
+
+    [actionTypes.CREATE_STATUS_SUCCESS](state, action: actionTypes.CreateStatusSuccess) {
+        return {
+            ...state,
+            statuses: [...(state.statuses || []), action.status],
+        };
+    },
+    [actionTypes.UPDATE_STATUS_SUCCESS](state, action: actionTypes.UpdateStatusSuccess) {
+        if (!state.statuses) {
+            return state;
+        }
+
+        const newStatuses = [...state.statuses];
+        const index = newStatuses.findIndex((status) => status.id === action.id);
+
+        if (index < 0) {
+            return state;
+        }
+
+        const status = newStatuses[index];
+
+        const newStatus = {
+            ...status,
+            ...action.status,
+        };
+
+        newStatuses[index] = newStatus;
+
+        return {
+            ...state,
+            statuses: [...newStatuses],
+        };
+    },
+    [actionTypes.DELETE_STATUS_SUCCESS](state, action: actionTypes.DeleteStatusSuccess) {
+        if (!state.statuses) {
+            return state;
+        }
+
+        const newStatuses = [...state.statuses];
+        const index = newStatuses.findIndex((status) => status.id === action.id);
+
+        if (index < 0) {
+            return state;
+        }
+
+        newStatuses.splice(index, 1);
+
+        return {
+            ...state,
+            statuses: [...newStatuses],
         };
     },
 });

@@ -12,7 +12,8 @@ from .views import (
     BulkUpdateTagGroupAPI,
     BulkUpdatePublishingAPI,
     BulkUpdateTagAPI,
-    BulkUpdateSeriesAPI
+    BulkUpdateSeriesAPI,
+    BulkUpdateStatusesAPI,
 )
 
 tags_router = DefaultRouter()
@@ -32,6 +33,7 @@ authors_router.register(r"bulk", BulkUpdateAuthorAPI, basename="authors")
 authors_router.register(r"", AuthorAPI, basename="authors")
 
 statuses_router = DefaultRouter()
+statuses_router.register(r"bulk", BulkUpdateStatusesAPI, basename="statuses")
 statuses_router.register(r"", StatusAPI)
 
 urlpatterns = [

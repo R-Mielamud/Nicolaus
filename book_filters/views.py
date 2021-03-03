@@ -10,6 +10,7 @@ from .celery import (
     bulk_update_publishings,
     bulk_update_tags,
     bulk_update_series,
+    bulk_update_statuses,
 )
 
 from .serializers import (
@@ -102,3 +103,9 @@ class BulkUpdateSeriesAPI(BaseBulkUpdateAPI):
 
     def create(self, request, *args, **kwargs):
         return self.get_create(bulk_update_series, request, *args, **kwargs)
+
+class BulkUpdateStatusesAPI(BaseBulkUpdateAPI):
+    serializer_class = StatusSerializer
+
+    def create(self, request, *args, **kwargs):
+        return self.get_create(bulk_update_statuses, request, *args, **kwargs)

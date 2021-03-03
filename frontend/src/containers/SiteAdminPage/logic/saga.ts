@@ -4,6 +4,7 @@ import * as actionTypes from "./actionTypes";
 import * as authorsService from "../../../services/authors.service";
 import * as tagsService from "../../../services/tags.service";
 import * as publishingsService from "../../../services/publishings.service";
+import * as statusesService from "../../../services/statuses.service";
 import { error } from "../../../helpers/notifications.helper";
 
 // Authors
@@ -360,6 +361,76 @@ function* watchBulkSeries() {
     yield takeEvery(actionTypes.BULK_SERIES, bulkSeries);
 }
 
+// Statuses
+
+function* loadAdminStatuses() {
+    try {
+        const statuses: WebApi.Entity.ChangeStatus[] = yield call(statusesService.getAdminStatuses);
+        yield put(actions.loadAdminStatusesSuccess({ statuses }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchLoadAdminStatuses() {
+    yield takeEvery(actionTypes.LOAD_ADMIN_STATUSES, loadAdminStatuses);
+}
+
+function* createStatus(action: ReturnType<typeof actions.createStatus>) {
+    try {
+        const status: WebApi.Entity.ChangeStatus = yield call(statusesService.createStatus, action.data);
+        yield put(actions.createStatusSuccess({ status }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchCreateStatus() {
+    yield takeEvery(actionTypes.CREATE_STATUS, createStatus);
+}
+
+function* updateStatus(action: ReturnType<typeof actions.updateStatus>) {
+    try {
+        const status: WebApi.Entity.ChangeStatus = yield call(statusesService.updateStatus, action.id, action.data);
+        yield put(actions.updateStatusSuccess({ id: action.id, status }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchUpdateStatus() {
+    yield takeEvery(actionTypes.UPDATE_STATUS, updateStatus);
+}
+
+function* deleteStatus(action: ReturnType<typeof actions.deleteStatus>) {
+    try {
+        yield call(statusesService.deleteStatus, action.id);
+        yield put(actions.deleteStatusSuccess({ id: action.id }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchDeleteStatus() {
+    yield takeEvery(actionTypes.DELETE_STATUS, deleteStatus);
+}
+
+function* bulkStatuses(action: ReturnType<typeof actions.bulkStatuses>) {
+    try {
+        yield call(statusesService.bulkStatuses, action.statuses);
+
+        const parts = window.location.href.split("?");
+        const url = parts[0];
+        window.location.replace(url + "?activeIndex=" + action.index);
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchBulkStatuses() {
+    yield takeEvery(actionTypes.BULK_STATUSES, bulkStatuses);
+}
+
 function* authorSaga() {
     yield all([
         watchLoadAdminAuthors(),
@@ -400,10 +471,20 @@ function* seriesSaga() {
     ]);
 }
 
+function* statusSaga() {
+    yield all([
+        watchLoadAdminStatuses(),
+        watchCreateStatus(),
+        watchUpdateStatus(),
+        watchDeleteStatus(),
+        watchBulkStatuses(),
+    ]);
+}
+
 function* tagSaga() {
     yield all([watchLoadAdminTags(), watchCreateTag(), watchUpdateTag(), watchDeleteTag(), watchBulkTags()]);
 }
 
 export default function* siteAdminSaga() {
-    yield all([publishingSaga(), authorSaga(), tagGroupSaga(), tagSaga(), seriesSaga()]);
+    yield all([publishingSaga(), authorSaga(), tagGroupSaga(), tagSaga(), seriesSaga(), statusSaga()]);
 }
