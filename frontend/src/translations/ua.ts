@@ -63,4 +63,13 @@ export const ua = {
     tag_group: "Група тегів",
     series_p: "Серії",
     publishing: "Видавництво",
+    title: "Назва",
+    description: "Опис",
+    image: "Картинка",
+    select_file: "Обрати файл",
+    status: "Статус",
+    price: "Ціна",
+    discount: "Знижка",
+    pages_count: "Кількість сторінок",
+    paper_type: "Тип паперу",
 };

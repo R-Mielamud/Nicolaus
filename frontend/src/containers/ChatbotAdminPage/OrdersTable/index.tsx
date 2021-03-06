@@ -52,6 +52,7 @@ const OrdersTable: React.FC = () => {
                         headers={CSVHeaders.MESSENGER_ORDER}
                         fileName={FileNames.MESSENGER_ORDERS_CSV}
                         text={t("download_table")}
+                        newLineArrays
                     />
                     <Table celled className={globalStyles.table}>
                         <Table.Header>

@@ -63,4 +63,13 @@ export const en = {
     tag_group: "Tag group",
     series_p: "Series",
     publishing: "Publishing",
+    title: "Title",
+    description: "Description",
+    image: "Image",
+    select_file: "Select file",
+    status: "Status",
+    price: "Price",
+    discount: "Discount",
+    pages_count: "Pages count",
+    paper_type: "Paper type",
 };

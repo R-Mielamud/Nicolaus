@@ -51,6 +51,7 @@ const BillsTable: React.FC = () => {
                         headers={CSVHeaders.MESSENGER_BILL}
                         fileName={FileNames.MESSENGER_BILLS_CSV}
                         text={t("download_table")}
+                        newLineArrays
                     />
                     <Table celled className={styles.table}>
                         <Table.Header>

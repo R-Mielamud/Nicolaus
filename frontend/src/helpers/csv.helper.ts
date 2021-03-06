@@ -23,23 +23,26 @@ function parseHeader(stringHeader: string): Header {
 export class CSVExporter {
     protected objects: Record<string, any>[];
     protected headers: string[];
+    protected newLineArrays?: boolean;
     protected url: string | null = "";
     protected horizontalDelimiter = ";";
-    protected verticalDelimeter = "\n";
+    protected verticalDelimiter = "\n";
+    protected arrayDelimiter = "//";
     protected quote = '"';
     protected BOM = "\ufeff";
     protected encoding = "text/csv;charset=utf-18";
 
-    public constructor(objects: Record<string, any>[], headers: string[]) {
+    public constructor(objects: Record<string, any>[], headers: string[], newLineArrays?: boolean) {
         this.objects = objects;
         this.headers = headers;
+        this.newLineArrays = newLineArrays;
     }
 
     protected makeCSV(): string {
         let string =
             this.BOM +
             this.headers.map((h) => parseHeader(h).name).join(this.horizontalDelimiter) +
-            this.verticalDelimeter;
+            this.verticalDelimiter;
 
         const headersCount = this.headers.length;
 
@@ -49,9 +52,13 @@ export class CSVExporter {
                 let maybeValue = recursiveGetAttribute(obj, header) || defaultValue;
                 let value = "";
 
-                if (maybeValue !== undefined || maybeValue !== null) {
+                if (maybeValue !== undefined && maybeValue !== null) {
                     if (Array.isArray(maybeValue)) {
-                        maybeValue = maybeValue.join(this.verticalDelimeter);
+                        if (!this.newLineArrays) {
+                            maybeValue = maybeValue.join(this.arrayDelimiter);
+                        } else {
+                            maybeValue = maybeValue.join(this.verticalDelimiter);
+                        }
                     } else if (typeof maybeValue === "boolean") {
                         maybeValue = maybeValue ? "1" : "0";
                     }
@@ -60,14 +67,14 @@ export class CSVExporter {
                         maybeValue = String(maybeValue);
                     }
 
-                    value = this.quote + maybeValue.replace('"', '""') + this.quote;
+                    value = this.quote + maybeValue.replace(new RegExp(this.quote, "gi"), '""') + this.quote;
                 }
 
                 const semi = headersCount - i === 1 ? "" : this.horizontalDelimiter;
                 string += String(value) + semi;
             });
 
-            string += this.verticalDelimeter;
+            string += this.verticalDelimiter;
         });
 
         return string;
@@ -98,18 +105,18 @@ export class CSVImporter<T extends BasicObject> {
     protected fileText: string;
     protected headers: string[];
     protected horizontalDelimiter = ";";
-    protected verticalDelimeter = "\n";
+    protected verticalDelimiter = "\n";
+    protected arrayDelimiter = "//";
     protected quote = '"';
 
     public constructor(fileText: string, headers: string[]) {
         this.fileText = fileText.trim().replace("\r", "");
         this.headers = headers;
-        console.log(this.fileText);
     }
 
     public importCSV(): T[] {
         const objects: T[] = [];
-        const strings: string[] = this.fileText.split(this.verticalDelimeter).slice(1);
+        const strings: string[] = this.fileText.split(this.verticalDelimiter).slice(1);
 
         strings.forEach((string) => {
             const object: Partial<T> = {};
@@ -130,6 +137,15 @@ export class CSVImporter<T extends BasicObject> {
 
                 if (!isNaN(+value)) {
                     value = Number(value);
+                }
+
+                if (typeof value === "string") {
+                    value.replace(new RegExp('""', "gi"), this.horizontalDelimiter);
+                    const splitted = value.split(this.arrayDelimiter);
+
+                    if (splitted.length > 1) {
+                        value = [...splitted];
+                    }
                 }
 
                 const stringHeader: string = this.headers[index];

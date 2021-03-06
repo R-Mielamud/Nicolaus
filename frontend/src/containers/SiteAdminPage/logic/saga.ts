@@ -1,10 +1,11 @@
-import { all, put, takeEvery, call } from "redux-saga/effects";
+import { all, put, takeEvery, call, select } from "redux-saga/effects";
 import * as actions from "./actions";
 import * as actionTypes from "./actionTypes";
 import * as authorsService from "../../../services/authors.service";
 import * as tagsService from "../../../services/tags.service";
 import * as publishingsService from "../../../services/publishings.service";
 import * as statusesService from "../../../services/statuses.service";
+import * as booksService from "../../../services/books.service";
 import { error } from "../../../helpers/notifications.helper";
 
 // Authors
@@ -431,6 +432,80 @@ function* watchBulkStatuses() {
     yield takeEvery(actionTypes.BULK_STATUSES, bulkStatuses);
 }
 
+// Books
+
+function* loadAdminBooks(action: ReturnType<typeof actions.loadAdminBooks>) {
+    try {
+        const {
+            siteAdmin: { booksFilter },
+        } = yield select();
+
+        const result: WebApi.Specific.ListAdminBooksResult = yield call(booksService.getAdminBooks, booksFilter);
+        yield put(actions.loadAdminBooksSuccess({ books: result.books, hasMore: result.has_more, more: action.more }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchLoadAdminBooks() {
+    yield takeEvery(actionTypes.LOAD_ADMIN_BOOKS, loadAdminBooks);
+}
+
+function* createBook(action: ReturnType<typeof actions.createBook>) {
+    try {
+        const book: WebApi.Entity.ChangeBook = yield call(booksService.createBook, action.data);
+        yield put(actions.createBookSuccess({ book }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchCreateBook() {
+    yield takeEvery(actionTypes.CREATE_BOOK, createBook);
+}
+
+function* updateBook(action: ReturnType<typeof actions.updateBook>) {
+    try {
+        const book: WebApi.Entity.ChangeBook = yield call(booksService.updateBook, action.id, action.data);
+        yield put(actions.updateBookSuccess({ id: action.id, book }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchUpdateBook() {
+    yield takeEvery(actionTypes.UPDATE_BOOK, updateBook);
+}
+
+function* deleteBook(action: ReturnType<typeof actions.deleteBook>) {
+    try {
+        yield call(booksService.deleteBook, action.id);
+        yield put(actions.deleteBookSuccess({ id: action.id }));
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchDeleteBook() {
+    yield takeEvery(actionTypes.DELETE_BOOK, deleteBook);
+}
+
+function* bulkBooks(action: ReturnType<typeof actions.bulkBooks>) {
+    try {
+        yield call(booksService.bulkBooks, action.books);
+
+        const parts = window.location.href.split("?");
+        const url = parts[0];
+        window.location.replace(url + "?activeIndex=" + action.index);
+    } catch (err) {
+        error(err.text);
+    }
+}
+
+function* watchBulkBooks() {
+    yield takeEvery(actionTypes.BULK_BOOKS, bulkBooks);
+}
+
 function* authorSaga() {
     yield all([
         watchLoadAdminAuthors(),
@@ -481,10 +556,14 @@ function* statusSaga() {
     ]);
 }
 
+function* bookSaga() {
+    yield all([watchLoadAdminBooks(), watchCreateBook(), watchUpdateBook(), watchDeleteBook(), watchBulkBooks()]);
+}
+
 function* tagSaga() {
     yield all([watchLoadAdminTags(), watchCreateTag(), watchUpdateTag(), watchDeleteTag(), watchBulkTags()]);
 }
 
 export default function* siteAdminSaga() {
-    yield all([publishingSaga(), authorSaga(), tagGroupSaga(), tagSaga(), seriesSaga(), statusSaga()]);
+    yield all([publishingSaga(), authorSaga(), tagGroupSaga(), tagSaga(), seriesSaga(), statusSaga(), bookSaga()]);
 }

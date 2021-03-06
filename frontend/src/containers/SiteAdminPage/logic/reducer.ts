@@ -374,4 +374,58 @@ export const siteAdminReducer = createReducer<SiteAdminState>(initialState, {
             statuses: [...newStatuses],
         };
     },
+
+    // Books
+
+    [actionTypes.CREATE_BOOK_SUCCESS](state, action: actionTypes.CreateBookSuccess) {
+        return {
+            ...state,
+            books: [...(state.books || []), action.book],
+        };
+    },
+    [actionTypes.UPDATE_BOOK_SUCCESS](state, action: actionTypes.UpdateBookSuccess) {
+        if (!state.books) {
+            return state;
+        }
+
+        const newBooks = [...state.books];
+        const index = newBooks.findIndex((book) => book.id === action.id);
+
+        if (index < 0) {
+            return state;
+        }
+
+        const book = newBooks[index];
+
+        const newBook = {
+            ...book,
+            ...action.book,
+        };
+
+        newBooks[index] = newBook;
+
+        return {
+            ...state,
+            books: [...newBooks],
+        };
+    },
+    [actionTypes.DELETE_BOOK_SUCCESS](state, action: actionTypes.DeleteBookSuccess) {
+        if (!state.books) {
+            return state;
+        }
+
+        const newBooks = [...state.books];
+        const index = newBooks.findIndex((book) => book.id === action.id);
+
+        if (index < 0) {
+            return state;
+        }
+
+        newBooks.splice(index, 1);
+
+        return {
+            ...state,
+            books: [...newBooks],
+        };
+    },
 });

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import { Header, Button, Divider, Tab, TabProps } from "semantic-ui-react";
 import AuthorsTable from "./AuthorsTable";
+import BooksTable from "./BooksTable";
 import PublishingsTable from "./PublishingsTable";
 import SeriesTable from "./SeriesTable";
 import StatusesTable from "./StatusesTable";
@@ -23,28 +24,32 @@ const SiteAdminPage: React.FC<Props> = ({ activeIndex }) => {
 
     const tabOptions = [
         {
+            menuItem: t("books"),
+            render: () => <BooksTable index={0} />,
+        },
+        {
             menuItem: t("authors"),
-            render: () => <AuthorsTable index={0} />,
+            render: () => <AuthorsTable index={1} />,
         },
         {
             menuItem: t("tag_groups"),
-            render: () => <TagGroupsTable index={1} />,
+            render: () => <TagGroupsTable index={2} />,
         },
         {
             menuItem: t("publishings"),
-            render: () => <PublishingsTable index={2} />,
+            render: () => <PublishingsTable index={3} />,
         },
         {
             menuItem: t("tags"),
-            render: () => <TagsTable index={3} />,
+            render: () => <TagsTable index={4} />,
         },
         {
             menuItem: t("series_p"),
-            render: () => <SeriesTable index={4} />,
+            render: () => <SeriesTable index={5} />,
         },
         {
             menuItem: t("statuses"),
-            render: () => <StatusesTable index={5} />,
+            render: () => <StatusesTable index={6} />,
         },
     ];
 

@@ -79,6 +79,16 @@ export const createStatusSuccess = createAction<actionTypes.CreateStatusSuccess>
 export const updateStatusSuccess = createAction<actionTypes.UpdateStatusSuccess>(actionTypes.UPDATE_STATUS_SUCCESS);
 export const deleteStatusSuccess = createAction<actionTypes.DeleteStatusSuccess>(actionTypes.DELETE_STATUS_SUCCESS);
 
+// Books
+
+export const createBook = createAction<actionTypes.CreateBook>(actionTypes.CREATE_BOOK);
+export const createBookSuccess = createAction<actionTypes.CreateBookSuccess>(actionTypes.CREATE_BOOK_SUCCESS);
+export const updateBook = createAction<actionTypes.UpdateBook>(actionTypes.UPDATE_BOOK);
+export const updateBookSuccess = createAction<actionTypes.UpdateBookSuccess>(actionTypes.UPDATE_BOOK_SUCCESS);
+export const deleteBook = createAction<actionTypes.DeleteBook>(actionTypes.DELETE_BOOK);
+export const deleteBookSuccess = createAction<actionTypes.DeleteBookSuccess>(actionTypes.DELETE_BOOK_SUCCESS);
+export const bulkBooks = createAction<actionTypes.BulkBooks>(actionTypes.BULK_BOOKS);
+
 // Read
 
 export const loadAdminBooks = createAction<actionTypes.LoadBooks>(actionTypes.LOAD_ADMIN_BOOKS);

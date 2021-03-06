@@ -104,7 +104,7 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                         </div>
                         {book.publishing ? (
                             <div className={styles.textParameter}>
-                                <span className={styles.key}>Publishing: </span>
+                                <span className={styles.key}>{t("publishing")}: </span>
                                 <span
                                     className={styles.link}
                                     onClick={() =>
@@ -166,7 +166,7 @@ const ExpandedBookPage: React.FC<Props> = ({ bookId }) => {
                     {book.description ? (
                         <>
                             <Header as="h2" dividing>
-                                Description
+                                {t("description")}
                             </Header>
                             <div className={styles.description}>{book.description}</div>
                         </>

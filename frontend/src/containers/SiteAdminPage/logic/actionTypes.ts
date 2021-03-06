@@ -75,6 +75,16 @@ export const DELETE_STATUS = "CATALOG:ADMIN:STATUSES:DELETE";
 export const DELETE_STATUS_SUCCESS = "CATALOG:ADMIN:STATUSES:DELETE:SUCCESS";
 export const BULK_STATUSES = "CATALOG:ADMIN:STATUSES:UPDATE:BULK";
 
+// Books
+
+export const CREATE_BOOK = "CATALOG:ADMIN:BOOKS:CREATE";
+export const CREATE_BOOK_SUCCESS = "CATALOG:ADMIN:BOOKS:CREATE:SUCCESS";
+export const UPDATE_BOOK = "CATALOG:ADMIN:BOOKS:UPDATE";
+export const UPDATE_BOOK_SUCCESS = "CATALOG:ADMIN:BOOKS:UPDATE:SUCCESS";
+export const DELETE_BOOK = "CATALOG:ADMIN:BOOKS:DELETE";
+export const DELETE_BOOK_SUCCESS = "CATALOG:ADMIN:BOOKS:DELETE:SUCCESS";
+export const BULK_BOOKS = "CATALOG:ADMIN:BOOKS:UPDATE:BULK";
+
 // Read
 
 export interface LoadBooks {
@@ -306,5 +316,38 @@ export interface DeleteStatusSuccess {
 
 export interface BulkStatuses {
     statuses: WebApi.Entity.CSVChangeStatus[];
+    index: number;
+}
+
+// Books
+
+export interface CreateBook {
+    data: WebApi.Entity.ServerChangeBook;
+}
+
+export interface CreateBookSuccess {
+    book: WebApi.Entity.ChangeBook;
+}
+
+export interface UpdateBook {
+    id: number;
+    data: Partial<WebApi.Entity.ServerChangeBook>;
+}
+
+export interface UpdateBookSuccess {
+    id: number;
+    book: WebApi.Entity.ChangeBook;
+}
+
+export interface DeleteBook {
+    id: number;
+}
+
+export interface DeleteBookSuccess {
+    id: number;
+}
+
+export interface BulkBooks {
+    books: WebApi.Entity.CSVChangeBook[];
     index: number;
 }

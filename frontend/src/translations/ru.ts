@@ -63,4 +63,13 @@ export const ru = {
     tag_group: "Группа тегов",
     series_p: "Серии",
     publishing: "Издательство",
+    title: "Название",
+    description: "Описание",
+    image: "Картинка",
+    select_file: "Выбрать файл",
+    status: "Статус",
+    price: "Цена",
+    discount: "Скидка",
+    pages_count: "Кол-во страниц",
+    paper_type: "Тип бумаги",
 };

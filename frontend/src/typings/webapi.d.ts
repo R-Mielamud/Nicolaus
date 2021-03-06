@@ -131,11 +131,11 @@ namespace WebApi.Entity {
     interface ChangeBook extends Identified {
         title: string;
         description?: string;
-        status?: Status;
+        status?: number;
         image: string;
-        authors: Author[];
-        publishing?: Publishing;
-        series?: Series;
+        authors: number[];
+        publishing?: number;
+        series?: number;
         isbn: string;
         orig_price: number;
         discount: number;
@@ -143,7 +143,43 @@ namespace WebApi.Entity {
         pages_count: number;
         paper_type: string;
         chosen: boolean;
-        tags: Tag[];
+        tags: number[];
+    }
+
+    interface ServerChangeBook extends Identified {
+        title: string;
+        description?: string;
+        status?: number;
+        image: File;
+        authors: number[];
+        publishing?: number;
+        series?: number;
+        isbn: string;
+        orig_price: number;
+        discount: number;
+        in_stock: number;
+        pages_count: number;
+        paper_type: string;
+        chosen: boolean;
+        tags: number[];
+    }
+
+    interface CSVChangeBook extends Identified {
+        title: string;
+        description?: string;
+        status?: number;
+        authors: number[];
+        publishing?: number;
+        series?: number;
+        isbn: string;
+        orig_price: number;
+        discount: number;
+        in_stock: number;
+        pages_count: number;
+        paper_type: string;
+        chosen: boolean;
+        tags: number[];
+        change: boolean;
     }
 }
 

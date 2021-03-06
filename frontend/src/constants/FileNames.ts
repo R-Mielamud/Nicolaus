@@ -8,4 +8,5 @@ export enum FileNames {
     TAGS_CSV = "tags.csv",
     SERIES_CSV = "series.csv",
     STATUSES_CSV = "statuses.csv",
+    BOOKS_CSV = "books.csv",
 }

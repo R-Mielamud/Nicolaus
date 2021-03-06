@@ -11,19 +11,13 @@ export async function getBooks(filter: WebApi.Specific.BooksFilter): Promise<Web
     return (await res.json()) as WebApi.Specific.ListBooksResult;
 }
 
-export async function getAdminBooks({
-    limit,
-    from,
-    name,
-}: {
-    limit: number;
-    from: number;
-    name?: string;
-}): Promise<WebApi.Specific.ListAdminBooksResult> {
+export async function getAdminBooks(
+    filter: WebApi.Specific.BooksFilter,
+): Promise<WebApi.Specific.ListAdminBooksResult> {
     const res: Response = await callWebApi({
         endpoint: "books/",
         method: "GET",
-        query: { limit, from, name },
+        query: { ...convertFilterToQuery(filter), admin: 1 },
     });
 
     return (await res.json()) as WebApi.Specific.ListAdminBooksResult;
@@ -46,4 +40,49 @@ export async function getBookById(id: number): Promise<WebApi.Entity.Book> {
     });
 
     return (await res.json()) as WebApi.Entity.Book;
+}
+export async function createBook(body: WebApi.Entity.ServerChangeBook): Promise<WebApi.Entity.ChangeBook> {
+    const { image, ...newBody } = body;
+
+    const res: Response = await callWebApi({
+        endpoint: "books/",
+        method: "POST",
+        attachment: image,
+        attachmentFieldName: "image",
+        body: newBody,
+    });
+
+    return (await res.json()) as WebApi.Entity.ChangeBook;
+}
+
+export async function updateBook(
+    id: number,
+    body: Partial<WebApi.Entity.ServerChangeBook>,
+): Promise<WebApi.Entity.ChangeBook> {
+    const { image, ...newBody } = body;
+
+    const res: Response = await callWebApi({
+        endpoint: `books/${id}/`,
+        method: "PATCH",
+        attachment: image,
+        attachmentFieldName: "image",
+        body: newBody,
+    });
+
+    return (await res.json()) as WebApi.Entity.ChangeBook;
+}
+
+export async function deleteBook(id: number): Promise<void> {
+    await callWebApi({
+        endpoint: `books/${id}/`,
+        method: "DELETE",
+    });
+}
+
+export async function bulkBooks(body: WebApi.Entity.CSVChangeBook[]): Promise<void> {
+    await callWebApi({
+        endpoint: "books/bulk/",
+        method: "POST",
+        body,
+    });
 }

@@ -5,6 +5,8 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 from viewsets import ChangeSerializerViewSet
 from .models import Book
+from book_filters.views import BaseBulkUpdateAPI
+from .celery import bulk_update_books
 
 from .serlializers import (
     ListBookSerializer,
@@ -17,8 +19,49 @@ class BookAPI(ChangeSerializerViewSet):
     read_serializer_class = BookSerializer
     write_serializer_class = ChangeBookSerializer
 
+    def process_data(self, request):
+        m2m_relations = ["authors", "tags"]
+        data = dict(request.data)
+        new_data = {}
+
+        for key, val in data.items():
+            if type(val) == list and len(val) == 1:
+                val = val[0]
+
+            if type(val) == str:
+                if val.isdigit():
+                    val = int(val)
+                elif val == "false":
+                    val = False
+                elif val == "true":
+                    val = True
+                elif val == "undefined" or val == "null":
+                    val = None
+
+            if key in m2m_relations:
+                val = list(map(lambda v: int(v), val.split(",")))
+
+            new_data[key] = val
+
+        return new_data
+
+    def create(self, request, *args, **kwargs):
+        request._full_data = self.process_data(request)
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        request._full_data = self.process_data(request)
+        return super().update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        request._full_data = self.process_data(request)
+        return super().partial_update(request, *args, **kwargs)
+
     def get_serializer_class(self):
         if self.action == "list":
+            if self.request.GET.get("admin") == "1":
+                return self.write_serializer_class
+
             return ListBookSerializer
 
         return super().get_serializer_class()
@@ -152,3 +195,9 @@ class RecommendationsAPI(ListModelMixin, GenericViewSet):
         shuffle(with_status)
 
         return with_status[0:count]
+
+class BulkUpdateBookAPI(BaseBulkUpdateAPI):
+    serializer_class = ChangeBookSerializer
+
+    def create(self, request, *args, **kwargs):
+        return self.get_create(bulk_update_books, request, *args, **kwargs)
