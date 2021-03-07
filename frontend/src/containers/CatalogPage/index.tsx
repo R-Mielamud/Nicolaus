@@ -65,31 +65,29 @@ const CatalogPage: React.FC = () => {
                     <CatalogFiltersBar />
                 </Segment>
             </OnlyMobile>
-            <div>
-                {books.length ? (
-                    <InfiniteScroller
-                        ref={booksRef}
-                        className={styles.books}
-                        loading={loadingBooks}
-                        hasMore={hasMoreBooks}
-                        loader={<Loader active inline="centered" size="massive" />}
-                        loadMore={() => dispatch(loadBooks({ more: true }))}
-                    >
-                        {books.map((book) => (
-                            <BookCard key={book.id} book={book} />
-                        ))}
-                        <div className={styles.toTop} onClick={scrollTop}>
-                            <Icon name="arrow up" />
-                        </div>
-                    </InfiniteScroller>
-                ) : (
-                    <div className={styles.books}>
-                        <NoResults>
-                            <BookRecommendations />
-                        </NoResults>
+            {books.length ? (
+                <InfiniteScroller
+                    ref={booksRef}
+                    className={styles.books}
+                    loading={loadingBooks}
+                    hasMore={hasMoreBooks}
+                    loader={<Loader active inline="centered" size="massive" />}
+                    loadMore={() => dispatch(loadBooks({ more: true }))}
+                >
+                    {books.map((book) => (
+                        <BookCard key={book.id} book={book} />
+                    ))}
+                    <div className={styles.toTop} onClick={scrollTop}>
+                        <Icon name="arrow up" />
                     </div>
-                )}
-            </div>
+                </InfiniteScroller>
+            ) : (
+                <div className={styles.books}>
+                    <NoResults>
+                        <BookRecommendations />
+                    </NoResults>
+                </div>
+            )}
         </div>
     );
 };

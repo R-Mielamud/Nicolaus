@@ -92,6 +92,10 @@ class BookAPI(ChangeSerializerViewSet):
         else:
             limit = None
 
+        if self.request.GET.get("all") == "1":
+            offset = None
+            limit = None
+
         publishings_query = Q()
         series_query = Q()
         authors_query = Q()
