@@ -139,69 +139,67 @@ const PublishingsTable: React.FC<TableProps> = ({ index }) => {
                     onChange={(event, data) => setName(data.value)}
                 />
             </Form>
+            <DownloadCSV
+                data={displayPublishings}
+                headers={CSVHeaders.PUBLISHING}
+                fileName={FileNames.PUBLISHINGS_CSV}
+                text={t("download_table")}
+            />
+            <ImportCSV text={t("import_table")} headers={CSVHeaders.PUBLISHING} onGetData={_bulkPublishings} />
             {displayPublishings.length ? (
-                <>
-                    <DownloadCSV
-                        data={displayPublishings}
-                        headers={CSVHeaders.PUBLISHING}
-                        fileName={FileNames.PUBLISHINGS_CSV}
-                        text={t("download_table")}
-                    />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.PUBLISHING} onGetData={_bulkPublishings} />
-                    <Button primary disabled={Object.keys(changedPublishings).length === 0} onClick={updatePublishings}>
-                        {t("save_table")}
-                    </Button>
-                    <Table celled className={styles.table}>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {displayPublishings.map((publishing) => (
-                                <Table.Row key={publishing.id}>
-                                    <Table.Cell width={3}>
-                                        <Input
-                                            fluid
-                                            transparent
-                                            defaultValue={getField(publishing, "name")}
-                                            onChange={(event, data) =>
-                                                setUpdateData(publishing.id, { name: data.value })
-                                            }
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={1}>
-                                        <Icon
-                                            link
-                                            name="trash"
-                                            className={styles.danger}
-                                            onClick={() => removePublishing(publishing.id)}
-                                        />
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                        <Table.Footer>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>
+                <Button primary disabled={Object.keys(changedPublishings).length === 0} onClick={updatePublishings}>
+                    {t("save_table")}
+                </Button>
+            ) : null}
+            <Table celled className={styles.table}>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
+                        <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {displayPublishings.length ? (
+                        displayPublishings.map((publishing) => (
+                            <Table.Row key={publishing.id}>
+                                <Table.Cell width={3}>
                                     <Input
                                         fluid
                                         transparent
-                                        value={newPublishing.name ?? ""}
-                                        onChange={(event, data) => addToNewPublishing({ name: data.value })}
+                                        defaultValue={getField(publishing, "name")}
+                                        onChange={(event, data) => setUpdateData(publishing.id, { name: data.value })}
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={1}>
-                                    <Icon link name="plus" onClick={savePublishing} />
-                                </Table.HeaderCell>
+                                </Table.Cell>
+                                <Table.Cell width={1}>
+                                    <Icon
+                                        link
+                                        name="trash"
+                                        className={styles.danger}
+                                        onClick={() => removePublishing(publishing.id)}
+                                    />
+                                </Table.Cell>
                             </Table.Row>
-                        </Table.Footer>
-                    </Table>
-                </>
-            ) : (
-                <NoResults />
-            )}
+                        ))
+                    ) : (
+                        <NoResults notCentered />
+                    )}
+                </Table.Body>
+                <Table.Footer>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>
+                            <Input
+                                fluid
+                                transparent
+                                value={newPublishing.name ?? ""}
+                                onChange={(event, data) => addToNewPublishing({ name: data.value })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={1}>
+                            <Icon link name="plus" onClick={savePublishing} />
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Footer>
+            </Table>
         </Tab.Pane>
     );
 };

@@ -4,11 +4,15 @@ import { Header } from "semantic-ui-react";
 import image from "../../assets/noresults.png";
 import styles from "./noresults.module.scss";
 
-const NoResults: React.FC = ({ children }) => {
+interface Props {
+    notCentered?: boolean;
+}
+
+const NoResults: React.FC<Props> = ({ notCentered, children }) => {
     const { t } = useTranslation();
 
     return (
-        <div className={styles.container}>
+        <div className={notCentered ? styles.container : styles.centered}>
             <img src={image} alt="No results" />
             <Header as="h2">{t("cant_find")}</Header>
             {children}

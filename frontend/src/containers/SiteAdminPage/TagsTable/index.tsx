@@ -149,93 +149,91 @@ const TagsTable: React.FC<TableProps> = ({ index }) => {
                     onChange={(event, data) => setName(data.value)}
                 />
             </Form>
+            <DownloadCSV
+                data={displayTags}
+                headers={CSVHeaders.TAG}
+                fileName={FileNames.TAGS_CSV}
+                text={t("download_table")}
+            />
+            <ImportCSV text={t("import_table")} headers={CSVHeaders.TAG} onGetData={_bulkTags} />
             {displayTags.length ? (
-                <>
-                    <DownloadCSV
-                        data={displayTags}
-                        headers={CSVHeaders.TAG}
-                        fileName={FileNames.TAGS_CSV}
-                        text={t("download_table")}
-                    />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.TAG} onGetData={_bulkTags} />
-                    <Button primary disabled={Object.keys(changedTags).length === 0} onClick={updateTags}>
-                        {t("save_table")}
-                    </Button>
-                    <Table celled className={styles.table}>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{t("tag_group")}</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {displayTags.map((tag) => (
-                                <Table.Row key={tag.id}>
-                                    <Table.Cell width={3}>
-                                        <Input
-                                            fluid
-                                            transparent
-                                            defaultValue={getField(tag, "name")}
-                                            onChange={(event, data) => setUpdateData(tag.id, { name: data.value })}
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={2}>
-                                        <Dropdown
-                                            fluid
-                                            options={groupOptions}
-                                            defaultValue={getField(tag, "group")}
-                                            scrolling
-                                            onChange={(event, data) =>
-                                                setUpdateData(tag.id, { group: data.value as number | undefined })
-                                            }
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={1}>
-                                        <Icon
-                                            link
-                                            name="trash"
-                                            className={styles.danger}
-                                            onClick={() => removeTag(tag.id)}
-                                        />
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                        <Table.Footer>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>
+                <Button primary disabled={Object.keys(changedTags).length === 0} onClick={updateTags}>
+                    {t("save_table")}
+                </Button>
+            ) : null}
+            <Table celled className={styles.table}>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
+                        <Table.HeaderCell width={2}>{t("tag_group")}</Table.HeaderCell>
+                        <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {displayTags.length ? (
+                        displayTags.map((tag) => (
+                            <Table.Row key={tag.id}>
+                                <Table.Cell width={3}>
                                     <Input
                                         fluid
                                         transparent
-                                        value={newTag.name ?? ""}
-                                        onChange={(event, data) => addToNewTag({ name: data.value })}
+                                        defaultValue={getField(tag, "name")}
+                                        onChange={(event, data) => setUpdateData(tag.id, { name: data.value })}
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={2}>
+                                </Table.Cell>
+                                <Table.Cell width={2}>
                                     <Dropdown
                                         fluid
                                         options={groupOptions}
-                                        value={newTag.group ?? ""}
-                                        floating
-                                        upward
+                                        defaultValue={getField(tag, "group")}
                                         scrolling
-                                        clearable
                                         onChange={(event, data) =>
-                                            addToNewTag({ group: data.value as number | undefined })
+                                            setUpdateData(tag.id, { group: data.value as number | undefined })
                                         }
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={1}>
-                                    <Icon link name="plus" onClick={saveTag} />
-                                </Table.HeaderCell>
+                                </Table.Cell>
+                                <Table.Cell width={1}>
+                                    <Icon
+                                        link
+                                        name="trash"
+                                        className={styles.danger}
+                                        onClick={() => removeTag(tag.id)}
+                                    />
+                                </Table.Cell>
                             </Table.Row>
-                        </Table.Footer>
-                    </Table>
-                </>
-            ) : (
-                <NoResults />
-            )}
+                        ))
+                    ) : (
+                        <NoResults notCentered />
+                    )}
+                </Table.Body>
+                <Table.Footer>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>
+                            <Input
+                                fluid
+                                transparent
+                                value={newTag.name ?? ""}
+                                onChange={(event, data) => addToNewTag({ name: data.value })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={2}>
+                            <Dropdown
+                                fluid
+                                options={groupOptions}
+                                value={newTag.group ?? ""}
+                                floating
+                                upward
+                                scrolling
+                                clearable
+                                onChange={(event, data) => addToNewTag({ group: data.value as number | undefined })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={1}>
+                            <Icon link name="plus" onClick={saveTag} />
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Footer>
+            </Table>
         </Tab.Pane>
     );
 };

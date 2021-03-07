@@ -137,84 +137,82 @@ const TagGroupsTable: React.FC<TableProps> = ({ index }) => {
                     onChange={(event, data) => setName(data.value)}
                 />
             </Form>
+            <DownloadCSV
+                data={displayGroups}
+                headers={CSVHeaders.TAG_GROUP}
+                fileName={FileNames.TAG_GROUPS_CSV}
+                text={t("download_table")}
+            />
+            <ImportCSV text={t("import_table")} headers={CSVHeaders.TAG_GROUP} onGetData={bulkGroups} />
             {displayGroups.length ? (
-                <>
-                    <DownloadCSV
-                        data={displayGroups}
-                        headers={CSVHeaders.TAG_GROUP}
-                        fileName={FileNames.TAG_GROUPS_CSV}
-                        text={t("download_table")}
-                    />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.TAG_GROUP} onGetData={bulkGroups} />
-                    <Button primary disabled={Object.keys(changedTagGroups).length === 0} onClick={updateGroups}>
-                        {t("save_table")}
-                    </Button>
-                    <Table celled className={styles.table}>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{t("chosen")}</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {displayGroups.map((group) => (
-                                <Table.Row key={group.id}>
-                                    <Table.Cell width={3}>
-                                        <Input
-                                            fluid
-                                            transparent
-                                            defaultValue={getField(group, "name")}
-                                            onChange={(event, data) => setUpdateData(group.id, { name: data.value })}
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={2}>
-                                        <Checkbox
-                                            toggle
-                                            defaultChecked={getField(group, "chosen")}
-                                            onChange={(event, data) =>
-                                                setUpdateData(group.id, { chosen: data.checked })
-                                            }
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={1}>
-                                        <Icon
-                                            link
-                                            name="trash"
-                                            className={styles.danger}
-                                            onClick={() => removeTagGroups(group.id)}
-                                        />
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                        <Table.Footer>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>
+                <Button primary disabled={Object.keys(changedTagGroups).length === 0} onClick={updateGroups}>
+                    {t("save_table")}
+                </Button>
+            ) : null}
+            <Table celled className={styles.table}>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
+                        <Table.HeaderCell width={2}>{t("chosen")}</Table.HeaderCell>
+                        <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {displayGroups.length ? (
+                        displayGroups.map((group) => (
+                            <Table.Row key={group.id}>
+                                <Table.Cell width={3}>
                                     <Input
                                         fluid
                                         transparent
-                                        value={newGroup.name ?? ""}
-                                        onChange={(event, data) => addToNewGroup({ name: data.value })}
+                                        defaultValue={getField(group, "name")}
+                                        onChange={(event, data) => setUpdateData(group.id, { name: data.value })}
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={2}>
+                                </Table.Cell>
+                                <Table.Cell width={2}>
                                     <Checkbox
                                         toggle
-                                        checked={newGroup.chosen ?? false}
-                                        onChange={(event, data) => addToNewGroup({ chosen: data.checked })}
+                                        defaultChecked={getField(group, "chosen")}
+                                        onChange={(event, data) => setUpdateData(group.id, { chosen: data.checked })}
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={1}>
-                                    <Icon link name="plus" onClick={saveGroup} />
-                                </Table.HeaderCell>
+                                </Table.Cell>
+                                <Table.Cell width={1}>
+                                    <Icon
+                                        link
+                                        name="trash"
+                                        className={styles.danger}
+                                        onClick={() => removeTagGroups(group.id)}
+                                    />
+                                </Table.Cell>
                             </Table.Row>
-                        </Table.Footer>
-                    </Table>
-                </>
-            ) : (
-                <NoResults />
-            )}
+                        ))
+                    ) : (
+                        <NoResults notCentered />
+                    )}
+                </Table.Body>
+                <Table.Footer>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>
+                            <Input
+                                fluid
+                                transparent
+                                value={newGroup.name ?? ""}
+                                onChange={(event, data) => addToNewGroup({ name: data.value })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={2}>
+                            <Checkbox
+                                toggle
+                                checked={newGroup.chosen ?? false}
+                                onChange={(event, data) => addToNewGroup({ chosen: data.checked })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={1}>
+                            <Icon link name="plus" onClick={saveGroup} />
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Footer>
+            </Table>
         </Tab.Pane>
     );
 };

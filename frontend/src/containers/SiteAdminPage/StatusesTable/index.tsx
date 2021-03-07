@@ -137,67 +137,67 @@ const StatusesTable: React.FC<TableProps> = ({ index }) => {
                     onChange={(event, data) => setName(data.value)}
                 />
             </Form>
+            <DownloadCSV
+                data={displayStatuses}
+                headers={CSVHeaders.STATUS}
+                fileName={FileNames.STATUSES_CSV}
+                text={t("download_table")}
+            />
+            <ImportCSV text={t("import_table")} headers={CSVHeaders.STATUS} onGetData={_bulkStatuses} />
             {displayStatuses.length ? (
-                <>
-                    <DownloadCSV
-                        data={displayStatuses}
-                        headers={CSVHeaders.STATUS}
-                        fileName={FileNames.STATUSES_CSV}
-                        text={t("download_table")}
-                    />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.STATUS} onGetData={_bulkStatuses} />
-                    <Button primary disabled={Object.keys(changedStatuses).length === 0} onClick={updateStatuses}>
-                        {t("save_table")}
-                    </Button>
-                    <Table celled className={styles.table}>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {displayStatuses.map((status) => (
-                                <Table.Row key={status.id}>
-                                    <Table.Cell width={3}>
-                                        <Input
-                                            fluid
-                                            transparent
-                                            defaultValue={getField(status, "name")}
-                                            onChange={(event, data) => setUpdateData(status.id, { name: data.value })}
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={1}>
-                                        <Icon
-                                            link
-                                            name="trash"
-                                            className={styles.danger}
-                                            onClick={() => removeStatus(status.id)}
-                                        />
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                        <Table.Footer>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>
+                <Button primary disabled={Object.keys(changedStatuses).length === 0} onClick={updateStatuses}>
+                    {t("save_table")}
+                </Button>
+            ) : null}
+            <Table celled className={styles.table}>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
+                        <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {displayStatuses.length ? (
+                        displayStatuses.map((status) => (
+                            <Table.Row key={status.id}>
+                                <Table.Cell width={3}>
                                     <Input
                                         fluid
                                         transparent
-                                        value={newStatus.name ?? ""}
-                                        onChange={(event, data) => addToNewStatus({ name: data.value })}
+                                        defaultValue={getField(status, "name")}
+                                        onChange={(event, data) => setUpdateData(status.id, { name: data.value })}
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={1}>
-                                    <Icon link name="plus" onClick={saveStatus} />
-                                </Table.HeaderCell>
+                                </Table.Cell>
+                                <Table.Cell width={1}>
+                                    <Icon
+                                        link
+                                        name="trash"
+                                        className={styles.danger}
+                                        onClick={() => removeStatus(status.id)}
+                                    />
+                                </Table.Cell>
                             </Table.Row>
-                        </Table.Footer>
-                    </Table>
-                </>
-            ) : (
-                <NoResults />
-            )}
+                        ))
+                    ) : (
+                        <NoResults notCentered />
+                    )}
+                </Table.Body>
+                <Table.Footer>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>
+                            <Input
+                                fluid
+                                transparent
+                                value={newStatus.name ?? ""}
+                                onChange={(event, data) => addToNewStatus({ name: data.value })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={1}>
+                            <Icon link name="plus" onClick={saveStatus} />
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Footer>
+            </Table>
         </Tab.Pane>
     );
 };

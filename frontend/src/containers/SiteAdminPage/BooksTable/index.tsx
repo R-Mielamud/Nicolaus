@@ -12,9 +12,10 @@ import { FileNames } from "../../../constants/FileNames";
 import ImportCSV from "../../../components/ImportCSV";
 import { TableProps } from "..";
 import _ from "lodash";
-import styles from "../site.module.scss";
 import MaskedFileInput from "../../../components/common/MaskedFileInput";
 import InfiniteScroller from "../../../components/InfiniteScroller";
+import * as booksService from "../../../services/books.service";
+import styles from "../site.module.scss";
 
 interface IndexedChange extends Partial<WebApi.Entity.ServerChangeBook> {
     [key: string]: any;
@@ -295,422 +296,418 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                     </Form>
                 </Modal.Content>
             </Modal>
+            <DownloadCSV
+                data={() => booksService.getAdminBooks(booksFilter, true).then((result) => result.books)}
+                headers={CSVHeaders.BOOK}
+                fileName={FileNames.BOOKS_CSV}
+                text={t("download_table")}
+            />
+            <ImportCSV text={t("import_table")} headers={CSVHeaders.BOOK} onGetData={_bulkBooks} />
             {books.length ? (
-                <>
-                    <DownloadCSV
-                        data={books}
-                        headers={CSVHeaders.BOOK}
-                        fileName={FileNames.BOOKS_CSV}
-                        text={t("download_table")}
-                    />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.BOOK} onGetData={_bulkBooks} />
-                    <Button primary disabled={Object.keys(changedBooks).length === 0} onClick={updateBooks}>
-                        {t("save_table")}
-                    </Button>
-                    <InfiniteScroller
-                        className={styles.tableContainer}
-                        loading={loadingBooks}
-                        hasMore={hasMoreBooks}
-                        loader={<Loader active inline="centered" size="massive" />}
-                        loadMore={() => dispatch(loadAdminBooks({ more: true }))}
-                    >
-                        <Table celled className={styles.booksTable}>
-                            <Table.Header>
-                                <Table.Row>
-                                    <Table.HeaderCell width={3}>{t("title")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={5}>{t("description")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>{t("image")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>{t("status")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={4}>{t("authors")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>{t("publishings")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>{t("series")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>ISBN</Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>{t("price")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>{t("discount")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>{t("in_stock")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>{t("pages_count")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>{t("paper_type")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={1}>{t("chosen")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={4}>{t("tags")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
-                                </Table.Row>
-                            </Table.Header>
-                            <Table.Body>
-                                {books.map((book) => (
-                                    <Table.Row key={book.id}>
-                                        <Table.Cell width={3}>
-                                            <Input
-                                                fluid
-                                                transparent
-                                                value={getField(book, "title")}
-                                                onChange={(event, data) =>
-                                                    setUpdateData(book.id, { title: data.value })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={5}>
-                                            <Form>
-                                                <TextArea
-                                                    className={styles.textArea}
-                                                    value={getField(book, "description")}
-                                                    onChange={(event, data) =>
-                                                        setUpdateData(book.id, {
-                                                            description: data.value as string | undefined,
-                                                        })
-                                                    }
-                                                />
-                                            </Form>
-                                        </Table.Cell>
-                                        <Table.Cell width={3}>
-                                            <MaskedFileInput
-                                                text={t("select_file")}
-                                                allow=".jpeg, .png, .jpg"
-                                                onUpload={(file) => setUpdateData(book.id, { image: file })}
-                                            />
-                                            <div>{getImageName(book.id, book.image)}</div>
-                                        </Table.Cell>
-                                        <Table.Cell width={2}>
-                                            <Dropdown
-                                                fluid
-                                                options={statusOptions}
-                                                defaultValue={getField(book, "status")}
-                                                scrolling
-                                                clearable
-                                                onChange={(event, data) =>
-                                                    setUpdateData(book.id, {
-                                                        status: data.value as number | undefined,
-                                                    })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={4}>
-                                            <Dropdown
-                                                fluid
-                                                multiple
-                                                options={authorOptions}
-                                                defaultValue={getField(book, "authors")}
-                                                scrolling
-                                                onChange={(event, data) =>
-                                                    setUpdateData(book.id, {
-                                                        authors: data.value as number[],
-                                                    })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={3}>
-                                            <Dropdown
-                                                fluid
-                                                options={publishingOptions}
-                                                defaultValue={getField(book, "publishing")}
-                                                scrolling
-                                                clearable
-                                                onChange={(event, data) =>
-                                                    setUpdateData(book.id, {
-                                                        publishing: data.value as number | undefined,
-                                                    })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={3}>
-                                            <Dropdown
-                                                fluid
-                                                options={seriesOptions}
-                                                defaultValue={getField(book, "series")}
-                                                scrolling
-                                                clearable
-                                                onChange={(event, data) =>
-                                                    setUpdateData(book.id, {
-                                                        series: data.value as number | undefined,
-                                                    })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={3}>
-                                            <Input
-                                                fluid
-                                                transparent
-                                                value={getField(book, "isbn")}
-                                                onChange={(event, data) => setUpdateData(book.id, { isbn: data.value })}
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={2}>
-                                            <Input
-                                                fluid
-                                                type="number"
-                                                transparent
-                                                value={getField(book, "orig_price")}
-                                                onChange={(event, data) =>
-                                                    // type="number"
-                                                    setUpdateData(book.id, { orig_price: data.value as any })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={2}>
-                                            <Input
-                                                fluid
-                                                transparent
-                                                type="number"
-                                                value={getField(book, "discount")}
-                                                onChange={(event, data) =>
-                                                    // type="number"
-                                                    setUpdateData(book.id, { discount: data.value as any })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={2}>
-                                            <Input
-                                                fluid
-                                                type="number"
-                                                transparent
-                                                value={getField(book, "in_stock")}
-                                                onChange={(event, data) =>
-                                                    // type="number"
-                                                    setUpdateData(book.id, { in_stock: data.value as any })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={2}>
-                                            <Input
-                                                fluid
-                                                type="number"
-                                                transparent
-                                                value={getField(book, "pages_count")}
-                                                onChange={(event, data) =>
-                                                    // type="number"
-                                                    setUpdateData(book.id, { pages_count: data.value as any })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={3}>
-                                            <Input
-                                                fluid
-                                                transparent
-                                                value={getField(book, "paper_type")}
-                                                onChange={(event, data) =>
-                                                    setUpdateData(book.id, { paper_type: data.value })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={1}>
-                                            <Checkbox
-                                                toggle
-                                                defaultChecked={getField(book, "chosen")}
-                                                onChange={(event, data) =>
-                                                    setUpdateData(book.id, { chosen: data.checked })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={4}>
-                                            <Dropdown
-                                                fluid
-                                                multiple
-                                                options={tagOptions}
-                                                defaultValue={getField(book, "tags")}
-                                                scrolling
-                                                onChange={(event, data) =>
-                                                    setUpdateData(book.id, {
-                                                        tags: data.value as number[],
-                                                    })
-                                                }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell width={1}>
-                                            <Icon
-                                                link
-                                                name="trash"
-                                                className={styles.danger}
-                                                onClick={() => removeBook(book.id)}
-                                            />
-                                        </Table.Cell>
-                                    </Table.Row>
-                                ))}
-                            </Table.Body>
-                            <Table.Footer>
-                                <Table.Row>
-                                    <Table.HeaderCell width={3}>
+                <Button primary disabled={Object.keys(changedBooks).length === 0} onClick={updateBooks}>
+                    {t("save_table")}
+                </Button>
+            ) : null}
+            <InfiniteScroller
+                className={styles.tableContainer}
+                loading={loadingBooks}
+                hasMore={hasMoreBooks}
+                loader={<Loader active inline="centered" size="massive" />}
+                loadMore={() => dispatch(loadAdminBooks({ more: true }))}
+            >
+                <Table celled className={styles.booksTable}>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell width={3}>{t("title")}</Table.HeaderCell>
+                            <Table.HeaderCell width={5}>{t("description")}</Table.HeaderCell>
+                            <Table.HeaderCell width={3}>{t("image")}</Table.HeaderCell>
+                            <Table.HeaderCell width={2}>{t("status")}</Table.HeaderCell>
+                            <Table.HeaderCell width={4}>{t("authors")}</Table.HeaderCell>
+                            <Table.HeaderCell width={3}>{t("publishings")}</Table.HeaderCell>
+                            <Table.HeaderCell width={3}>{t("series")}</Table.HeaderCell>
+                            <Table.HeaderCell width={3}>ISBN</Table.HeaderCell>
+                            <Table.HeaderCell width={2}>{t("price")}</Table.HeaderCell>
+                            <Table.HeaderCell width={2}>{t("discount")}</Table.HeaderCell>
+                            <Table.HeaderCell width={2}>{t("in_stock")}</Table.HeaderCell>
+                            <Table.HeaderCell width={2}>{t("pages_count")}</Table.HeaderCell>
+                            <Table.HeaderCell width={3}>{t("paper_type")}</Table.HeaderCell>
+                            <Table.HeaderCell width={1}>{t("chosen")}</Table.HeaderCell>
+                            <Table.HeaderCell width={4}>{t("tags")}</Table.HeaderCell>
+                            <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {books.length ? (
+                            books.map((book) => (
+                                <Table.Row key={book.id}>
+                                    <Table.Cell width={3}>
                                         <Input
                                             fluid
                                             transparent
-                                            value={newBook.title ?? ""}
-                                            onChange={(event, data) => addToNewBook({ title: data.value })}
+                                            value={getField(book, "title")}
+                                            onChange={(event, data) => setUpdateData(book.id, { title: data.value })}
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={5}>
+                                    </Table.Cell>
+                                    <Table.Cell width={5}>
                                         <Form>
                                             <TextArea
                                                 className={styles.textArea}
-                                                value={newBook.description}
+                                                value={getField(book, "description")}
                                                 onChange={(event, data) =>
-                                                    addToNewBook({
+                                                    setUpdateData(book.id, {
                                                         description: data.value as string | undefined,
                                                     })
                                                 }
                                             />
                                         </Form>
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
                                         <MaskedFileInput
                                             text={t("select_file")}
                                             allow=".jpeg, .png, .jpg"
-                                            clear
-                                            onUpload={(file) => {
-                                                addToNewBook({ image: file });
-                                            }}
+                                            onUpload={(file) => setUpdateData(book.id, { image: file })}
                                         />
-                                        {newBook.image ? <div>{_getFname(newBook.image.name)}</div> : null}
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>
+                                        <div>{getImageName(book.id, book.image)}</div>
+                                    </Table.Cell>
+                                    <Table.Cell width={2}>
                                         <Dropdown
                                             fluid
                                             options={statusOptions}
-                                            value={newBook.status ?? ""}
-                                            floating
-                                            upward
+                                            defaultValue={getField(book, "status")}
                                             scrolling
                                             clearable
                                             onChange={(event, data) =>
-                                                addToNewBook({ status: data.value as number | undefined })
+                                                setUpdateData(book.id, {
+                                                    status: data.value as number | undefined,
+                                                })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={4}>
+                                    </Table.Cell>
+                                    <Table.Cell width={4}>
                                         <Dropdown
                                             fluid
                                             multiple
                                             options={authorOptions}
-                                            value={newBook.authors ?? []}
+                                            defaultValue={getField(book, "authors")}
                                             scrolling
                                             onChange={(event, data) =>
-                                                addToNewBook({
+                                                setUpdateData(book.id, {
                                                     authors: data.value as number[],
                                                 })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
                                         <Dropdown
                                             fluid
                                             options={publishingOptions}
-                                            value={newBook.publishing ?? ""}
-                                            floating
-                                            upward
+                                            defaultValue={getField(book, "publishing")}
                                             scrolling
                                             clearable
                                             onChange={(event, data) =>
-                                                addToNewBook({ publishing: data.value as number | undefined })
+                                                setUpdateData(book.id, {
+                                                    publishing: data.value as number | undefined,
+                                                })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
                                         <Dropdown
                                             fluid
                                             options={seriesOptions}
-                                            value={newBook.series ?? ""}
-                                            floating
-                                            upward
+                                            defaultValue={getField(book, "series")}
                                             scrolling
                                             clearable
                                             onChange={(event, data) =>
-                                                addToNewBook({ series: data.value as number | undefined })
+                                                setUpdateData(book.id, {
+                                                    series: data.value as number | undefined,
+                                                })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
                                         <Input
                                             fluid
                                             transparent
-                                            value={newBook.isbn ?? ""}
-                                            onChange={(event, data) => addToNewBook({ isbn: data.value })}
+                                            value={getField(book, "isbn")}
+                                            onChange={(event, data) => setUpdateData(book.id, { isbn: data.value })}
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>
+                                    </Table.Cell>
+                                    <Table.Cell width={2}>
                                         <Input
                                             fluid
                                             type="number"
                                             transparent
-                                            value={newBook.orig_price ?? ""}
+                                            value={getField(book, "orig_price")}
                                             onChange={(event, data) =>
                                                 // type="number"
-                                                addToNewBook({ orig_price: data.value as any })
+                                                setUpdateData(book.id, { orig_price: data.value as any })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>
+                                    </Table.Cell>
+                                    <Table.Cell width={2}>
                                         <Input
                                             fluid
                                             transparent
                                             type="number"
-                                            value={newBook.discount ?? ""}
+                                            value={getField(book, "discount")}
                                             onChange={(event, data) =>
                                                 // type="number"
-                                                addToNewBook({ discount: data.value as any })
+                                                setUpdateData(book.id, { discount: data.value as any })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>
+                                    </Table.Cell>
+                                    <Table.Cell width={2}>
                                         <Input
                                             fluid
                                             type="number"
                                             transparent
-                                            value={newBook.in_stock ?? ""}
+                                            value={getField(book, "in_stock")}
                                             onChange={(event, data) =>
                                                 // type="number"
-                                                addToNewBook({ in_stock: data.value as any })
+                                                setUpdateData(book.id, { in_stock: data.value as any })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={2}>
+                                    </Table.Cell>
+                                    <Table.Cell width={2}>
                                         <Input
                                             fluid
                                             type="number"
                                             transparent
-                                            value={newBook.pages_count ?? ""}
+                                            value={getField(book, "pages_count")}
                                             onChange={(event, data) =>
                                                 // type="number"
-                                                addToNewBook({ pages_count: data.value as any })
+                                                setUpdateData(book.id, { pages_count: data.value as any })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
                                         <Input
                                             fluid
                                             transparent
-                                            value={newBook.paper_type ?? ""}
-                                            onChange={(event, data) => addToNewBook({ paper_type: data.value })}
+                                            value={getField(book, "paper_type")}
+                                            onChange={(event, data) =>
+                                                setUpdateData(book.id, { paper_type: data.value })
+                                            }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={1}>
+                                    </Table.Cell>
+                                    <Table.Cell width={1}>
                                         <Checkbox
                                             toggle
-                                            checked={newBook.chosen ?? false}
-                                            onChange={(event, data) => addToNewBook({ chosen: data.checked })}
+                                            defaultChecked={getField(book, "chosen")}
+                                            onChange={(event, data) => setUpdateData(book.id, { chosen: data.checked })}
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={4}>
+                                    </Table.Cell>
+                                    <Table.Cell width={4}>
                                         <Dropdown
                                             fluid
                                             multiple
                                             options={tagOptions}
-                                            value={newBook.tags ?? []}
+                                            defaultValue={getField(book, "tags")}
                                             scrolling
                                             onChange={(event, data) =>
-                                                addToNewBook({
+                                                setUpdateData(book.id, {
                                                     tags: data.value as number[],
                                                 })
                                             }
                                         />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell width={1}>
-                                        <Icon link name="plus" onClick={saveBook} />
-                                    </Table.HeaderCell>
+                                    </Table.Cell>
+                                    <Table.Cell width={1}>
+                                        <Icon
+                                            link
+                                            name="trash"
+                                            className={styles.danger}
+                                            onClick={() => removeBook(book.id)}
+                                        />
+                                    </Table.Cell>
                                 </Table.Row>
-                            </Table.Footer>
-                        </Table>
-                    </InfiniteScroller>
-                </>
-            ) : (
-                <NoResults />
-            )}
+                            ))
+                        ) : (
+                            <NoResults notCentered />
+                        )}
+                    </Table.Body>
+                    <Table.Footer>
+                        <Table.Row>
+                            <Table.HeaderCell width={3}>
+                                <Input
+                                    fluid
+                                    transparent
+                                    value={newBook.title ?? ""}
+                                    onChange={(event, data) => addToNewBook({ title: data.value })}
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={5}>
+                                <Form>
+                                    <TextArea
+                                        className={styles.textArea}
+                                        value={newBook.description}
+                                        onChange={(event, data) =>
+                                            addToNewBook({
+                                                description: data.value as string | undefined,
+                                            })
+                                        }
+                                    />
+                                </Form>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={3}>
+                                <MaskedFileInput
+                                    text={t("select_file")}
+                                    allow=".jpeg, .png, .jpg"
+                                    clear
+                                    onUpload={(file) => {
+                                        addToNewBook({ image: file });
+                                    }}
+                                />
+                                {newBook.image ? <div>{_getFname(newBook.image.name)}</div> : null}
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={2}>
+                                <Dropdown
+                                    fluid
+                                    options={statusOptions}
+                                    value={newBook.status ?? ""}
+                                    floating
+                                    upward
+                                    scrolling
+                                    clearable
+                                    onChange={(event, data) =>
+                                        addToNewBook({ status: data.value as number | undefined })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={4}>
+                                <Dropdown
+                                    fluid
+                                    multiple
+                                    options={authorOptions}
+                                    value={newBook.authors ?? []}
+                                    scrolling
+                                    onChange={(event, data) =>
+                                        addToNewBook({
+                                            authors: data.value as number[],
+                                        })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={3}>
+                                <Dropdown
+                                    fluid
+                                    options={publishingOptions}
+                                    value={newBook.publishing ?? ""}
+                                    floating
+                                    upward
+                                    scrolling
+                                    clearable
+                                    onChange={(event, data) =>
+                                        addToNewBook({ publishing: data.value as number | undefined })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={3}>
+                                <Dropdown
+                                    fluid
+                                    options={seriesOptions}
+                                    value={newBook.series ?? ""}
+                                    floating
+                                    upward
+                                    scrolling
+                                    clearable
+                                    onChange={(event, data) =>
+                                        addToNewBook({ series: data.value as number | undefined })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={3}>
+                                <Input
+                                    fluid
+                                    transparent
+                                    value={newBook.isbn ?? ""}
+                                    onChange={(event, data) => addToNewBook({ isbn: data.value })}
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={2}>
+                                <Input
+                                    fluid
+                                    type="number"
+                                    transparent
+                                    value={newBook.orig_price ?? ""}
+                                    onChange={(event, data) =>
+                                        // type="number"
+                                        addToNewBook({ orig_price: data.value as any })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={2}>
+                                <Input
+                                    fluid
+                                    transparent
+                                    type="number"
+                                    value={newBook.discount ?? ""}
+                                    onChange={(event, data) =>
+                                        // type="number"
+                                        addToNewBook({ discount: data.value as any })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={2}>
+                                <Input
+                                    fluid
+                                    type="number"
+                                    transparent
+                                    value={newBook.in_stock ?? ""}
+                                    onChange={(event, data) =>
+                                        // type="number"
+                                        addToNewBook({ in_stock: data.value as any })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={2}>
+                                <Input
+                                    fluid
+                                    type="number"
+                                    transparent
+                                    value={newBook.pages_count ?? ""}
+                                    onChange={(event, data) =>
+                                        // type="number"
+                                        addToNewBook({ pages_count: data.value as any })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={3}>
+                                <Input
+                                    fluid
+                                    transparent
+                                    value={newBook.paper_type ?? ""}
+                                    onChange={(event, data) => addToNewBook({ paper_type: data.value })}
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={1}>
+                                <Checkbox
+                                    toggle
+                                    checked={newBook.chosen ?? false}
+                                    onChange={(event, data) => addToNewBook({ chosen: data.checked })}
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={4}>
+                                <Dropdown
+                                    fluid
+                                    multiple
+                                    options={tagOptions}
+                                    value={newBook.tags ?? []}
+                                    scrolling
+                                    onChange={(event, data) =>
+                                        addToNewBook({
+                                            tags: data.value as number[],
+                                        })
+                                    }
+                                />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell width={1}>
+                                <Icon link name="plus" onClick={saveBook} />
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Footer>
+                </Table>
+            </InfiniteScroller>
         </Tab.Pane>
     );
 };

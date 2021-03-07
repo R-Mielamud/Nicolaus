@@ -150,95 +150,95 @@ const SeriesTable: React.FC<TableProps> = ({ index }) => {
                     onChange={(event, data) => setName(data.value)}
                 />
             </Form>
+            <DownloadCSV
+                data={displaySeries}
+                headers={CSVHeaders.SERIES}
+                fileName={FileNames.SERIES_CSV}
+                text={t("download_table")}
+            />
+            <ImportCSV text={t("import_table")} headers={CSVHeaders.SERIES} onGetData={_bulkSeries} />
             {displaySeries.length ? (
-                <>
-                    <DownloadCSV
-                        data={displaySeries}
-                        headers={CSVHeaders.SERIES}
-                        fileName={FileNames.SERIES_CSV}
-                        text={t("download_table")}
-                    />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.SERIES} onGetData={_bulkSeries} />
-                    <Button primary disabled={Object.keys(changedSeries).length === 0} onClick={_updateSeries}>
-                        {t("save_table")}
-                    </Button>
-                    <Table celled className={styles.table}>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{t("publishing")}</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {displaySeries.map((series) => (
-                                <Table.Row key={series.id}>
-                                    <Table.Cell width={3}>
-                                        <Input
-                                            fluid
-                                            transparent
-                                            defaultValue={getField(series, "name")}
-                                            onChange={(event, data) => setUpdateData(series.id, { name: data.value })}
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={2}>
-                                        <Dropdown
-                                            fluid
-                                            options={publishingOptions}
-                                            defaultValue={getField(series, "publishing")}
-                                            scrolling
-                                            onChange={(event, data) =>
-                                                setUpdateData(series.id, {
-                                                    publishing: data.value as number | undefined,
-                                                })
-                                            }
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={1}>
-                                        <Icon
-                                            link
-                                            name="trash"
-                                            className={styles.danger}
-                                            onClick={() => removeSeries(series.id)}
-                                        />
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                        <Table.Footer>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>
+                <Button primary disabled={Object.keys(changedSeries).length === 0} onClick={_updateSeries}>
+                    {t("save_table")}
+                </Button>
+            ) : null}
+            <Table celled className={styles.table}>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
+                        <Table.HeaderCell width={2}>{t("publishing")}</Table.HeaderCell>
+                        <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {displaySeries.length ? (
+                        displaySeries.map((series) => (
+                            <Table.Row key={series.id}>
+                                <Table.Cell width={3}>
                                     <Input
                                         fluid
                                         transparent
-                                        value={newSeries.name ?? ""}
-                                        onChange={(event, data) => addToNewSeries({ name: data.value })}
+                                        defaultValue={getField(series, "name")}
+                                        onChange={(event, data) => setUpdateData(series.id, { name: data.value })}
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={2}>
+                                </Table.Cell>
+                                <Table.Cell width={2}>
                                     <Dropdown
                                         fluid
                                         options={publishingOptions}
-                                        value={newSeries.publishing ?? ""}
-                                        floating
-                                        upward
+                                        defaultValue={getField(series, "publishing")}
                                         scrolling
-                                        clearable
                                         onChange={(event, data) =>
-                                            addToNewSeries({ publishing: data.value as number | undefined })
+                                            setUpdateData(series.id, {
+                                                publishing: data.value as number | undefined,
+                                            })
                                         }
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={1}>
-                                    <Icon link name="plus" onClick={saveSeries} />
-                                </Table.HeaderCell>
+                                </Table.Cell>
+                                <Table.Cell width={1}>
+                                    <Icon
+                                        link
+                                        name="trash"
+                                        className={styles.danger}
+                                        onClick={() => removeSeries(series.id)}
+                                    />
+                                </Table.Cell>
                             </Table.Row>
-                        </Table.Footer>
-                    </Table>
-                </>
-            ) : (
-                <NoResults />
-            )}
+                        ))
+                    ) : (
+                        <NoResults notCentered />
+                    )}
+                </Table.Body>
+                <Table.Footer>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>
+                            <Input
+                                fluid
+                                transparent
+                                value={newSeries.name ?? ""}
+                                onChange={(event, data) => addToNewSeries({ name: data.value })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={2}>
+                            <Dropdown
+                                fluid
+                                options={publishingOptions}
+                                value={newSeries.publishing ?? ""}
+                                floating
+                                upward
+                                scrolling
+                                clearable
+                                onChange={(event, data) =>
+                                    addToNewSeries({ publishing: data.value as number | undefined })
+                                }
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={1}>
+                            <Icon link name="plus" onClick={saveSeries} />
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Footer>
+            </Table>
         </Tab.Pane>
     );
 };

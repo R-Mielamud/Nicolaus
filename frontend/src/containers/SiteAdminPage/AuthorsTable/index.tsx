@@ -137,84 +137,82 @@ const AuthorsTable: React.FC<TableProps> = ({ index }) => {
                     onChange={(event, data) => setName(data.value)}
                 />
             </Form>
+            <DownloadCSV
+                data={displayAuthors}
+                headers={CSVHeaders.AUTHOR}
+                fileName={FileNames.AUTHORS_CSV}
+                text={t("download_table")}
+            />
+            <ImportCSV text={t("import_table")} headers={CSVHeaders.AUTHOR} onGetData={_bulkAuthors} />
             {displayAuthors.length ? (
-                <>
-                    <DownloadCSV
-                        data={displayAuthors}
-                        headers={CSVHeaders.AUTHOR}
-                        fileName={FileNames.AUTHORS_CSV}
-                        text={t("download_table")}
-                    />
-                    <ImportCSV text={t("import_table")} headers={CSVHeaders.AUTHOR} onGetData={_bulkAuthors} />
-                    <Button primary disabled={Object.keys(changedAuthors).length === 0} onClick={updateAuthors}>
-                        {t("save_table")}
-                    </Button>
-                    <Table celled className={styles.table}>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{t("chosen")}</Table.HeaderCell>
-                                <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {displayAuthors.map((author) => (
-                                <Table.Row key={author.id}>
-                                    <Table.Cell width={3}>
-                                        <Input
-                                            fluid
-                                            transparent
-                                            defaultValue={getField(author, "name")}
-                                            onChange={(event, data) => setUpdateData(author.id, { name: data.value })}
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={2}>
-                                        <Checkbox
-                                            toggle
-                                            defaultChecked={getField(author, "chosen")}
-                                            onChange={(event, data) =>
-                                                setUpdateData(author.id, { chosen: data.checked })
-                                            }
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell width={1}>
-                                        <Icon
-                                            link
-                                            name="trash"
-                                            className={styles.danger}
-                                            onClick={() => removeAuthor(author.id)}
-                                        />
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))}
-                        </Table.Body>
-                        <Table.Footer>
-                            <Table.Row>
-                                <Table.HeaderCell width={3}>
+                <Button primary disabled={Object.keys(changedAuthors).length === 0} onClick={updateAuthors}>
+                    {t("save_table")}
+                </Button>
+            ) : null}
+            <Table celled className={styles.table}>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>{t("name")}</Table.HeaderCell>
+                        <Table.HeaderCell width={2}>{t("chosen")}</Table.HeaderCell>
+                        <Table.HeaderCell width={1}>{t("actions")}</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {displayAuthors.length ? (
+                        displayAuthors.map((author) => (
+                            <Table.Row key={author.id}>
+                                <Table.Cell width={3}>
                                     <Input
                                         fluid
                                         transparent
-                                        value={newAuthor.name ?? ""}
-                                        onChange={(event, data) => addToNewAuthor({ name: data.value })}
+                                        defaultValue={getField(author, "name")}
+                                        onChange={(event, data) => setUpdateData(author.id, { name: data.value })}
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={2}>
+                                </Table.Cell>
+                                <Table.Cell width={2}>
                                     <Checkbox
                                         toggle
-                                        checked={newAuthor.chosen ?? false}
-                                        onChange={(event, data) => addToNewAuthor({ chosen: data.checked })}
+                                        defaultChecked={getField(author, "chosen")}
+                                        onChange={(event, data) => setUpdateData(author.id, { chosen: data.checked })}
                                     />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width={1}>
-                                    <Icon link name="plus" onClick={saveAuthor} />
-                                </Table.HeaderCell>
+                                </Table.Cell>
+                                <Table.Cell width={1}>
+                                    <Icon
+                                        link
+                                        name="trash"
+                                        className={styles.danger}
+                                        onClick={() => removeAuthor(author.id)}
+                                    />
+                                </Table.Cell>
                             </Table.Row>
-                        </Table.Footer>
-                    </Table>
-                </>
-            ) : (
-                <NoResults />
-            )}
+                        ))
+                    ) : (
+                        <NoResults notCentered />
+                    )}
+                </Table.Body>
+                <Table.Footer>
+                    <Table.Row>
+                        <Table.HeaderCell width={3}>
+                            <Input
+                                fluid
+                                transparent
+                                value={newAuthor.name ?? ""}
+                                onChange={(event, data) => addToNewAuthor({ name: data.value })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={2}>
+                            <Checkbox
+                                toggle
+                                checked={newAuthor.chosen ?? false}
+                                onChange={(event, data) => addToNewAuthor({ chosen: data.checked })}
+                            />
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={1}>
+                            <Icon link name="plus" onClick={saveAuthor} />
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Footer>
+            </Table>
         </Tab.Pane>
     );
 };
