@@ -32,6 +32,7 @@ const DownloadCSV: React.FC<Props> = ({ data, headers, fileName, text, newLineAr
                 setExportData(newData);
             });
         } else {
+            setCsvExporter(new CSVExporter(data, headers, newLineArrays));
             setExportData(data);
         }
     }, []);
