@@ -1,5 +1,12 @@
 export enum FileNames {
-    USERS_CSV = "users.csv",
-    BILLS_CSV = "bills.csv",
-    ORDERS_CSV = "orders.csv",
+    MESSENGER_USERS_CSV = "users.csv",
+    MESSENGER_BILLS_CSV = "bills.csv",
+    MESSENGER_ORDERS_CSV = "orders.csv",
+    AUTHORS_CSV = "authors.csv",
+    TAG_GROUPS_CSV = "tagGroups.csv",
+    PUBLISHINGS_CSV = "publishings.csv",
+    TAGS_CSV = "tags.csv",
+    SERIES_CSV = "series.csv",
+    STATUSES_CSV = "statuses.csv",
+    BOOKS_CSV = "books.csv",
 }

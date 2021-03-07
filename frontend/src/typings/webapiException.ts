@@ -36,9 +36,9 @@ export class WebApiException {
         for (const key of Object.keys(clientException)) {
             const startText = snakeCaseToSentense(key) + ": ";
             const errors = clientException[key];
-            const messages = errors.map((err: Record<string, any>) => err.message);
+            const messages = errors.map((err: Record<string, any>) => err.message || err);
             const messagesText = messages.join(", ");
-            texts.push(startText + messagesText + ".");
+            texts.push(startText + messagesText);
         }
 
         return texts.join("\n");

@@ -1,21 +1,22 @@
 import React, { useMemo, useState } from "react";
 import { Button } from "semantic-ui-react";
-import CSVExporter from "../../helpers/csv.helper";
+import { CSVExporter } from "../../helpers/csv.helper";
 
 interface Props {
     data: Record<string, any>[];
     headers: string[];
     fileName: string;
     text: string;
+    newLineArrays?: boolean;
 }
 
-const DownloadCSV: React.FC<Props> = ({ data, headers, fileName, text }) => {
+const DownloadCSV: React.FC<Props> = ({ data, headers, fileName, text, newLineArrays }) => {
     const [csvExporter, setCsvExporter] = useState<CSVExporter>(new CSVExporter(data, headers));
     const [downloadUrl, setDownloadUrl] = useState<string>(csvExporter.makeURL());
 
     useMemo(() => {
         csvExporter.revoke();
-        const exporter = new CSVExporter(data, headers);
+        const exporter = new CSVExporter(data, headers, newLineArrays);
 
         setCsvExporter(exporter);
         setDownloadUrl(exporter.makeURL());

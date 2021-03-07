@@ -1,0 +1,150 @@
+.container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left {
+    width: 60%;
+    height: min-content;
+    display: flex;
+}
+
+.right {
+    width: 36%;
+}
+
+.imgContainer {
+    min-width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+}
+
+.textContainer {
+    padding: 10px 0 10px 5%;
+    min-width: 43%;
+    max-width: 43%;
+}
+
+.textParameter {
+    margin-bottom: 10px;
+
+    .key {
+        color: #545454;
+    }
+}
+
+.textOverflow {
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
+}
+
+.status {
+    position: absolute !important;
+    left: -14px !important;
+}
+
+.price {
+    @extend .textParameter;
+    font-weight: 600;
+}
+
+.origPrice {
+    color: #565656;
+    text-decoration: line-through;
+    margin-left: 10px;
+    font-weight: 300;
+}
+
+.discount {
+    border-radius: 12px;
+    border: 1px solid #a2d;
+    color: #a2d;
+    box-sizing: border-box;
+    font-size: 12px;
+    padding: 0 10px;
+    margin-left: 10px;
+}
+
+.green {
+    color: #090;
+}
+
+.grey {
+    color: #666;
+}
+
+.tag {
+    padding: 3px 7px;
+    margin-right: 5px;
+    background-color: #212121;
+    color: #fff;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.description {
+    font-size: 18px;
+}
+
+.link {
+    color: #4183c4;
+    cursor: pointer;
+
+    &:hover {
+        color: #1e70bf;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .container {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .right {
+        flex-direction: column;
+        height: max-content;
+        width: 100%;
+    }
+
+    .left {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .textContainer {
+        padding: 20px 0 0 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .imgContainer {
+        height: 300px;
+        width: 100%;
+    }
+
+    .image {
+        width: unset;
+        height: 300px;
+    }
+}

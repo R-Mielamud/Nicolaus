@@ -2,15 +2,16 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Menu, Header as HeaderUI } from "semantic-ui-react";
 import Logo from "../../components/common/Logo";
-import history from "../../helpers/history.helper";
 import { removeToken } from "../../helpers/token.helper";
 import RootState from "../../typings/rootState";
 import Authorized from "./Authorized";
 import NotAuthorized from "./NotAuthorized";
 import styles from "./header.module.scss";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
 
 const Header: React.FC = () => {
+    const history = useHistory();
     const { t } = useTranslation();
     const { isAuthorized } = useSelector((state: RootState) => state.auth);
 
