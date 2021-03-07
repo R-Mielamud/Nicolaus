@@ -12,9 +12,10 @@ import { FileNames } from "../../../constants/FileNames";
 import ImportCSV from "../../../components/ImportCSV";
 import { TableProps } from "..";
 import _ from "lodash";
-import styles from "../site.module.scss";
 import MaskedFileInput from "../../../components/common/MaskedFileInput";
 import InfiniteScroller from "../../../components/InfiniteScroller";
+import * as booksService from "../../../services/books.service";
+import styles from "../site.module.scss";
 
 interface IndexedChange extends Partial<WebApi.Entity.ServerChangeBook> {
     [key: string]: any;
@@ -296,7 +297,7 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                 </Modal.Content>
             </Modal>
             <DownloadCSV
-                data={books}
+                data={() => booksService.getAdminBooks(booksFilter, true).then((result) => result.books)}
                 headers={CSVHeaders.BOOK}
                 fileName={FileNames.BOOKS_CSV}
                 text={t("download_table")}

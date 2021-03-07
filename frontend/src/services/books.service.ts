@@ -13,11 +13,12 @@ export async function getBooks(filter: WebApi.Specific.BooksFilter): Promise<Web
 
 export async function getAdminBooks(
     filter: WebApi.Specific.BooksFilter,
+    all: boolean = false,
 ): Promise<WebApi.Specific.ListAdminBooksResult> {
     const res: Response = await callWebApi({
         endpoint: "books/",
         method: "GET",
-        query: { ...convertFilterToQuery(filter), admin: 1 },
+        query: { ...convertFilterToQuery(filter), admin: 1, all: all ? 1 : 0 },
     });
 
     return (await res.json()) as WebApi.Specific.ListAdminBooksResult;
