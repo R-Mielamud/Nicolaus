@@ -174,6 +174,8 @@ ALLOW_ROUTES = {
     ],
     "FOR_ADMIN_MOD": [
         r"^/api/books/",
+        r"^/api/books/filters/[a-zA-Z0-9]+/bulk/$",
+        r"^/api/books/filters/[a-zA-Z0-9]+/[a-zA-Z0-9]+/bulk/$",
     ],
 }
 
@@ -206,3 +208,17 @@ AWS_S3_MEDIA_BUCKET = os.environ.get("AWS_S3_MEDIA_BUCKET", "")
 AWS_S3_MEDIA_REGION = os.environ.get("AWS_S3_MEDIA_REGION", "")
 
 AWS_S3_BOOK_IMAGE_KEY = "book_images"
+
+# Celery Settings
+
+BROKER_URL = "redis://localhost:6379"
+
+CELERY_RESULT_URL = "redis://localhost:6379"
+
+CELERY_ACCEPT_CONTENT = ["application/json"]
+
+CELERY_TASK_SERIALIZER = "json"
+
+CELERY_RESULT_SERIALIER = "json"
+
+CELERY_TIMEZONE = "UTC"

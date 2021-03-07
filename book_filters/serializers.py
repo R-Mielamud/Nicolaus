@@ -23,12 +23,17 @@ class TagGroupSerializer(ModelSerializer):
 class ChangeTagGroupSerializer(ModelSerializer):
     class Meta:
         model = TagGroup
-        fields = ["id", "name"]
+        fields = ["id", "name", "chosen"]
 
 class AuthorSerializer(ModelSerializer):
     class Meta:
         model = Author
         fields = ["id", "name"]
+
+class ChangeAuthorSerializer(ModelSerializer):
+    class Meta:
+        model = Author
+        fields = ["id", "name", "chosen"]
 
 class SeriesSerializer(ModelSerializer):
     class Meta:

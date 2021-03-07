@@ -11,6 +11,7 @@ class TagGroup(Model):
         ordering = ["-chosen"]
 
 class Tag(Model):
+    id_to_relation = {"group": TagGroup}
     name = CharField(max_length=200)
     group = ForeignKey(to=TagGroup, related_name="tags", on_delete=CASCADE)
 
@@ -40,6 +41,7 @@ class Publishing(Model):
         ordering = ["name"]
 
 class Series(Model):
+    id_to_relation = {"publishing": Publishing}
     name = CharField(max_length=200)
     publishing = ForeignKey(to=Publishing, related_name="series", on_delete=CASCADE)
 

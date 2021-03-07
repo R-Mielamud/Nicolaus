@@ -4,6 +4,7 @@ from storages import S3BookImageStorage
 from helpers.percentage import get_percent_of_number
 
 class Book(Model):
+    id_to_m2m = {"authors": Author, "tags": Tag}
     title = CharField(max_length=300)
     description = TextField(max_length=3000, blank=True, null=True)
     image = ImageField(storage=S3BookImageStorage())

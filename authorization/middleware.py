@@ -47,6 +47,16 @@ def process_permissions(get_response):
         path = request.path
         is_get = request.method == "GET"
 
+        if request.GET.get("admin") == "1":
+            if not request.user:
+                return JsonResponse({
+                    "message": "Not authorized",
+                }, status=401)
+            elif not request.user.is_admin:
+                return JsonResponse({
+                    "message": "Permission denied",
+                }, status=403)
+
         if not path.startswith("/api"):
             return get_response(request)
 

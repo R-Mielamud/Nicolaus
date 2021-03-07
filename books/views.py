@@ -5,6 +5,8 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 from viewsets import ChangeSerializerViewSet
 from .models import Book
+from book_filters.views import BaseBulkUpdateAPI
+from .celery import bulk_update_books
 
 from .serlializers import (
     ListBookSerializer,
@@ -13,11 +15,56 @@ from .serlializers import (
 )
 
 class BookAPI(ChangeSerializerViewSet):
+    for_admin = True
     read_serializer_class = BookSerializer
     write_serializer_class = ChangeBookSerializer
 
+    def process_data(self, request):
+        if request.headers.get("Content-Type") == "application/json":
+            return request.data
+
+        m2m_relations = ["authors", "tags"]
+        data = dict(request.data)
+        new_data = {}
+
+        for key, val in data.items():
+            if type(val) == list and len(val) == 1:
+                val = val[0]
+
+            if type(val) == str:
+                if val.isdigit():
+                    val = int(val)
+                elif val == "false":
+                    val = False
+                elif val == "true":
+                    val = True
+                elif val == "undefined" or val == "null":
+                    val = None
+
+            if key in m2m_relations:
+                val = list(map(lambda v: int(v), val.split(",")))
+
+            new_data[key] = val
+
+        return new_data
+
+    def create(self, request, *args, **kwargs):
+        request._full_data = self.process_data(request)
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        request._full_data = self.process_data(request)
+        return super().update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        request._full_data = self.process_data(request)
+        return super().partial_update(request, *args, **kwargs)
+
     def get_serializer_class(self):
         if self.action == "list":
+            if self.request.GET.get("admin") == "1":
+                return self.write_serializer_class
+
             return ListBookSerializer
 
         return super().get_serializer_class()
@@ -32,22 +79,8 @@ class BookAPI(ChangeSerializerViewSet):
         if self.action != "list":
             return Book.objects.all()
 
-        search = self.request.GET.get("search")
         offset = self.request.GET.get("from")
         limit = self.request.GET.get("limit")
-        tags = self.request.GET.get("tags")
-        publishings = self.request.GET.get("publishings")
-        series = self.request.GET.get("series")
-        authors = self.request.GET.get("authors")
-        statuses = self.request.GET.get("statuses")
-
-        text_search_fields = ["title", "authors__name", "series__name", "publishing__name"]
-        publishings_query = Q()
-        series_query = Q()
-        authors_query = Q()
-        tags_query = Q()
-        statuses_query = Q()
-        text_query = Q()
 
         if offset and offset.isdigit():
             offset = int(offset)
@@ -58,6 +91,22 @@ class BookAPI(ChangeSerializerViewSet):
             limit = int(limit)
         else:
             limit = None
+
+        publishings_query = Q()
+        series_query = Q()
+        authors_query = Q()
+        tags_query = Q()
+        statuses_query = Q()
+        text_query = Q()
+
+        search = self.request.GET.get("search")
+        tags = self.request.GET.get("tags")
+        publishings = self.request.GET.get("publishings")
+        series = self.request.GET.get("series")
+        authors = self.request.GET.get("authors")
+        statuses = self.request.GET.get("statuses")
+
+        text_search_fields = ["title", "authors__name", "series__name", "publishing__name"]
 
         if search:
             words = search.strip().split(" ")
@@ -142,3 +191,9 @@ class RecommendationsAPI(ListModelMixin, GenericViewSet):
         shuffle(with_status)
 
         return with_status[0:count]
+
+class BulkUpdateBookAPI(BaseBulkUpdateAPI):
+    serializer_class = ChangeBookSerializer
+
+    def create(self, request, *args, **kwargs):
+        return self.get_create(bulk_update_books, request, *args, **kwargs)

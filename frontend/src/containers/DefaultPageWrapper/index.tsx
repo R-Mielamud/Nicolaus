@@ -2,11 +2,32 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loadAuthors, loadBooks, loadPublishings, loadStatuses, loadTagGroups } from "../CatalogPage/logic/actions";
 import { loadMessengerBills, loadMessengerOrders, loadMessengerUsers } from "../ChatbotAdminPage/logic/actions";
+
+import {
+    loadAdminAuthors,
+    loadAdminBooks,
+    loadAdminTagGroups,
+    loadAdminTags,
+    loadAdminPublishings,
+    loadAdminStatuses,
+    loadAdminSeries,
+} from "../SiteAdminPage/logic/actions";
+
 import Header from "../Header";
 import styles from "./default.module.scss";
 
 export const CATALOG_INFO_SET = ["books", "tagGroups", "publishings", "authors", "statuses"];
-export const SITE_ADMIN_INFO_SET = []; // Will be filled
+
+export const SITE_ADMIN_INFO_SET = [
+    "adminBooks",
+    "adminTagGroups",
+    "adminTags",
+    "adminPublishings",
+    "adminAuthors",
+    "adminStatuses",
+    "adminSeries",
+];
+
 export const CHATBOT_ADMIN_INFO_SET = ["messengerUsers", "messengerBills", "messengerOrders"];
 
 const infoLoadingMap: Record<string, any> = {
@@ -18,6 +39,13 @@ const infoLoadingMap: Record<string, any> = {
     publishings: loadPublishings,
     authors: loadAuthors,
     statuses: loadStatuses,
+    adminBooks: loadAdminBooks,
+    adminTagGroups: loadAdminTagGroups,
+    adminTags: loadAdminTags,
+    adminPublishings: loadAdminPublishings,
+    adminAuthors: loadAdminAuthors,
+    adminStatuses: loadAdminStatuses,
+    adminSeries: loadAdminSeries,
 };
 
 interface Props {
