@@ -72,4 +72,6 @@ export const ua = {
     discount: "Знижка",
     pages_count: "Кількість сторінок",
     paper_type: "Тип паперу",
+    open_filters: "Показати фільтри",
+    filters: "Фільтри",
 };

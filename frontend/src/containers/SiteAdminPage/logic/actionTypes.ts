@@ -1,5 +1,6 @@
 // Read
 
+export const SET_BOOKS_FILTER = "CATALOG:ADMIN:BOOKS:FILTER:SET";
 export const LOAD_ADMIN_BOOKS = "CATALOG:ADMIN:BOOKS:LOAD";
 export const LOAD_ADMIN_BOOKS_SUCCESS = "CATALOG:ADMIN:BOOKS:LOAD:SUCCESS";
 export const LOAD_ADMIN_TAGS = "CATALOG:ADMIN:TAGS:LOAD";
@@ -89,6 +90,7 @@ export const BULK_BOOKS = "CATALOG:ADMIN:BOOKS:UPDATE:BULK";
 
 export interface LoadBooks {
     more?: boolean;
+    customFilter?: Partial<WebApi.Specific.BooksFilter>;
 }
 
 export interface LoadBooksSuccess {
@@ -119,6 +121,11 @@ export interface LoadPublishingsSuccess {
 
 export interface LoadStatusesSuccess {
     statuses: WebApi.Entity.Status[];
+}
+
+export interface SetBooksFilter {
+    filter: Partial<WebApi.Specific.BooksFilter>;
+    clear?: boolean;
 }
 
 // Authors

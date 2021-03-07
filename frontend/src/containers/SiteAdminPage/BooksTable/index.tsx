@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Checkbox, Dropdown, Form, Icon, Input, Tab, Table, TextArea } from "semantic-ui-react";
+import { Button, Checkbox, Dropdown, Form, Icon, Input, Loader, Modal, Tab, Table, TextArea } from "semantic-ui-react";
 import Spinner from "../../../components/common/Spinner";
 import NoResults from "../../../components/NoResults";
-import { bulkBooks, createBook, deleteBook, updateBook } from "../logic/actions";
+import { bulkBooks, createBook, deleteBook, loadAdminBooks, setBooksFilter, updateBook } from "../logic/actions";
 import RootState from "../../../typings/rootState";
 import DownloadCSV from "../../../components/DownloadCSV";
 import { CSVHeaders } from "../../../constants/CSVHeaders";
@@ -14,6 +14,7 @@ import { TableProps } from "..";
 import _ from "lodash";
 import styles from "../site.module.scss";
 import MaskedFileInput from "../../../components/common/MaskedFileInput";
+import InfiniteScroller from "../../../components/InfiniteScroller";
 
 interface IndexedChange extends Partial<WebApi.Entity.ServerChangeBook> {
     [key: string]: any;
@@ -53,15 +54,22 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
     };
 
     const dispatch = useDispatch();
-    const { books, statuses, authors, publishings, series, tags } = useSelector((state: RootState) => state.siteAdmin);
-    const [title, setTitle] = useState<string>("");
+
+    const {
+        books,
+        hasMoreBooks,
+        loadingBooks,
+        statuses,
+        authors,
+        publishings,
+        series,
+        tags,
+        booksFilter,
+    } = useSelector((state: RootState) => state.siteAdmin);
+
     const [changedBooks, setChangedBooks] = useState<ChangeBookDataSet>({});
     const [newBook, setNewBook] = useState<Partial<WebApi.Entity.ServerChangeBook>>(defaultNewBook);
-
-    const displayBooks = useMemo(
-        () => books && books.filter((book) => book.title.toLowerCase().includes(title.toLowerCase())),
-        [books, title],
-    );
+    const [filtersOpen, setFiltersOpen] = useState<boolean>(false);
 
     const statusOptions: SelectOption[] | undefined = useMemo(
         () => statuses && statuses.map((status) => ({ value: status.id, key: status.id, text: status.name })),
@@ -90,17 +98,17 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
         [tags],
     );
 
-    if (
-        !displayBooks ||
-        !books ||
-        !statusOptions ||
-        !authorOptions ||
-        !publishingOptions ||
-        !seriesOptions ||
-        !tagOptions
-    ) {
+    if (!books || !books || !statusOptions || !authorOptions || !publishingOptions || !seriesOptions || !tagOptions) {
         return <Spinner />;
     }
+
+    const loadBooks = (closeFilters: boolean = false) => {
+        if (closeFilters) {
+            setFiltersOpen(false);
+        }
+
+        dispatch(loadAdminBooks({}));
+    };
 
     const setUpdateData = (id: number, data: IndexedChange) => {
         const newChanged = { ...changedBooks };
@@ -212,21 +220,85 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
         return _getFname(path);
     };
 
+    const updateFilter = (filter: Partial<WebApi.Specific.BooksFilter>) => {
+        dispatch(setBooksFilter({ filter }));
+    };
+
+    const clearFilters = () => {
+        dispatch(setBooksFilter({ filter: {}, clear: true }));
+        loadBooks(true);
+    };
+
     return (
         <Tab.Pane>
-            <Form style={{ marginBottom: 30 }}>
-                <Input
-                    value={title}
-                    placeholder={t("search_by_name")}
-                    icon="search"
-                    style={{ width: 240 }}
-                    onChange={(event, data) => setTitle(data.value)}
-                />
-            </Form>
-            {displayBooks.length ? (
+            <Modal
+                trigger={<Button secondary>{t("open_filters")}</Button>}
+                openOnTriggerClick
+                closeIcon
+                closeOnEscape
+                open={filtersOpen}
+                onOpen={() => setFiltersOpen(true)}
+                onClose={() => setFiltersOpen(false)}
+            >
+                <Modal.Header>{t("filters")}</Modal.Header>
+                <Modal.Content>
+                    <Form>
+                        <Form.Input
+                            value={booksFilter.search ?? ""}
+                            placeholder={t("search_book")}
+                            icon="search"
+                            onChange={(event, data) => updateFilter({ search: data.value })}
+                        />
+                        <Form.Select
+                            placeholder={t("authors")}
+                            options={authorOptions}
+                            multiple
+                            value={booksFilter.authors ?? []}
+                            onChange={(event, data) => updateFilter({ authors: data.value as number[] | undefined })}
+                        />
+                        <Form.Select
+                            placeholder={t("publishings")}
+                            options={publishingOptions}
+                            multiple
+                            value={booksFilter.publishings ?? []}
+                            onChange={(event, data) =>
+                                updateFilter({ publishings: data.value as number[] | undefined })
+                            }
+                        />
+                        <Form.Select
+                            placeholder={t("series_p")}
+                            options={seriesOptions}
+                            multiple
+                            value={booksFilter.series ?? []}
+                            onChange={(event, data) => updateFilter({ series: data.value as number[] | undefined })}
+                        />
+                        <Form.Select
+                            placeholder={t("tags")}
+                            options={tagOptions}
+                            multiple
+                            value={booksFilter.tags ?? []}
+                            onChange={(event, data) => updateFilter({ tags: data.value as number[] | undefined })}
+                        />
+                        <Form.Select
+                            placeholder={t("statuses")}
+                            options={statusOptions}
+                            multiple
+                            value={booksFilter.statuses ?? []}
+                            onChange={(event, data) => updateFilter({ statuses: data.value as number[] | undefined })}
+                        />
+                        <Button primary onClick={() => loadBooks(true)}>
+                            {t("apply")}
+                        </Button>
+                        <Button secondary onClick={clearFilters}>
+                            {t("clear_filters")}
+                        </Button>
+                    </Form>
+                </Modal.Content>
+            </Modal>
+            {books.length ? (
                 <>
                     <DownloadCSV
-                        data={displayBooks}
+                        data={books}
                         headers={CSVHeaders.BOOK}
                         fileName={FileNames.BOOKS_CSV}
                         text={t("download_table")}
@@ -235,14 +307,20 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                     <Button primary disabled={Object.keys(changedBooks).length === 0} onClick={updateBooks}>
                         {t("save_table")}
                     </Button>
-                    <div className={styles.tableContainer}>
+                    <InfiniteScroller
+                        className={styles.tableContainer}
+                        loading={loadingBooks}
+                        hasMore={hasMoreBooks}
+                        loader={<Loader active inline="centered" size="massive" />}
+                        loadMore={() => dispatch(loadAdminBooks({ more: true }))}
+                    >
                         <Table celled className={styles.booksTable}>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell width={3}>{t("title")}</Table.HeaderCell>
                                     <Table.HeaderCell width={5}>{t("description")}</Table.HeaderCell>
                                     <Table.HeaderCell width={3}>{t("image")}</Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>{t("status")}</Table.HeaderCell>
+                                    <Table.HeaderCell width={2}>{t("status")}</Table.HeaderCell>
                                     <Table.HeaderCell width={4}>{t("authors")}</Table.HeaderCell>
                                     <Table.HeaderCell width={3}>{t("publishings")}</Table.HeaderCell>
                                     <Table.HeaderCell width={3}>{t("series")}</Table.HeaderCell>
@@ -258,7 +336,7 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
-                                {displayBooks.map((book) => (
+                                {books.map((book) => (
                                     <Table.Row key={book.id}>
                                         <Table.Cell width={3}>
                                             <Input
@@ -291,7 +369,7 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                                             />
                                             <div>{getImageName(book.id, book.image)}</div>
                                         </Table.Cell>
-                                        <Table.Cell width={3}>
+                                        <Table.Cell width={2}>
                                             <Dropdown
                                                 fluid
                                                 options={statusOptions}
@@ -299,7 +377,9 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                                                 scrolling
                                                 clearable
                                                 onChange={(event, data) =>
-                                                    setUpdateData(book.id, { status: data.value as number | undefined })
+                                                    setUpdateData(book.id, {
+                                                        status: data.value as number | undefined,
+                                                    })
                                                 }
                                             />
                                         </Table.Cell>
@@ -339,7 +419,9 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                                                 scrolling
                                                 clearable
                                                 onChange={(event, data) =>
-                                                    setUpdateData(book.id, { series: data.value as number | undefined })
+                                                    setUpdateData(book.id, {
+                                                        series: data.value as number | undefined,
+                                                    })
                                                 }
                                             />
                                         </Table.Cell>
@@ -477,7 +559,7 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                                         />
                                         {newBook.image ? <div>{_getFname(newBook.image.name)}</div> : null}
                                     </Table.HeaderCell>
-                                    <Table.HeaderCell width={3}>
+                                    <Table.HeaderCell width={2}>
                                         <Dropdown
                                             fluid
                                             options={statusOptions}
@@ -624,7 +706,7 @@ const BooksTable: React.FC<TableProps> = ({ index }) => {
                                 </Table.Row>
                             </Table.Footer>
                         </Table>
-                    </div>
+                    </InfiniteScroller>
                 </>
             ) : (
                 <NoResults />

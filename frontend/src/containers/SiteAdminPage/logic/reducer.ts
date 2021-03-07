@@ -5,12 +5,19 @@ import * as actionTypes from "./actionTypes";
 export const siteAdminReducer = createReducer<SiteAdminState>(initialState, {
     // Read
 
+    [actionTypes.LOAD_ADMIN_BOOKS](state) {
+        return {
+            ...state,
+            loadingBooks: true,
+        };
+    },
     [actionTypes.LOAD_ADMIN_BOOKS_SUCCESS](state, action: actionTypes.LoadBooksSuccess) {
         const newBooks = action.more ? [...(state.books || []), ...action.books] : action.books;
 
         return {
             ...state,
             hasMoreBooks: action.hasMore,
+            loadingBooks: false,
             books: newBooks,
         };
     },
@@ -426,6 +433,30 @@ export const siteAdminReducer = createReducer<SiteAdminState>(initialState, {
         return {
             ...state,
             books: [...newBooks],
+        };
+    },
+    [actionTypes.SET_BOOKS_FILTER](state, action: actionTypes.SetBooksFilter) {
+        if (action.clear) {
+            return {
+                ...state,
+                booksFilter: {
+                    ...state.booksFilter,
+                    tags: [],
+                    publishings: [],
+                    series: [],
+                    authors: [],
+                    statuses: [],
+                    search: undefined,
+                },
+            };
+        }
+
+        return {
+            ...state,
+            booksFilter: {
+                ...state.booksFilter,
+                ...action.filter,
+            },
         };
     },
 });

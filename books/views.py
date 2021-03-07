@@ -20,6 +20,9 @@ class BookAPI(ChangeSerializerViewSet):
     write_serializer_class = ChangeBookSerializer
 
     def process_data(self, request):
+        if request.headers.get("Content-Type") == "application/json":
+            return request.data
+
         m2m_relations = ["authors", "tags"]
         data = dict(request.data)
         new_data = {}
@@ -96,60 +99,53 @@ class BookAPI(ChangeSerializerViewSet):
         statuses_query = Q()
         text_query = Q()
 
-        if self.request.GET.get("admin") != "1":
-            search = self.request.GET.get("search")
-            tags = self.request.GET.get("tags")
-            publishings = self.request.GET.get("publishings")
-            series = self.request.GET.get("series")
-            authors = self.request.GET.get("authors")
-            statuses = self.request.GET.get("statuses")
+        search = self.request.GET.get("search")
+        tags = self.request.GET.get("tags")
+        publishings = self.request.GET.get("publishings")
+        series = self.request.GET.get("series")
+        authors = self.request.GET.get("authors")
+        statuses = self.request.GET.get("statuses")
 
-            text_search_fields = ["title", "authors__name", "series__name", "publishing__name"]
+        text_search_fields = ["title", "authors__name", "series__name", "publishing__name"]
 
-            if search:
-                words = search.strip().split(" ")
+        if search:
+            words = search.strip().split(" ")
 
-                for field in text_search_fields:
-                    for word in words:
-                        text_query |= Q(**{ field + "__icontains": word })
+            for field in text_search_fields:
+                for word in words:
+                    text_query |= Q(**{ field + "__icontains": word })
 
-            if publishings:
-                pub_ids = publishings.strip().split(",")
-                publishings_query &= Q(publishing__in=pub_ids)
+        if publishings:
+            pub_ids = publishings.strip().split(",")
+            publishings_query &= Q(publishing__in=pub_ids)
 
-            if series:
-                series_ids = series.strip().split(",")
-                series_query &= Q(series__in=series_ids)
+        if series:
+            series_ids = series.strip().split(",")
+            series_query &= Q(series__in=series_ids)
 
-            if authors:
-                author_ids = authors.strip().split(",")
-                authors_query &= Q(authors__in=author_ids)
+        if authors:
+            author_ids = authors.strip().split(",")
+            authors_query &= Q(authors__in=author_ids)
 
-            if statuses:
-                status_ids = statuses.strip().split(",")
-                statuses_query &= Q(status__in=status_ids)
+        if statuses:
+            status_ids = statuses.strip().split(",")
+            statuses_query &= Q(status__in=status_ids)
 
-            tags_filtered_queryset = None
+        tags_filtered_queryset = None
 
-            if tags:
-                tag_ids = tags.strip().split(",")
+        if tags:
+            tag_ids = tags.strip().split(",")
 
-                for tag_id in tag_ids:
-                    if not tag_id.isdigit():
-                        continue
+            for tag_id in tag_ids:
+                if not tag_id.isdigit():
+                    continue
 
-                    new_queryset = Book.objects.filter(tags=tag_id)
+                new_queryset = Book.objects.filter(tags=tag_id)
 
-                    if not tags_filtered_queryset:
-                        tags_filtered_queryset = new_queryset
-                    else:
-                        tags_filtered_queryset &= new_queryset
-        else:
-            name = self.request.GET.get("name")
-            tags_filtered_queryset = None
-
-            if name:
-                tags_filtered_queryset = Book.objects.filter(title__icontains=name)
+                if not tags_filtered_queryset:
+                    tags_filtered_queryset = new_queryset
+                else:
+                    tags_filtered_queryset &= new_queryset
 
         if tags_filtered_queryset is None:
             tags_filtered_queryset = Book.objects.all()

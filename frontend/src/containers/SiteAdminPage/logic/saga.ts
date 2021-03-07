@@ -7,6 +7,12 @@ import * as publishingsService from "../../../services/publishings.service";
 import * as statusesService from "../../../services/statuses.service";
 import * as booksService from "../../../services/books.service";
 import { error } from "../../../helpers/notifications.helper";
+import { Books } from "../../../constants/Books";
+import { defaultBooksFilter } from "./state";
+
+const loadNewBooksAfterMod = (limit: number) => {
+    return booksService.getBooks({ ...defaultBooksFilter, from: 0, limit });
+};
 
 // Authors
 
@@ -434,14 +440,36 @@ function* watchBulkStatuses() {
 
 // Books
 
-function* loadAdminBooks(action: ReturnType<typeof actions.loadAdminBooks>) {
+function* loadAdminBooks({ more, customFilter }: ReturnType<typeof actions.loadAdminBooks>) {
     try {
+        const assignFilter = customFilter ?? {};
+
         const {
-            siteAdmin: { booksFilter },
+            siteAdmin: { booksFilter: filter },
         } = yield select();
 
-        const result: WebApi.Specific.ListAdminBooksResult = yield call(booksService.getAdminBooks, booksFilter);
-        yield put(actions.loadAdminBooksSuccess({ books: result.books, hasMore: result.has_more, more: action.more }));
+        const increasedFrom = filter.from + Books.ADMIN_INFINITE_SCROLL_STEP;
+
+        if (more) {
+            filter.from = increasedFrom;
+        }
+
+        const result: WebApi.Specific.ListAdminBooksResult = yield call(booksService.getAdminBooks, {
+            ...filter,
+            ...assignFilter,
+        });
+
+        yield put(actions.loadAdminBooksSuccess({ books: result.books, hasMore: result.has_more, more: more }));
+
+        if (more) {
+            yield put(
+                actions.setBooksFilter({
+                    filter: {
+                        from: increasedFrom,
+                    },
+                }),
+            );
+        }
     } catch (err) {
         error(err.text);
     }
@@ -453,8 +481,15 @@ function* watchLoadAdminBooks() {
 
 function* createBook(action: ReturnType<typeof actions.createBook>) {
     try {
+        const {
+            siteAdmin: {
+                booksFilter: { limit },
+            },
+        } = yield select();
+
         const book: WebApi.Entity.ChangeBook = yield call(booksService.createBook, action.data);
         yield put(actions.createBookSuccess({ book }));
+        yield call(loadNewBooksAfterMod, limit);
     } catch (err) {
         error(err.text);
     }
@@ -466,8 +501,15 @@ function* watchCreateBook() {
 
 function* updateBook(action: ReturnType<typeof actions.updateBook>) {
     try {
+        const {
+            siteAdmin: {
+                booksFilter: { limit },
+            },
+        } = yield select();
+
         const book: WebApi.Entity.ChangeBook = yield call(booksService.updateBook, action.id, action.data);
         yield put(actions.updateBookSuccess({ id: action.id, book }));
+        yield call(loadNewBooksAfterMod, limit);
     } catch (err) {
         error(err.text);
     }
@@ -479,8 +521,15 @@ function* watchUpdateBook() {
 
 function* deleteBook(action: ReturnType<typeof actions.deleteBook>) {
     try {
+        const {
+            siteAdmin: {
+                booksFilter: { limit },
+            },
+        } = yield select();
+
         yield call(booksService.deleteBook, action.id);
         yield put(actions.deleteBookSuccess({ id: action.id }));
+        yield call(loadNewBooksAfterMod, limit);
     } catch (err) {
         error(err.text);
     }

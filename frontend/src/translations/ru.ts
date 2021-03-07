@@ -72,4 +72,6 @@ export const ru = {
     discount: "Скидка",
     pages_count: "Кол-во страниц",
     paper_type: "Тип бумаги",
+    open_filters: "Показать фильтры",
+    filters: "Фильтры",
 };

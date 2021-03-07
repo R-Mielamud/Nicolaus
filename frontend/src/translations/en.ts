@@ -72,4 +72,6 @@ export const en = {
     discount: "Discount",
     pages_count: "Pages count",
     paper_type: "Paper type",
+    open_filters: "Open filters",
+    filters: "Filters",
 };

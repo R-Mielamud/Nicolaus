@@ -91,6 +91,7 @@ export const bulkBooks = createAction<actionTypes.BulkBooks>(actionTypes.BULK_BO
 
 // Read
 
+export const setBooksFilter = createAction<actionTypes.SetBooksFilter>(actionTypes.SET_BOOKS_FILTER);
 export const loadAdminBooks = createAction<actionTypes.LoadBooks>(actionTypes.LOAD_ADMIN_BOOKS);
 export const loadAdminBooksSuccess = createAction<actionTypes.LoadBooksSuccess>(actionTypes.LOAD_ADMIN_BOOKS_SUCCESS);
 export const loadAdminTags = createAction(actionTypes.LOAD_ADMIN_TAGS);

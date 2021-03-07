@@ -1,7 +1,7 @@
 .tableContainer {
     width: 100%;
     max-width: 100%;
-    max-height: 57vh;
+    max-height: 80vh;
     margin-top: 20px;
     overflow: auto;
 }
@@ -21,7 +21,7 @@
 
     thead,
     tfoot {
-        z-index: 10;
+        z-index: 2;
     }
 
     thead {
