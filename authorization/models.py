@@ -4,7 +4,7 @@ from helpers import password
 class User(Model):
     email = EmailField()
     password = CharField(max_length=200)
-    telephone = CharField(max_length=20, blank=True, null=True)
+    telephone = CharField(max_length=20, default="+380000000000")
     first_name = CharField(max_length=30, blank=True, null=True)
     last_name = CharField(max_length=30, blank=True, null=True)
     is_admin = BooleanField(default=False)
