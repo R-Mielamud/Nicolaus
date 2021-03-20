@@ -2,6 +2,7 @@ from django.db.models import *
 from book_filters.models import Tag, Author, Series, Publishing, Status
 from storages import S3BookImageStorage
 from helpers.percentage import get_percent_of_number
+from .celery import recalculate_instances_price
 
 class Book(Model):
     id_to_m2m = {"authors": Author, "tags": Tag}
@@ -28,8 +29,10 @@ class Book(Model):
     def save(self, *args, **kwargs):
         new_price = self.orig_price - get_percent_of_number(self.orig_price, self.discount)
         self.price = round(new_price)
+        result = super().save(*args, **kwargs)
+        recalculate_instances_price.delay(self)
 
-        return super().save(*args, **kwargs)
+        return result
 
     class Meta:
         ordering = ["-chosen"]

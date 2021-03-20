@@ -1,5 +1,6 @@
 from django.db.models import *
 from helpers import password
+from cart.models import Cart
 
 class User(Model):
     email = EmailField()
@@ -8,6 +9,7 @@ class User(Model):
     first_name = CharField(max_length=30, blank=True, null=True)
     last_name = CharField(max_length=30, blank=True, null=True)
     is_admin = BooleanField(default=False)
+    cart = OneToOneField(to=Cart, on_delete=SET_NULL, to_field="id", null=True)
     is_active = True
 
     def save(self, *args, **kwargs):
