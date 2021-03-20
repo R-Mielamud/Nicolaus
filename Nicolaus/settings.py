@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "authorization",
     "book_filters",
     "books",
+    "cart",
 ]
 
 MIDDLEWARE = [
