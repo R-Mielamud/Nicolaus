@@ -5,7 +5,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 from viewsets import ChangeSerializerViewSet
 from .models import Book
-from book_filters.views import BaseBulkUpdateAPI
+from Nicolaus.base import BaseBulkUpdateAPI, BaseCSVExportAPI
 from .celery import bulk_update_books
 
 from .serlializers import (
@@ -201,3 +201,6 @@ class BulkUpdateBookAPI(BaseBulkUpdateAPI):
 
     def create(self, request, *args, **kwargs):
         return self.get_create(bulk_update_books, request, *args, **kwargs)
+
+class CSVBookAPI(BaseCSVExportAPI):
+    model = Book

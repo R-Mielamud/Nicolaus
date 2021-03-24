@@ -1,6 +1,5 @@
-from django.http import JsonResponse
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.viewsets import ModelViewSet
+from Nicolaus.base import BaseCSVExportAPI, BaseBulkUpdateAPI
 from viewsets import ChangeSerializerViewSet
 from .models import Tag, TagGroup, Author, Series, Publishing, Status
 
@@ -25,17 +24,6 @@ from .serializers import (
     PublishingSerializer,
     StatusSerializer,
 )
-
-class BaseBulkUpdateAPI(CreateModelMixin, GenericViewSet):
-    def get_create(self, action, request, *args, **kwargs):
-        data = request.data
-
-        try:
-            action.delay(data)
-        except:
-            return JsonResponse({ "message": "Request format is incorrect" }, status=400)
-
-        return JsonResponse({ "success": True }, status=201)
 
 class TagAPI(ChangeSerializerViewSet):
     for_admin = True
@@ -109,3 +97,21 @@ class BulkUpdateStatusesAPI(BaseBulkUpdateAPI):
 
     def create(self, request, *args, **kwargs):
         return self.get_create(bulk_update_statuses, request, *args, **kwargs)
+
+class CSVTagAPI(BaseCSVExportAPI):
+    model = Tag
+
+class CSVTagGroupAPI(BaseCSVExportAPI):
+    model = TagGroup
+
+class CSVAuthorAPI(BaseCSVExportAPI):
+    model = Author
+
+class CSVSeriesAPI(BaseCSVExportAPI):
+    model = Series
+
+class CSVPublishingAPI(BaseCSVExportAPI):
+    model = Publishing
+
+class CSVStatusAPI(BaseCSVExportAPI):
+    model = Status

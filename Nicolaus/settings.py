@@ -177,6 +177,10 @@ ALLOW_ROUTES = {
         r"^/api/books/filters/[a-zA-Z0-9]+/bulk/$",
         r"^/api/books/filters/[a-zA-Z0-9]+/[a-zA-Z0-9]+/bulk/$",
     ],
+    "FOR_ADMIN": [
+        r"^/api/books/filters/[a-zA-Z0-9]+/csv/$",
+        r"^/api/books/filters/[a-zA-Z0-9]+/[a-zA-Z0-9]+/csv/$",
+    ],
 }
 
 # Cross-Origin Resource Sharing

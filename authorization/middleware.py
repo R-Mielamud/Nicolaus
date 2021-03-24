@@ -64,6 +64,20 @@ def process_permissions(get_response):
             if re.match(regex, path):
                 return get_response(request)
 
+        for regex in settings.ALLOW_ROUTES["FOR_ADMIN"]:
+            if not request.user:
+                return JsonResponse({
+                    "message": "Not authorized",
+                }, status=401)
+
+            if re.match(regex, path):
+                if not request.user.is_admin:
+                    return JsonResponse({
+                        "message": "Permission denied",
+                    }, status=403)
+                else:
+                    return get_response(request)
+
         if is_get:
             for regex in settings.ALLOW_ROUTES["PUBLISH_GET"]:
                 if re.match(regex, path):
