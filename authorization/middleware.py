@@ -1,7 +1,8 @@
 import re
-from django.http import JsonResponse
 from jwt import DecodeError
 from Nicolaus import settings
+from errors.unauthorized import UnauthorizedError
+from errors.forbidden import ForbiddenError
 from helpers import jwt
 from .models import User
 
@@ -31,9 +32,7 @@ def extract_user(get_response):
         try:
             user_id = jwt.get_user_id(token)
         except DecodeError:
-            return JsonResponse({
-                "message": "Invalid JWT token",
-            }, status=401)
+            return UnauthorizedError()
 
         user = User.objects.filter(pk=user_id).first()
         request.user = user
@@ -49,13 +48,9 @@ def process_permissions(get_response):
 
         if request.GET.get("admin") == "1":
             if not request.user:
-                return JsonResponse({
-                    "message": "Not authorized",
-                }, status=401)
+                return UnauthorizedError()
             elif not request.user.is_admin:
-                return JsonResponse({
-                    "message": "Permission denied",
-                }, status=403)
+                return ForbiddenError()
 
         if not path.startswith("/api"):
             return get_response(request)
@@ -66,15 +61,11 @@ def process_permissions(get_response):
 
         for regex in settings.ALLOW_ROUTES["FOR_ADMIN"]:
             if not request.user:
-                return JsonResponse({
-                    "message": "Not authorized",
-                }, status=401)
+                return UnauthorizedError()
 
             if re.match(regex, path):
                 if not request.user.is_admin:
-                    return JsonResponse({
-                        "message": "Permission denied",
-                    }, status=403)
+                    return ForbiddenError()
                 else:
                     return get_response(request)
 
@@ -84,15 +75,11 @@ def process_permissions(get_response):
                     return get_response(request)
 
         if not request.user:
-            return JsonResponse({
-                "message": "Not authorized",
-            }, status=401)
+            return UnauthorizedError()
         elif not request.user.is_admin:
             for regex in settings.ALLOW_ROUTES["FOR_ADMIN_MOD"]:
                 if re.match(regex, path):
-                    return JsonResponse({
-                        "message": "Permission denied",
-                    }, status=403)
+                    return ForbiddenError()
 
         return get_response(request)
 

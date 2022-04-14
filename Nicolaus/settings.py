@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
+    "corsheaders",
     "rest_framework",
     "api",
     "authorization",
@@ -150,8 +150,9 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         "api.authentication.CsrfExemptAuthentication",
-        'rest_framework.authentication.BasicAuthentication',
-    ]
+        "rest_framework.authentication.BasicAuthentication",
+    ],
+    "EXCEPTION_HANDLER": "Nicolaus.middleware.api_error_handler",
 }
 
 # JWT

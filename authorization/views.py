@@ -1,9 +1,8 @@
-from django.http import JsonResponse, HttpResponse
-
+from django.http import JsonResponse
 from rest_framework.views import APIView
-from rest_framework.viewsets import ViewSetMixin
 from rest_framework.exceptions import ValidationError
-
+from errors.unauthorized import UnauthorizedError
+from errors.forbidden import ForbiddenError
 from .models import User
 from .serializers import UserSerializer, RegisterUserSerializer, UpdateUserSerializer
 from helpers import jwt, password
@@ -19,18 +18,14 @@ class RegisterAPIView(APIView):
             check_user = User.objects.filter(email=create_serializer.validated_data.get("email")).first()
 
             if check_user:
-                return JsonResponse({
-                    "message": "This email is already taken"
-                }, status=401)
+                raise UnauthorizedError("This email is already taken")
 
             if passwd and len(passwd) < 6:
-                return JsonResponse({
-                    "message": "This password is too short"
-                }, status=401)
+                raise UnauthorizedError("This password is too short")
 
             user = create_serializer.save()
         except ValidationError as exc:
-            return JsonResponse(exc.get_full_details(), status=401)
+            raise UnauthorizedError(exc.detail)
 
         jwt_token = jwt.get_user_token(user.id)
         serializer = UserSerializer(user)
@@ -53,34 +48,30 @@ class UpdateAPIView(APIView):
                 check_user = User.objects.filter(email=email).first()
 
                 if check_user:
-                    return JsonResponse({
-                        "message": "This email is already taken"
-                    }, status=401)
+                    raise UnauthorizedError("This email is already taken")
 
             user = update_serializer.update(update_user, update_serializer.data)
         except ValidationError as exc:
-            return JsonResponse(exc.get_full_details(), status=400)
+            raise UnauthorizedError(exc.detail)
 
         serializer = UserSerializer(user)
         return JsonResponse(serializer.data)
 
 class LoginAPIView(APIView):
     def reject(self):
-        return JsonResponse({
-            "message": "Email or password is invalid"
-        }, status=401)
+        raise UnauthorizedError("Email or password is invalid")
 
     def post(self, request):
         email = request.data.get("email")
         passwd = request.data.get("password")
 
         if not email:
-            return self.reject()
+            self.reject()
 
         user = User.objects.filter(email=email).first()
 
-        if (not user) or (not password.compare(passwd, user.password)):
-            return self.reject()
+        if not user or not password.compare(passwd, user.password):
+            self.reject()
 
         jwt_token = jwt.get_user_token(user.id)
         serializer = UserSerializer(user)
@@ -93,9 +84,7 @@ class LoginAPIView(APIView):
 class ProfileAPIView(APIView):
     def get(self, request):
         if not request.user:
-            return JsonResponse({
-                "message": "Not authorized"
-            }, status=401)
+            return UnauthorizedError()
 
         serializer = UserSerializer(request.user)
         return JsonResponse(serializer.data)

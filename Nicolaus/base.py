@@ -1,6 +1,8 @@
 from django.http import JsonResponse, HttpResponse
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from rest_framework.decorators import action
+from errors.unprocessable import UnprocessableError
 from helpers.csv import CSV
 
 class BaseBulkUpdateAPI(CreateModelMixin, GenericViewSet):
@@ -10,9 +12,9 @@ class BaseBulkUpdateAPI(CreateModelMixin, GenericViewSet):
         try:
             action.delay(data)
         except:
-            return JsonResponse({ "message": "Request format is incorrect" }, status=400)
+            raise UnprocessableError()
 
-        return JsonResponse({ "success": True }, status=201)
+        return JsonResponse({}, status=201)
 
 class BaseCSVModel:
     @classmethod
